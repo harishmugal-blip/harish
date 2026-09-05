@@ -52,6 +52,11 @@ let state: RadioState = {
   muted: false,
 };
 
+// consecutive resolve failures — protects the search API from skip-spam
+// when the network/search service is down or rate-limited
+let consecutiveResolveFails = 0;
+const MAX_CONSECUTIVE_FAILS = 4;
+
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -116,6 +121,8 @@ async function resolveVideoId(song: Song): Promise<string[]> {
   try {
     const res = await fetch(`/api/ytmusic?q=${encodeURIComponent(songSearchQuery(song))}`);
     const data = await res.json();
+    // server-side failure (rate limit etc.) — do NOT poison the fail cache, just give up quietly this attempt
+    if (data && data.ok === false && data.error) return [];
     const ids: string[] = Array.isArray(data?.videoIds) && data.videoIds.length ? data.videoIds : data?.videoId ? [data.videoId] : [];
     if (ids.length) {
       writeCache(key, { id: ids[0], at: Date.now() });
@@ -161,17 +168,33 @@ function setSongInternal(song: Song, list: Song[]) {
 let candidateQueue: string[] = [];
 
 async function playSong(song: Song) {
+  // circuit breaker: too many consecutive failures means search is down /
+  // rate-limited — stop the skip-spam chain and tell the user honestly
+  if (consecutiveResolveFails >= MAX_CONSECUTIVE_FAILS) {
+    state = {
+      ...state,
+      on: false,
+      playing: false,
+      loading: false,
+      error: "Search service busy he — thodi der baad play try karo, sir",
+    };
+    emit();
+    return;
+  }
+
   state = { ...state, on: true, loading: true, error: null, song };
   emit();
 
   const candidates = song.ytId ? [song.ytId] : await resolveVideoId(song);
   if (!candidates.length) {
+    consecutiveResolveFails += 1;
     state = { ...state, loading: false, error: `Link nahi mila: ${song.title} — skip kar raha hu` };
     emit();
     setTimeout(() => nextSong(), 1200);
     return;
   }
 
+  consecutiveResolveFails = 0;
   candidateQueue = candidates.slice(1);
   loadCandidate(candidates[0]);
 }

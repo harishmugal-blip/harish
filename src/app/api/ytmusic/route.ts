@@ -43,19 +43,34 @@ export async function GET(req: NextRequest) {
       `${q} hd song youtube`,
     ];
     let videoIds: string[] = [];
-    for (const query of queries) {
-      try {
-        const res = (await zai.functions.invoke("web_search", { query, num: 8 })) as unknown[];
-        videoIds = extractVideoIds(res);
+    let rateLimited = false;
+    for (let attempt = 0; attempt < 2 && !videoIds.length; attempt++) {
+      for (const query of queries) {
         if (videoIds.length) break;
-      } catch (e) {
-        console.error("[ytmusic] search failed:", query.slice(0, 50), (e as Error).message?.slice(0, 120));
+        try {
+          const res = (await zai.functions.invoke("web_search", { query, num: 8 })) as unknown[];
+          videoIds = extractVideoIds(res);
+        } catch (e) {
+          const msg = (e as Error).message || "";
+          if (/429|too many requests/i.test(msg)) rateLimited = true;
+          console.error("[ytmusic] search failed:", query.slice(0, 50), msg.slice(0, 120));
+        }
+      }
+      if (!videoIds.length && rateLimited && attempt === 0) {
+        // rate limit is transient — back off once before hammering again
+        await new Promise((r) => setTimeout(r, 2500));
       }
     }
-    memCache.set(key, { id: videoIds[0] || null, at: Date.now() });
-    return NextResponse.json({ ok: videoIds.length > 0, videoId: videoIds[0] || null, videoIds });
+    // never cache FAIL on rate-limit — otherwise songs stay dead for 10min
+    if (!rateLimited || videoIds.length) {
+      memCache.set(key, { id: videoIds[0] || null, at: Date.now() });
+    }
+    return NextResponse.json({ ok: videoIds.length > 0, videoId: videoIds[0] || null, videoIds, ...(rateLimited && !videoIds.length ? { error: "rate limited" } : {}) });
   } catch (e) {
-    memCache.set(key, { id: null, at: Date.now() });
-    return NextResponse.json({ ok: false, error: (e as Error).message?.slice(0, 120) });
+    const msg = (e as Error).message || "";
+    if (!/429|too many requests/i.test(msg)) {
+      memCache.set(key, { id: null, at: Date.now() });
+    }
+    return NextResponse.json({ ok: false, error: msg.slice(0, 120) || "resolve failed" });
   }
 }

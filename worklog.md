@@ -50,3 +50,25 @@ Stage Summary:
 - Site fully rebuilt + music system YouTube-Music-powered: 151 songs, live link resolution with caching, resilient playback chain
 - Screenshots: download/jarvis_hud_rebuilt.png, download/desktop_rebuilt.png
 - Flow: boot -> login(harish) -> desktop -> Activate Windows -> jarvis -> AI console (chat/research/memory/music control)
+
+---
+Task ID: 19
+Agent: Super Z (main agent)
+Task: "JARVIS AK SERIUS MODEL HE BRO" — brain ko full Master Protocol serious-model level pe upgrade + 429 resilience + music verify (user re-sent MASTER SYSTEM PROMPT)
+
+Work Log:
+- Diagnosis round 2: preview URL 404 de raha tha (env reset ke baad preview proxy unregistered) — "sab uda diya" ka asli reason; local server 200 + tsc 0 + eslint 0 (code intact tha, Task 18 rebuild sahi tha)
+- JARVIS brain v6 (route.ts): full MASTER SYSTEM PROMPT port — serious persona (never comedian), CORE BEHAVIOR 7-step, NEVER FABRICATE list (8 items), 5 COMMAND MODES with detail (CHAT/RESEARCH/AUTOMATION/CODING/CREATIVE), PROACTIVE INTELLIGENCE (1-line suggestion rule), ERROR HANDLING (never hide, never claim fixed), full SECURITY (secrets/env vars), RESPONSE FORMAT (simple direct / complex Objective-Plan-Implementation-Verification), SPEECH STYLE patterns ("Understood, sir — handling it." / "Task completed, sir."), IMPORTANT RULE (assistant not actor, never simulate tools), PRIMARY OBJECTIVE; serious examples (chai-joke hataya)
+- 429 resilience: chatWithRetry helper (3 attempts, 1.4s/2.8s backoff on 429) — GLM platform rate-limit (hourly window, ~25 min cooldown observed) handle karta hai
+- ytmusic route hardening: 429 pe retry+backoff, FAIL-cache sirf genuine no-result pe (rate-limit pe cache skip — poisoning fix)
+- radio.ts circuit breaker: consecutiveResolveFails >= 4 → auto-skip chain STOP + honest error "Search service busy he" (skip-spam loop jo rate-limit ko aur bigaad raha tha, fixed)
+- RESEARCH HONESTY hardening: search fail hone pe model training-data se fake news + fake citations bana raha tha (zero-tolerance violation) — prompt me explicit rule + WRONG/CORRECT example add: "LIVE WEB RESULTS absent → ONLY honest unavailable line, NO news/citations from memory, NEVER mix"
+- E2E verified: login(harish) → JARVIS activation(jarvis) → HUD boot; brain tests: chat ("All systems operational, sir. Aapka next command ready he."), proactive ("Login page bana dunga, sir... session management, password hashing, CSRF protection bhi include karunga" + Plan), memory ("Understood, sir — POS project saved in memory core"), research (mode=research + real citations jab search available)
+- MUSIC VERIFIED: web_search recover hone pe Lag Ja Gale → videoId lvrTOUHx5XE resolve; browser session me 9 songs real videoIds ke saath resolved (lag ja gale, ajeeb dastan, tere bina zindagi, piya tu ab to aaja, dum maro dum, chura liya, in aankhon ki masti, parde mein rehne do...); player error 150 (embed-blocked) → candidate retry → auto-skip working as designed; localStorage yt-resolved-v1 cache building
+- Known env notes: headless test env me media codecs nahi (sound test nahi ho sakta) — real browser pe user-click se sound aayega; embed-blocked videos (code 150/101) auto-skip hote he, "YT" link har song pe manual fallback
+- Screenshots: download/jarvis_hud_v6.png, download/desktop_v6.png, download/music_resolved_v6.png
+- NOTE: preview URL 404 issue platform-side he — Complete call se re-provision expected; open-meteo weather API bhi daily limit pe tha (alag service, kal reset hoga)
+
+Stage Summary:
+- JARVIS brain v6 = full Master Protocol serious-model implementation; 429/circuit-breaker/cache-poisoning sab hardened; music system live YT resolution VERIFIED with 9 real videoIds
+- Rate-limit reality: platform quota hourly window — jab bhi 429 aaye ~5-25 min wait, retry automatic

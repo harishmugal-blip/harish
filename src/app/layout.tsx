@@ -14,17 +14,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aarav Dosanjh — Portfolio (Windows 7 Edition)",
+  title: "Harish — Website Designer & Backend Developer • POS Software (Windows 7 Edition)",
   description:
-    "Full-stack developer portfolio built as a Windows 7 desktop — nostalgic, interactive and fully functional. About, Projects, Skills, Resume and Contact — sab ek desktop pe.",
-  keywords: ["portfolio", "Windows 7", "developer", "full-stack", "React", "Next.js", "nostalgia"],
-  authors: [{ name: "Aarav Dosanjh" }],
+    "Harish ka portfolio — Windows 7 desktop style, fully interactive. Website Designer & Backend Developer (POS Software), IIT Roorkee bootcamp trained. 151 songs music library + J.A.R.V.I.S AI assistant.",
+  keywords: ["Harish", "portfolio", "website designer", "backend developer", "POS software", "Windows 7", "JARVIS", "Muzaffarnagar"],
+  authors: [{ name: "Harish" }],
   icons: {
     icon: "/avatar.png",
   },
   openGraph: {
-    title: "Aarav Dosanjh — Portfolio (Windows 7 Edition)",
-    description: "My portfolio, served fresh out of 2009. Click the icons. Nostalgia guaranteed.",
+    title: "Harish — Portfolio (Windows 7 Edition)",
+    description: "Windows 7 desktop portfolio with J.A.R.V.I.S AI assistant and 151-song music library. Click 'Activate Windows' 😉",
     type: "website",
   },
 };

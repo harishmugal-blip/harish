@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Wifi, Volume2, ChevronUp } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { Wifi, ChevronUp } from "lucide-react";
 import { IEIcon, MediaIcon, FolderIcon, WinFlag } from "./icons";
 import { useToast } from "@/hooks/use-toast";
 import { profile } from "@/lib/portfolio";
+import { getRadioSnapshot, subscribeRadio, togglePlayPause, nextSong, radioStart } from "@/lib/radio";
 
-export type WinId = "about" | "projects" | "skills" | "resume" | "contact" | "computer" | "recycle";
+export type WinId = "about" | "projects" | "skills" | "resume" | "contact" | "computer" | "recycle" | "music";
 
 export interface TaskItem {
   id: WinId;
@@ -37,6 +38,43 @@ export function Clock() {
   );
 }
 
+/* ---------------- Radio tray (taskbar) ---------------- */
+function RadioTray() {
+  const radio = useSyncExternalStore(subscribeRadio, getRadioSnapshot, () => getRadioSnapshot());
+  const { toast } = useToast();
+
+  if (!radio.on) {
+    return (
+      <button
+        aria-label="Radio — play music"
+        className="win7-no-touch flex items-center gap-1 px-1.5 py-[3px] rounded-[3px] hover:bg-white/20"
+        onClick={() => {
+          void radioStart("OLD");
+          toast({ title: "♪ Radio ON", description: "YouTube Music se old songs laga raha hu — link live dhundhta hu 🎵" });
+        }}
+      >
+        <MediaIcon className="w-[17px] h-[17px]" />
+        <span className="hidden md:inline text-[10.5px] text-white/75">Radio</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1 px-1.5 max-w-[190px]">
+      <button aria-label="Play/Pause" className="win7-no-touch text-white/90 hover:text-white text-[11px] px-1" onClick={() => togglePlayPause()}>
+        {radio.loading ? "…" : radio.playing ? "❚❚" : "▶"}
+      </button>
+      <button aria-label="Next" className="win7-no-touch text-white/90 hover:text-white text-[10px] px-0.5" onClick={() => nextSong()}>
+        ▶▶
+      </button>
+      <div className="min-w-0 leading-[1.15]">
+        <div className="text-[10px] text-white/90 truncate max-w-[110px]">♪ {radio.song?.title || "Loading…"}</div>
+        <div className="text-[9px] text-white/55 truncate max-w-[110px]">{radio.playing ? "YT Music • playing" : "paused"}</div>
+      </div>
+    </div>
+  );
+}
+
 /* ---------------- Taskbar ---------------- */
 interface TaskbarProps {
   tasks: TaskItem[];
@@ -46,9 +84,10 @@ interface TaskbarProps {
   onStartToggle: () => void;
   startOpen: boolean;
   onMinimizeAll: () => void;
+  onJarvisOpen: () => void;
 }
 
-export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle, startOpen, onMinimizeAll }: TaskbarProps) {
+export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle, startOpen, onMinimizeAll, onJarvisOpen }: TaskbarProps) {
   const { toast } = useToast();
 
   return (
@@ -70,9 +109,7 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
           className="win7-no-touch relative -top-[1px] ml-[2px] mt-[1px] w-[50px] h-[38px] flex items-center justify-center group"
         >
           <span
-            className={`w-[37px] h-[37px] rounded-full flex items-center justify-center transition-all duration-150 ${
-              startOpen ? "win7-breathe text-[#9fd8ff]" : ""
-            }`}
+            className={`w-[37px] h-[37px] rounded-full flex items-center justify-center transition-all duration-150 ${startOpen ? "win7-breathe text-[#9fd8ff]" : ""}`}
             style={{
               background: startOpen
                 ? "radial-gradient(circle at 35% 28%, #d8f2ff 0%, #5ab5ee 45%, #1a6fb0 80%, #0d4f86 100%)"
@@ -96,19 +133,20 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
         >
           <IEIcon className="w-[22px] h-[22px]" />
         </button>
-        <button
-          aria-label="File Explorer"
-          className="win7-no-touch p-[3px] rounded-[3px] hover:bg-white/20"
-          onClick={() => onTaskClick("computer")}
-        >
+        <button aria-label="File Explorer" className="win7-no-touch p-[3px] rounded-[3px] hover:bg-white/20" onClick={() => onTaskClick("computer")}>
           <FolderIcon className="w-[22px] h-[22px]" />
         </button>
-        <button
-          aria-label="Media Player"
-          className="win7-no-touch p-[3px] rounded-[3px] hover:bg-white/20"
-          onClick={() => toast({ title: "Windows Media Player", description: "♪ Now playing: 'Tum Se Hi' — coding playlist 🎧" })}
-        >
+        <button aria-label="Music Library" className="win7-no-touch p-[3px] rounded-[3px] hover:bg-white/20" onClick={() => onTaskClick("music")}>
           <MediaIcon className="w-[22px] h-[22px]" />
+        </button>
+        {/* JARVIS launch */}
+        <button
+          aria-label="Launch JARVIS"
+          onClick={onJarvisOpen}
+          title="Launch J.A.R.V.I.S"
+          className="win7-no-touch p-[3px] rounded-[3px] hover:bg-cyan-400/25 group relative"
+        >
+          <span className="block w-[22px] h-[22px] rounded-full bg-[radial-gradient(circle_at_35%_28%,#bff4ff_0%,#41c7f0_45%,#0b7fb0_85%)] shadow-[0_0_8px_rgba(80,220,255,0.55),inset_0_1px_2px_rgba(255,255,255,0.6)] flex items-center justify-center win7-breathe" />
         </button>
       </div>
 
@@ -122,9 +160,7 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
               onClick={() => onTaskClick(t.id)}
               title={t.title}
               className={`win7-no-touch flex items-center gap-1.5 h-[28px] max-w-[165px] min-w-0 px-2 rounded-[3px] border text-left transition-colors ${
-                isActive
-                  ? "bg-white/30 border-white/40 shadow-[inset_0_1px_3px_rgba(0,0,0,0.25)]"
-                  : "bg-white/10 border-white/15 hover:bg-white/20"
+                isActive ? "bg-white/30 border-white/40 shadow-[inset_0_1px_3px_rgba(0,0,0,0.25)]" : "bg-white/10 border-white/15 hover:bg-white/20"
               }`}
             >
               <span className="w-4 h-4 shrink-0 [&>svg]:w-4 [&>svg]:h-4">{t.icon}</span>
@@ -138,6 +174,7 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
 
       {/* System tray */}
       <div className="flex items-center gap-1 px-2 shrink-0 border-l border-white/15">
+        <RadioTray />
         <button
           aria-label="Hidden icons"
           className="win7-no-touch p-1 rounded-[3px] hover:bg-white/20"
@@ -147,17 +184,10 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
         </button>
         <button
           aria-label="Network"
-          className="win7-no-touch p-1 rounded-[3px] hover:bg-white/20"
+          className="win7-no-touch p-1 rounded-[3px] hover:bg-white/20 hidden sm:block"
           onClick={() => toast({ title: "Network", description: "Connected to: DesiNet_5G (bars full, speed full, data khatam 😭)" })}
         >
           <Wifi className="w-4 h-4 text-white/85" />
-        </button>
-        <button
-          aria-label="Volume"
-          className="win7-no-touch p-1 rounded-[3px] hover:bg-white/20"
-          onClick={() => toast({ title: "Volume", description: "🔊 100% — bilkul bajao, padosi complain karenge" })}
-        >
-          <Volume2 className="w-4 h-4 text-white/85" />
         </button>
         <Clock />
         {/* Show desktop */}
@@ -177,9 +207,10 @@ interface StartMenuProps {
   onClose: () => void;
   onOpen: (id: WinId) => void;
   onShutdown: () => void;
+  onJarvisOpen: () => void;
 }
 
-export function StartMenu({ onClose, onOpen, onShutdown }: StartMenuProps) {
+export function StartMenu({ onClose, onOpen, onShutdown, onJarvisOpen }: StartMenuProps) {
   const { toast } = useToast();
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -189,7 +220,7 @@ export function StartMenu({ onClose, onOpen, onShutdown }: StartMenuProps) {
     return () => clearTimeout(t);
   }, []);
 
-  const programs: { id: WinId | "ie" | "games"; label: string; icon: ReactNode; sub?: string }[] = [
+  const programs: { id: WinId | "ie" | "games" | "jarvis"; label: string; icon: ReactNode; sub?: string }[] = [
     { id: "ie", label: "Internet Explorer", icon: <IEIcon className="w-6 h-6" /> },
     { id: "about", label: "About_Me.txt", icon: <span className="text-lg">📝</span> },
     { id: "projects", label: "My Projects", icon: <FolderIcon className="w-6 h-6" /> },
@@ -197,26 +228,29 @@ export function StartMenu({ onClose, onOpen, onShutdown }: StartMenuProps) {
     { id: "resume", label: "Resume.pdf", icon: <span className="text-lg">📄</span> },
     { id: "contact", label: "Contact.exe", icon: <span className="text-lg">📨</span> },
     { id: "computer", label: "Computer", icon: <span className="text-lg">💻</span> },
+    { id: "music", label: "Music Library", icon: <span className="text-lg">🎵</span>, sub: "151 songs • YT Music" },
+    { id: "jarvis", label: "J.A.R.V.I.S", icon: <span className="text-lg">🤖</span>, sub: "AI assistant — password protected" },
     { id: "games", label: "Games", icon: <span className="text-lg">🎮</span> },
   ];
 
   const filtered = programs.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
 
-  const launch = (id: WinId | "ie" | "games") => {
+  const launch = (id: WinId | "ie" | "games" | "jarvis") => {
     onClose();
     if (id === "ie") toast({ title: "Internet Explorer", description: "Ye sirf nostalgia ke liye he. Asli browsing Chrome me hoti he 😄" });
     else if (id === "games") toast({ title: "Games", description: "Minesweeper delete ho gaya deadline ke pehle. Sorry yaar 🙈" });
+    else if (id === "jarvis") onJarvisOpen();
     else onOpen(id);
   };
 
-  const links: { label: string; action: () => void }[] = [
-    { label: profile.name, action: () => launch("about") },
+  const links: { label: string; action: () => void; highlight?: boolean }[] = [
+    { label: profile.name, action: () => launch("about"), highlight: true },
     { label: "Documents", action: () => launch("resume") },
-    { label: "Pictures", action: () => { onClose(); toast({ title: "Pictures", description: "Instagram: @aarav.codes pe saare pics he 📸" }); } },
-    { label: "Music", action: () => { onClose(); toast({ title: "Music", description: "♪ lofi beats to code/relax to 🎧" }); } },
+    { label: "Music", action: () => launch("music") },
     { label: "Computer", action: () => launch("computer") },
+    { label: "J.A.R.V.I.S", action: () => onJarvisOpen() },
     { label: "Control Panel", action: () => launch("skills") },
-    { label: "Help and Support", action: () => { onClose(); toast({ title: "Help and Support", description: "Support aadmi so gaya. Google kar lo ya Contact.exe use karo 😴" }); } },
+    { label: "Help and Support", action: () => { onClose(); toast({ title: "Help and Support", description: "Support aadmi so gaya. J.A.R.V.I.S se pucho — wo 24x7 jagta he 😄" }); } },
   ];
 
   return (
@@ -237,13 +271,11 @@ export function StartMenu({ onClose, onOpen, onShutdown }: StartMenuProps) {
         {/* Left pane */}
         <div className="w-[58%] min-w-0 flex flex-col bg-[#f6f8fa]/95 rounded-tl-[6px] m-[1px] mr-0">
           <div className="flex-1 overflow-auto py-1.5 win7-scroll">
-            {filtered.length === 0 && (
-              <div className="px-3 py-2 text-[12px] text-[#7a8a98] italic">Kuch nahi mila "{query}" 🤷</div>
-            )}
+            {filtered.length === 0 && <div className="px-3 py-2 text-[12px] text-[#7a8a98] italic">Kuch nahi mila &quot;{query}&quot; 🤷</div>}
             {filtered.map((p) => (
               <button
                 key={p.label}
-                onClick={() => launch(p.id as WinId)}
+                onClick={() => launch(p.id)}
                 className="w-full flex items-center gap-2.5 px-2.5 py-[5px] text-left hover:bg-gradient-to-b hover:from-[#e8f4fd] hover:to-[#c9e4f8] hover:outline hover:outline-1 hover:outline-[#b3d8f0]"
               >
                 <span className="w-6 h-6 flex items-center justify-center shrink-0 [&>svg]:w-6 [&>svg]:h-6">{p.icon}</span>
@@ -260,7 +292,7 @@ export function StartMenu({ onClose, onOpen, onShutdown }: StartMenuProps) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && filtered[0]) launch(filtered[0].id as WinId);
+                if (e.key === "Enter" && filtered[0]) launch(filtered[0].id);
                 if (e.key === "Escape") onClose();
               }}
               placeholder="Search programs and files"
@@ -272,24 +304,18 @@ export function StartMenu({ onClose, onOpen, onShutdown }: StartMenuProps) {
         {/* Right pane */}
         <div className="flex-1 flex flex-col p-2.5 min-w-0">
           <button onClick={() => launch("about")} className="mx-auto mt-2 mb-1 win7-no-touch">
-            <img
-              src={profile.avatar}
-              alt={profile.name}
-              className="w-[52px] h-[52px] rounded-[4px] object-cover border-2 border-white/70 shadow-md"
-              draggable={false}
-            />
+            <img src={profile.avatar} alt={profile.name} className="w-[52px] h-[52px] rounded-[4px] object-cover border-2 border-white/70 shadow-md" draggable={false} />
           </button>
-          <div className="flex flex-col mt-1.5 flex-1 min-h-0 overflow-auto win7-scroll">
+          <div className="text-center text-[12px] text-white font-semibold mb-1" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.6)" }}>
+            {profile.name}
+          </div>
+          <div className="flex flex-col mt-0.5 flex-1 min-h-0 overflow-auto win7-scroll">
             {links.map((l) => (
               <button
                 key={l.label}
                 onClick={l.action}
-                className={`text-left px-2 py-[5px] rounded-[3px] text-[12px] truncate ${
-                  l.label === profile.name
-                    ? "text-white font-semibold"
-                    : "text-white/85 hover:text-white hover:bg-white/15"
-                }`}
-                style={l.label === profile.name ? { textShadow: "0 1px 2px rgba(0,0,0,0.6)" } : undefined}
+                className={`text-left px-2 py-[5px] rounded-[3px] text-[12px] truncate ${l.highlight ? "text-white font-semibold" : "text-white/85 hover:text-white hover:bg-white/15"}`}
+                style={l.highlight ? { textShadow: "0 1px 2px rgba(0,0,0,0.6)" } : undefined}
               >
                 {l.label}
               </button>
@@ -309,7 +335,10 @@ export function StartMenu({ onClose, onOpen, onShutdown }: StartMenuProps) {
             </button>
             <button
               aria-label="More shutdown options"
-              onClick={() => { onClose(); toast({ title: "Shutdown options", description: "Sleep? Restart? Bhai pehle portfolio toh dekh lo 😄" }); }}
+              onClick={() => {
+                onClose();
+                toast({ title: "Shutdown options", description: "Sleep? Restart? Bhai pehle J.A.R.V.I.S toh try kar lo 😄" });
+              }}
               className="w-[22px] h-[26px] text-white/95 rounded-r-[3px] border border-l-0 border-white/25 bg-gradient-to-b from-white/20 to-white/5 hover:from-[#f8b060]/50 hover:to-[#e08030]/40 text-[10px]"
             >
               ▸

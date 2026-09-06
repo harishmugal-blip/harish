@@ -72,3 +72,22 @@ Work Log:
 Stage Summary:
 - JARVIS brain v6 = full Master Protocol serious-model implementation; 429/circuit-breaker/cache-poisoning sab hardened; music system live YT resolution VERIFIED with 9 real videoIds
 - Rate-limit reality: platform quota hourly window — jab bhi 429 aaye ~5-25 min wait, retry automatic
+
+---
+Task ID: 20
+Agent: Super Z (main agent)
+Task: "ORIGINAL JESA BANAO — internet se Win7 photos dekho aur us hisab se create karo" — authentic Windows 7 visual accuracy pass
+
+Work Log:
+- Image-search se real Win7 references laaye (taskbar explainer + real desktop screenshot w/ GIMP + aero windows); 2 fake results bhi aaye (XP desktop, Windows 11, 3D-printed recycle bin 😄) — discard
+- Win7Window.tsx: caption buttons ab TOP edge pe flush (Win7 superbar style) — min/max glass buttons 29x20 with dark glyphs, close WIDE 46x20 saturated red gradient + white X + hover glow; title bar 31px with authentic glow text-shadow (active: white glow); frame aura glow active me (blue soft outer shadow + white ring); content rounded-t + inset white ring border
+- chrome.tsx Taskbar: blue-tinted → DARK SMOKE glass gradient (authentic Win7 superbar), start orb ab bar ke UPAR protrude karta he (40px orb, hover scale + glow, open pe breathe), quick-launch merge → icon-only pinned squares (IE/Folder/Media/JARVIS 40x33), window buttons → ICON-ONLY superbar squares (44x33, tooltip titles, active = bright glass + glow + inset highlights), tray polish
+- page.tsx WelcomeBubble: black modern toast → authentic Win7 balloon (light glass gradient #fdfeff→#e2edf7, border #9fb9d2, dark text, close X, computer icon header, Win7-style buttons) + position bottom-RIGHT above tray
+- Desktop icons: 36-40px → 44-48px icons, selection highlight tuned (blue translucent box #3d7ac0/50 + light border), label shadow class already authentic
+- globals.css: win7-glass-active brighter (top highlight rgba(245,252,255,0.62), blur 16, saturate 1.45)
+- Verified: tsc 0, eslint 0, browser screenshots — desktop/window/start menu/music library sab authentic Win7 look; music library windows naye chrome me sahi render
+- ZIP regenerated: download/harish-win7-portfolio.zip (updated with new look)
+- Screenshots: download/win7_new_look.png, download/win7_startmenu_new.png, download/win7_music_new.png
+
+Stage Summary:
+- Site ab real Windows 7 references ke hisab se visually accurate: flush caption buttons + wide red close, dark smoke superbar with icon-only buttons, protruding glowing start orb, Win7 balloon notifications, aero glass frames with aura glow

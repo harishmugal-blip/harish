@@ -95,63 +95,69 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
       className="fixed bottom-0 inset-x-0 h-[40px] z-[4000] flex items-stretch select-none"
       style={{
         background:
-          "linear-gradient(to bottom, rgba(70,110,160,0.62) 0%, rgba(38,66,108,0.72) 12%, rgba(18,38,70,0.82) 55%, rgba(10,24,48,0.9) 100%)",
-        borderTop: "1px solid rgba(255,255,255,0.28)",
-        backdropFilter: "blur(16px) saturate(1.5)",
-        WebkitBackdropFilter: "blur(16px) saturate(1.5)",
+          "linear-gradient(to bottom, rgba(118,132,148,0.48) 0%, rgba(52,66,84,0.72) 9%, rgba(20,28,40,0.87) 42%, rgba(3,9,17,0.94) 100%)",
+        borderTop: "1px solid rgba(255,255,255,0.34)",
+        backdropFilter: "blur(18px) saturate(1.35)",
+        WebkitBackdropFilter: "blur(18px) saturate(1.35)",
       }}
     >
-      {/* Start orb */}
-      <div className="relative shrink-0">
+      {/* Start orb — protrudes above the bar like real Win7 */}
+      <div className="relative w-[56px] shrink-0">
         <button
           aria-label="Start"
           onClick={onStartToggle}
-          className="win7-no-touch relative -top-[1px] ml-[2px] mt-[1px] w-[50px] h-[38px] flex items-center justify-center group"
+          className="win7-no-touch absolute -top-[5px] left-0 w-[56px] h-[47px] flex items-center justify-center group"
         >
           <span
-            className={`w-[37px] h-[37px] rounded-full flex items-center justify-center transition-all duration-150 ${startOpen ? "win7-breathe text-[#9fd8ff]" : ""}`}
+            className={`w-[40px] h-[40px] rounded-full flex items-center justify-center transition-all duration-150 group-hover:scale-[1.06] ${startOpen ? "win7-breathe" : ""}`}
             style={{
-              background: startOpen
-                ? "radial-gradient(circle at 35% 28%, #d8f2ff 0%, #5ab5ee 45%, #1a6fb0 80%, #0d4f86 100%)"
-                : "radial-gradient(circle at 35% 28%, #bfe8ff 0%, #4aa8e8 40%, #1663a4 78%, #0a4070 100%)",
+              background:
+                "radial-gradient(circle at 34% 26%, #e8f8ff 0%, #8ecdf2 22%, #3f9de0 48%, #135fb8 74%, #0a3f86 92%, #062c66 100%)",
               boxShadow: startOpen
-                ? "0 0 14px 4px rgba(120,200,255,0.65), inset 0 2px 4px rgba(255,255,255,0.6), inset 0 -4px 8px rgba(0,20,50,0.5)"
-                : "0 1px 4px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.55), inset 0 -4px 8px rgba(0,20,50,0.55)",
+                ? "0 0 18px 5px rgba(130,205,255,0.75), inset 0 2px 5px rgba(255,255,255,0.75), inset 0 -5px 9px rgba(0,20,55,0.6)"
+                : "0 2px 6px rgba(0,0,0,0.65), 0 0 10px 2px rgba(90,160,230,0.35), inset 0 2px 5px rgba(255,255,255,0.7), inset 0 -5px 9px rgba(0,20,55,0.6)",
             }}
           >
-            <WinFlag className="w-[19px] h-[19px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]" />
+            <WinFlag className="w-[21px] h-[21px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]" />
           </span>
         </button>
       </div>
 
-      {/* Quick launch */}
-      <div className="hidden sm:flex items-center gap-[2px] px-1.5 mr-1 shrink-0 border-x border-white/10 my-[5px]">
+      {/* Pinned + window buttons — Win7 superbar: icon-only glass squares */}
+      <div className="flex-1 flex items-center gap-[2px] px-1 min-w-0 overflow-hidden">
         <button
           aria-label="Internet Explorer"
-          className="win7-no-touch p-[3px] rounded-[3px] hover:bg-white/20"
+          title="Internet Explorer"
+          className="win7-no-touch w-[40px] h-[33px] shrink-0 rounded-[4px] border border-transparent hover:border-white/25 hover:bg-white/15 flex items-center justify-center"
           onClick={() => toast({ title: "Internet Explorer", description: "42 tabs open. Send help. 🥱 (IE is just decorative here)" })}
         >
-          <IEIcon className="w-[22px] h-[22px]" />
+          <IEIcon className="w-[24px] h-[24px]" />
         </button>
-        <button aria-label="File Explorer" className="win7-no-touch p-[3px] rounded-[3px] hover:bg-white/20" onClick={() => onTaskClick("computer")}>
-          <FolderIcon className="w-[22px] h-[22px]" />
+        <button
+          aria-label="File Explorer"
+          title="File Explorer"
+          className="win7-no-touch w-[40px] h-[33px] shrink-0 rounded-[4px] border border-transparent hover:border-white/25 hover:bg-white/15 flex items-center justify-center"
+          onClick={() => onTaskClick("computer")}
+        >
+          <FolderIcon className="w-[24px] h-[24px]" />
         </button>
-        <button aria-label="Music Library" className="win7-no-touch p-[3px] rounded-[3px] hover:bg-white/20" onClick={() => onTaskClick("music")}>
-          <MediaIcon className="w-[22px] h-[22px]" />
+        <button
+          aria-label="Windows Media Player"
+          title="Music Library — 151 songs"
+          className="win7-no-touch w-[40px] h-[33px] shrink-0 rounded-[4px] border border-transparent hover:border-white/25 hover:bg-white/15 flex items-center justify-center"
+          onClick={() => onTaskClick("music")}
+        >
+          <MediaIcon className="w-[24px] h-[24px]" />
         </button>
-        {/* JARVIS launch */}
         <button
           aria-label="Launch JARVIS"
-          onClick={onJarvisOpen}
           title="Launch J.A.R.V.I.S"
-          className="win7-no-touch p-[3px] rounded-[3px] hover:bg-cyan-400/25 group relative"
+          onClick={onJarvisOpen}
+          className="win7-no-touch w-[40px] h-[33px] shrink-0 rounded-[4px] border border-transparent hover:border-cyan-300/35 hover:bg-cyan-400/15 flex items-center justify-center"
         >
-          <span className="block w-[22px] h-[22px] rounded-full bg-[radial-gradient(circle_at_35%_28%,#bff4ff_0%,#41c7f0_45%,#0b7fb0_85%)] shadow-[0_0_8px_rgba(80,220,255,0.55),inset_0_1px_2px_rgba(255,255,255,0.6)] flex items-center justify-center win7-breathe" />
+          <span className="block w-[24px] h-[24px] rounded-full bg-[radial-gradient(circle_at_35%_28%,#dffaff_0%,#5fd4f5_40%,#0f8cc2_80%,#075e8a_100%)] shadow-[0_0_9px_rgba(80,220,255,0.6),inset_0_1px_2px_rgba(255,255,255,0.65)] win7-breathe" />
         </button>
-      </div>
-
-      {/* Window buttons */}
-      <div className="flex-1 flex items-center gap-[3px] px-1.5 min-w-0 overflow-hidden">
+        {tasks.length > 0 && <div className="w-[1px] h-[22px] mx-1 bg-white/15 shrink-0" />}
         {tasks.map((t) => {
           const isActive = activeId === t.id && !minimized[t.id];
           return (
@@ -159,21 +165,20 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
               key={t.id}
               onClick={() => onTaskClick(t.id)}
               title={t.title}
-              className={`win7-no-touch flex items-center gap-1.5 h-[28px] max-w-[165px] min-w-0 px-2 rounded-[3px] border text-left transition-colors ${
-                isActive ? "bg-white/30 border-white/40 shadow-[inset_0_1px_3px_rgba(0,0,0,0.25)]" : "bg-white/10 border-white/15 hover:bg-white/20"
+              className={`win7-no-touch w-[44px] h-[33px] shrink-0 rounded-[4px] border flex items-center justify-center transition-all ${
+                isActive
+                  ? "bg-white/25 border-white/45 shadow-[inset_0_1px_2px_rgba(255,255,255,0.45),inset_0_-1px_3px_rgba(0,0,0,0.35),0_0_11px_rgba(160,210,255,0.4)]"
+                  : "bg-white/[0.09] border-white/15 hover:bg-white/20"
               }`}
             >
-              <span className="w-4 h-4 shrink-0 [&>svg]:w-4 [&>svg]:h-4">{t.icon}</span>
-              <span className="text-[11.5px] text-white/95 truncate" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.7)" }}>
-                {t.title}
-              </span>
+              <span className="w-[23px] h-[23px] shrink-0 [&>svg]:w-[23px] [&>svg]:h-[23px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">{t.icon}</span>
             </button>
           );
         })}
       </div>
 
       {/* System tray */}
-      <div className="flex items-center gap-1 px-2 shrink-0 border-l border-white/15">
+      <div className="flex items-center gap-0.5 px-1.5 shrink-0 border-l border-white/15">
         <RadioTray />
         <button
           aria-label="Hidden icons"
@@ -194,7 +199,7 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
         <button
           aria-label="Show desktop"
           onClick={onMinimizeAll}
-          className="win7-no-touch w-[12px] self-stretch my-0 border-l border-white/40 hover:bg-white/25"
+          className="win7-no-touch w-[14px] self-stretch my-0 border-l border-white/35 hover:bg-white/25"
           title="Show desktop"
         />
       </div>

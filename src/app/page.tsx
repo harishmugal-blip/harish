@@ -381,12 +381,12 @@ export default function DesktopPage() {
             onKeyDown={(e) => {
               if (e.key === "Enter") openWindow(d.id);
             }}
-            className={`win7-no-touch w-[78px] sm:w-[84px] flex flex-col items-center gap-0.5 py-1.5 px-1 rounded-[3px] border cursor-default ${
-              selectedIcon === d.id ? "bg-[#316ac5]/55 border-[#5a9ae0]" : "border-transparent hover:bg-white/15 hover:border-white/25"
+            className={`win7-no-touch w-[80px] sm:w-[88px] flex flex-col items-center gap-1 py-1.5 px-1 rounded-[3px] border cursor-default ${
+              selectedIcon === d.id ? "bg-[#3d7ac0]/50 border-[#8fc3ea]" : "border-transparent hover:bg-white/15 hover:border-white/25"
             }`}
           >
-            <span className="w-9 h-9 sm:w-10 sm:h-10 drop-shadow-[0_2px_3px_rgba(0,0,0,0.5)] [&>svg]:w-full [&>svg]:h-full">{d.icon}</span>
-            <span className="win7-icon-label text-[11px] sm:text-[11.5px] text-white text-center leading-[1.2] break-words w-full">{d.label}</span>
+            <span className="w-11 h-11 sm:w-12 sm:h-12 drop-shadow-[0_2px_3px_rgba(0,0,0,0.55)] [&>svg]:w-full [&>svg]:h-full">{d.icon}</span>
+            <span className="win7-icon-label text-[11px] sm:text-[11.5px] text-white text-center leading-[1.25] break-words w-full">{d.label}</span>
           </button>
         ))}
       </div>
@@ -741,11 +741,26 @@ function WelcomeBubble({ onOpen }: { onOpen: () => void }) {
   }, []);
   if (dismissed) return null;
   return (
-    <div className={`fixed left-3 bottom-[52px] z-[3800] max-w-[250px] transition-all duration-500 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>
-      <div className="rounded-[8px] border border-white/30 bg-[#123]/85 backdrop-blur-md p-3 shadow-xl">
-        <div className="text-[12.5px] text-white/95 font-semibold">{profile.name} — Portfolio 🪟</div>
-        <div className="text-[11.5px] text-white/75 mt-1">
-          Music Library me 151 songs he (YouTube Music se). Aur haan — taskbar ke JARVIS button ya &quot;Activate Windows&quot; pe click karo 😉
+    <div className={`fixed right-3 bottom-[52px] z-[3800] max-w-[268px] transition-all duration-500 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>
+      <div
+        className="win7-balloon rounded-[7px] border border-[#9fb9d2] p-3 pr-7 relative shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
+        style={{ background: "linear-gradient(to bottom, #fdfeff 0%, #eef5fb 60%, #e2edf7 100%)" }}
+      >
+        <button
+          aria-label="Dismiss"
+          onClick={() => setDismissed(true)}
+          className="absolute top-1 right-1 w-[18px] h-[18px] rounded-[3px] border border-transparent hover:border-[#8fb4d4] hover:bg-[#dceaf7] flex items-center justify-center text-[#4a6a8a]"
+        >
+          <svg viewBox="0 0 10 10" className="w-[8px] h-[8px]">
+            <path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+          </svg>
+        </button>
+        <div className="flex items-start gap-2">
+          <span className="w-5 h-5 shrink-0 [&>svg]:w-5 [&>svg]:h-5"><ComputerIcon /></span>
+          <div className="text-[12.5px] text-[#123a5e] font-semibold leading-tight">{profile.name} — Portfolio</div>
+        </div>
+        <div className="text-[11.5px] text-[#2c4258] mt-1.5 leading-snug">
+          Music Library me 151 songs he (YouTube Music se live links). Aur haan — taskbar ke JARVIS button ya &quot;Activate Windows&quot; pe click karo 😉
         </div>
         <div className="flex gap-2 mt-2.5">
           <button
@@ -753,11 +768,14 @@ function WelcomeBubble({ onOpen }: { onOpen: () => void }) {
               setDismissed(true);
               onOpen();
             }}
-            className="text-[11.5px] px-2.5 py-1 rounded-[4px] bg-gradient-to-b from-[#5ab5ee] to-[#1a6fb0] text-white border border-white/30 hover:from-[#7ec5f5]"
+            className="text-[11.5px] px-3 py-1 rounded-[3px] text-[#123a5e] border border-[#7ba6c9] bg-[linear-gradient(to_bottom,#ffffff_0%,#e6f2fc_50%,#cfe6f8_100%)] hover:bg-[linear-gradient(to_bottom,#ffffff_0%,#d9edfc_50%,#b7dcf6_100%)] hover:border-[#5a9ae0]"
           >
             Play Music 🎵
           </button>
-          <button onClick={() => setDismissed(true)} className="text-[11.5px] px-2.5 py-1 rounded-[4px] bg-white/10 text-white/85 border border-white/20 hover:bg-white/20">
+          <button
+            onClick={() => setDismissed(true)}
+            className="text-[11.5px] px-3 py-1 rounded-[3px] text-[#2c4258] border border-[#b9cbdc] bg-[linear-gradient(to_bottom,#ffffff_0%,#f2f6fa_50%,#e4ecf4_100%)] hover:border-[#8fb4d4]"
+          >
             Theek he, khud dekhunga
           </button>
         </div>

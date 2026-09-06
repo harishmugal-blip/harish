@@ -15,14 +15,14 @@
 .win7-glass-active {
   background: linear-gradient(
     to bottom,
-    rgba(230, 245, 255, 0.55) 0%,
-    rgba(170, 210, 240, 0.42) 8px,
-    rgba(120, 170, 215, 0.38) 42%,
-    rgba(90, 140, 190, 0.42) 90%,
-    rgba(70, 110, 160, 0.5) 100%
+    rgba(245, 252, 255, 0.62) 0%,
+    rgba(185, 222, 248, 0.48) 7px,
+    rgba(130, 178, 220, 0.42) 42%,
+    rgba(96, 146, 195, 0.46) 90%,
+    rgba(76, 116, 166, 0.55) 100%
   );
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.45);
+  -webkit-backdrop-filter: blur(16px) saturate(1.45);
 }
 
 .win7-glass-inactive {

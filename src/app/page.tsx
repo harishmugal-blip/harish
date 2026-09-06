@@ -500,7 +500,13 @@ function BootScreen({ onDone }: { onDone: () => void }) {
         <div className="win7-boot-orb absolute left-[14px] bottom-[10px] w-[46px] h-[46px] rounded-full bg-[#00a1f1]" style={{ animationDelay: "0.85s", boxShadow: "0 0 30px 8px rgba(0,161,241,0.55)" }} />
         <div className="win7-boot-orb absolute right-[14px] bottom-[10px] w-[46px] h-[46px] rounded-full bg-[#ffbb00]" style={{ animationDelay: "1.15s", boxShadow: "0 0 30px 8px rgba(255,187,0,0.55)" }} />
         <div className="win7-boot-flag absolute inset-0 flex items-center justify-center">
-          <span className="text-[#bfe4ff] text-[42px] leading-none win7-breathe" style={{ textShadow: "0 0 30px rgba(120,200,255,0.9)" }}>🪟</span>
+          <img
+            src="/win7-logo.svg"
+            alt="Windows 7"
+            className="w-[100px] h-auto win7-breathe"
+            style={{ filter: "drop-shadow(0 0 26px rgba(130,205,255,0.85)) drop-shadow(0 4px 10px rgba(0,0,0,0.6))" }}
+            draggable={false}
+          />
         </div>
       </div>
       <div className="win7-boot-text text-white/90 text-[15px] sm:text-[17px] font-light mt-10">Starting Windows</div>

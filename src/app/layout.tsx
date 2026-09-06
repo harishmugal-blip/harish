@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   keywords: ["Harish", "portfolio", "website designer", "backend developer", "POS software", "Windows 7", "JARVIS", "Muzaffarnagar"],
   authors: [{ name: "Harish" }],
   icons: {
-    icon: "/avatar.png",
+    icon: "/win7-logo.svg",
   },
   openGraph: {
     title: "Harish — Portfolio (Windows 7 Edition)",

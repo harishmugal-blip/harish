@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { FolderIcon, DriveIcon, NotepadIcon } from "./icons";
+import { FolderIcon, DriveIcon, NotepadIcon, WinFlag } from "./icons";
 import { useToast } from "@/hooks/use-toast";
 import {
   profile,
@@ -390,7 +390,10 @@ export function ComputerContent() {
           ))}
         </div>
 
-        <div className="text-[12px] font-bold text-[#3a4a58] mb-1.5">System Properties</div>
+        <div className="text-[12px] font-bold text-[#3a4a58] mb-1.5 flex items-center justify-between max-w-[560px]">
+          <span>System Properties</span>
+          <WinFlag className="w-[52px] h-auto opacity-95" />
+        </div>
         <div className="border border-[#dfe8f0] rounded-[3px] overflow-hidden max-w-[560px]">
           {systemSpecs.map((s, i) => (
             <div key={s.label} className={`flex text-[12px] ${i % 2 ? "bg-[#f6fafd]" : "bg-white"}`}>

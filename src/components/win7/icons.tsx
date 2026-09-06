@@ -339,17 +339,9 @@ export function GamesIcon({ className = "w-8 h-8" }: { className?: string }) {
   );
 }
 
-/* ---------------- Waving Windows flag (start orb core) ---------------- */
+/* ---------------- Waving Windows flag — OFFICIAL Windows 7 logo (user-supplied SVG) ---------------- */
 export function WinFlag({ className = "w-6 h-6" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" className={className}>
-      {/* waving 4-pane flag — perspective flutter to the right */}
-      <path d="M3 10.2C7.6 7.6 11.6 7.1 14.8 7.7v7.6c-3.2-.7-7.2-.2-11.8 1.3z" fill="#f65314" />
-      <path d="M17.2 8.1c3.8-1 7.9-1.5 11.8-1.9v7.6c-3.9.4-8 .9-11.8 2z" fill="#7cbb00" />
-      <path d="M3 19.1c4.6-1.5 8.6-2 11.8-1.3v7.6c-3.2-.7-7.2-.2-11.8 1.3z" fill="#00a1f1" />
-      <path d="M17.2 18c3.8-1.1 7.9-1.6 11.8-2v7.6c-3.9.4-8 .9-11.8 2z" fill="#ffbb08" />
-    </svg>
-  );
+  return <img src="/win7-logo.svg" alt="Windows 7 logo" className={className} draggable={false} />;
 }
 
 /* ---------------- Tray: Action Center flag ---------------- */

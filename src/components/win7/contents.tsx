@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { FolderIcon, DriveIcon, NotepadIcon, WinFlag } from "./icons";
+import { FolderIcon, DriveIcon, NotepadIcon, WinFlag, SoundFileIcon, CdMusicIcon } from "./icons";
 import { useToast } from "@/hooks/use-toast";
 import {
   profile,
@@ -485,6 +485,7 @@ export function MusicLibraryContent() {
 
       {/* now playing bar */}
       <div className="flex items-center gap-2 px-2.5 py-1.5 bg-gradient-to-b from-[#eef5fb] to-[#dcebf7] border-b border-[#c5d5e2] shrink-0">
+        <CdMusicIcon className={`w-[26px] h-[26px] shrink-0 ${radio.playing && !radio.loading ? "animate-spin [animation-duration:2.8s]" : ""}`} />
         <button
           onClick={() => togglePlayPause()}
           className="w-[26px] h-[26px] rounded-full bg-gradient-to-b from-[#7db4dd] to-[#2f6a9e] text-white text-[12px] flex items-center justify-center shadow hover:from-[#8ec5ee] shrink-0"
@@ -604,7 +605,20 @@ export function RecycleContent() {
             <tbody>
               {items.map((it, i) => (
                 <tr key={it.name} className={`${i % 2 ? "bg-[#f8fbfd]" : "bg-white"} hover:bg-[#e8f2fa]`}>
-                  <td className="px-2.5 py-[5px] text-[#1a2a38] cursor-default">📄 {it.name}</td>
+                  <td className="px-2.5 py-[5px] text-[#1a2a38] cursor-default">
+                    <span className="inline-flex items-center gap-1.5">
+                      {it.name.endsWith(".wav") ? (
+                        <SoundFileIcon className="w-4 h-4 inline-block" />
+                      ) : it.name.endsWith(".png") ? (
+                        <span>🖼️</span>
+                      ) : it.name.endsWith(".docx") ? (
+                        <NotepadIcon className="w-4 h-4 inline-block" />
+                      ) : (
+                        <span>📄</span>
+                      )}
+                      {it.name}
+                    </span>
+                  </td>
                   <td className="px-2.5 py-[5px] text-[#44566a] cursor-default">{it.size}</td>
                   <td className="px-2.5 py-[5px] text-[#44566a] cursor-default hidden sm:table-cell">{it.type}</td>
                 </tr>

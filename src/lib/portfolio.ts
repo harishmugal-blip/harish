@@ -168,6 +168,7 @@ export const systemSpecs = [
 ];
 
 export const recycleItems = [
+  { name: "old_startup_beep.wav", size: "0.4 MB", type: "Fake boot sound — REAL one ab hai 😎" },
   { name: "paper_register.exe", size: "42 MB", type: "Obsolete" },
   { name: "hisaab_notebook.docx", size: "1.2 MB", type: "Replaced by POS" },
   { name: "network_chutiya_sharemarket.pptx", size: "0 KB", type: "Loss-making deck" },

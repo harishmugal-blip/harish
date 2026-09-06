@@ -127,3 +127,21 @@ Work Log:
 
 Stage Summary:
 - Official Win7 logo ab 4 jagah live: boot animation, start orb, Computer window System Properties, favicon — sab jagah same uploaded SVG
+
+---
+Task ID: 21
+Agent: Super Z (main agent)
+Task: "WINDOW 7 ICON OR STARTING WINDOW KA LOGO FACK DIKHTA HE + SOUND KE LIYE YE LAYA HU" — user ne REAL glossy Win7 icon sheet (dadr79hskpnc1.png) upload ki. Fake-looking icons + boot animation ko real banana, sound icons wire karna.
+
+Work Log:
+- Boot animation PURA REBUILD — pehle 4 plain colored circles the (Win8 jaise, fake). Ab real "Starting Windows": 4 glowing light RIBBONS (orange/green/blue/yellow capsules with gradient trails + glow) corners se curved paths pe converge karte he (staggered delays 0.1-0.7s) -> convergence flash bloom (radial white-blue burst) -> REAL win7-logo.svg scale-bloom ke sath fade in -> rotating light rays (repeating-conic + radial mask) -> "Starting Windows" text soft glow ke sath fade in. Timing: boot 4.4s total, fadeout 3.7s pe. globals.css me purane win7-boot-orb keyframes hataye, naye win7-comet-*/bloom/flag/rays/text keyframes
+- Icon EXTRACTION PIPELINE (scripts/extract_icons.py): user ki 2000x3000 icon sheet se 13 REAL glossy icons nikale — background modeling (border ring + flat-interior samples -> nearest griddata -> blur), distance matte, component filtering (>=15% main size, edge-touching streak drop, flat-sliver drop), crack-closing + hole-fill, feather; recycle-full ke liye SOFT GLASS alpha (semi-transparent glass, holes nahi). 128px optimize -> public/icons/*.png (230KB total)
+- icons.tsx: RecycleBin/Computer/Folder/Notepad/Contact(users)/Media(WMP)/IE/Volume(speaker) ab REAL PNG render karte he (same component APIs); naye exports: SoundFileIcon (WAV), CdMusicIcon, InfoIcon, ShieldCheckIcon, FolderVideosIcon
+- SOUND wiring (user ka "sound ke liye ye laya hu"): tray volume icon ab REAL glossy speaker; Music Library now-playing bar me REAL CD icon (playing pe animate-spin 2.8s); Recycle Bin rows me file-type icons — .wav = WAV icon; recycleItems me "old_startup_beep.wav" (type: "Fake boot sound — REAL one ab hai 😎") easter egg
+- Login screen: real Win7 branding — bottom-left REAL flag + "Windows 7 / Ultimate — Portfolio Edition", bottom-right copyright (pehle sirf ek plain line thi)
+- DEV SERVER CACHE ISSUE mila: Turbopack purana CSS chunk serve kar raha tha (naye keyframes missing) — pkill + restart fix; verify kiya served CSS me 16 new keyframe matches
+- Verified: tsc 0 src errors, eslint 0, console clean (sirf Fast Refresh logs), mobile 390x844 OK; screenshots — comets flight, flag bloom + rays + text, login branding, desktop real icons, start menu, recycle WAV row, music CD, tray/superbar zoom
+- ZIP regenerated
+
+Stage Summary:
+- Boot ab REAL Starting Windows jaisa (ribbons converge -> flag bloom + rays); desktop/start menu/tray/windows me REAL glossy icons (user ki sheet se); sound UI (speaker/WAV/CD) real icons pe — sab user-uploaded assets se

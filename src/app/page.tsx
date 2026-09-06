@@ -13,6 +13,7 @@ import {
   ContactIcon,
   GearIcon,
   MediaIcon,
+  WinFlag,
 } from "@/components/win7/icons";
 import {
   AboutContent,
@@ -487,29 +488,36 @@ export default function DesktopPage() {
 
 function BootScreen({ onDone }: { onDone: () => void }) {
   useEffect(() => {
-    const t = setTimeout(onDone, 3300);
+    const t = setTimeout(onDone, 4400);
     return () => clearTimeout(t);
   }, [onDone]);
 
   return (
-    <div className="win7-boot-fadeout fixed inset-0 z-[9000] bg-black flex flex-col items-center justify-center cursor-pointer select-none" onClick={onDone}>
-      <div className="relative w-[130px] h-[130px]">
-        <div className="absolute inset-0 rounded-full bg-[#4aa8e8]/20 blur-2xl" />
-        <div className="win7-boot-orb absolute left-[14px] top-[10px] w-[46px] h-[46px] rounded-full bg-[#f65314]" style={{ animationDelay: "0.25s", boxShadow: "0 0 30px 8px rgba(246,83,20,0.55)", clipPath: "path('M0,0 L46,0 L46,46 L23,40 Q6,36 0,20 Z')" }} />
-        <div className="win7-boot-orb absolute right-[14px] top-[10px] w-[46px] h-[46px] rounded-full bg-[#7cbb00]" style={{ animationDelay: "0.55s", boxShadow: "0 0 30px 8px rgba(124,187,0,0.55)" }} />
-        <div className="win7-boot-orb absolute left-[14px] bottom-[10px] w-[46px] h-[46px] rounded-full bg-[#00a1f1]" style={{ animationDelay: "0.85s", boxShadow: "0 0 30px 8px rgba(0,161,241,0.55)" }} />
-        <div className="win7-boot-orb absolute right-[14px] bottom-[10px] w-[46px] h-[46px] rounded-full bg-[#ffbb00]" style={{ animationDelay: "1.15s", boxShadow: "0 0 30px 8px rgba(255,187,0,0.55)" }} />
-        <div className="win7-boot-flag absolute inset-0 flex items-center justify-center">
+    <div className="win7-boot-fadeout fixed inset-0 z-[9000] bg-black flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden" onClick={onDone}>
+      <div className="relative w-[220px] h-[220px] flex items-center justify-center">
+        {/* soft ambient glow */}
+        <div className="absolute w-[190px] h-[190px] rounded-full bg-[#4aa8e8]/15 blur-3xl" />
+        {/* rotating light rays (fade in with the flag) */}
+        <div className="win7-boot-rays absolute inset-0" />
+        {/* four light ribbons converging from the corners — real Starting Windows */}
+        <div className="win7-comet win7-comet-tl" />
+        <div className="win7-comet win7-comet-tr" />
+        <div className="win7-comet win7-comet-bl" />
+        <div className="win7-comet win7-comet-br" />
+        {/* convergence flash */}
+        <div className="win7-boot-bloom absolute w-[150px] h-[150px] rounded-full" />
+        {/* the real Windows 7 flag */}
+        <div className="win7-boot-flag relative">
           <img
             src="/win7-logo.svg"
             alt="Windows 7"
-            className="w-[100px] h-auto win7-breathe"
-            style={{ filter: "drop-shadow(0 0 26px rgba(130,205,255,0.85)) drop-shadow(0 4px 10px rgba(0,0,0,0.6))" }}
+            className="w-[104px] h-auto"
+            style={{ filter: "drop-shadow(0 0 22px rgba(140,210,255,0.9)) drop-shadow(0 0 62px rgba(80,160,240,0.45))" }}
             draggable={false}
           />
         </div>
       </div>
-      <div className="win7-boot-text text-white/90 text-[15px] sm:text-[17px] font-light mt-10">Starting Windows</div>
+      <div className="win7-boot-text text-white/95 text-[19px] sm:text-[21px] font-light mt-9" style={{ textShadow: "0 0 16px rgba(160,215,255,0.6)" }}>Starting Windows</div>
       <div className="absolute bottom-6 text-white/30 text-[11px] tracking-[0.2em]">© {profile.name.toUpperCase()} PC • PORTFOLIO 7 ULTIMATE</div>
       <div className="absolute bottom-2 right-3 text-white/25 text-[10px]">click to skip</div>
     </div>
@@ -580,7 +588,15 @@ function LoginScreen({ onDone }: { onDone: () => void }) {
           Guest login →
         </button>
       )}
-      <div className="absolute bottom-5 text-white/35 text-[10.5px] tracking-[0.25em]">PORTFOLIO 7 ULTIMATE • {profile.role.toUpperCase()}</div>
+      {/* real Win7 login branding: edition bottom-left, copyright bottom-right */}
+      <div className="absolute bottom-5 left-6 flex items-center gap-2.5">
+        <WinFlag className="w-[46px] h-auto drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]" />
+        <div className="leading-tight">
+          <div className="text-white/90 text-[15px]" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>Windows 7</div>
+          <div className="text-white/60 text-[12px]">Ultimate — Portfolio Edition</div>
+        </div>
+      </div>
+      <div className="absolute bottom-5 right-6 text-white/35 text-[10.5px] tracking-[0.18em]">PORTFOLIO 7 ULTIMATE • {profile.role.toUpperCase()}</div>
     </div>
   );
 }

@@ -91,3 +91,22 @@ Work Log:
 
 Stage Summary:
 - Site ab real Windows 7 references ke hisab se visually accurate: flush caption buttons + wide red close, dark smoke superbar with icon-only buttons, protruding glowing start orb, Win7 balloon notifications, aero glass frames with aura glow
+
+---
+Task ID: 20-b
+Agent: Super Z (main agent)
+Task: "ORIGINAL ICON and theme" — user ne 2 real Win7 photos upload ki (original Harmony wallpaper + real desktop with start menu). Site ko un photos ke hisab se original banana.
+
+Work Log:
+- User uploads: pasted_image_1788711404578.png = ASLI Harmony wallpaper (1912x1076) → optimized JPG (122KB) → public/harmony-wallpaper.jpg → page.tsx wallpaper swap (purana AI-generated win7-wallpaper.png hata diya)
+- icons.tsx COMPLETE REWRITE — authentic Win7 icon set: RecycleBin (translucent glass bin + rim + facets + green 3-arrow recycle emblem + crumpled papers full-state), Computer (dark bezel LCD + Harmony-blue screen with waving flag ghost + silver stand + power LED), Folder (two-tone manila gradient), Notepad (blue cover + spiral rings + blue rules), PDF (red gradient badge), Contact (Live Mail envelope), Gear (metal gradient), Media (WMP12 orange orb with sheen + white play), IE (path-drawn italic e + gold orbit back/front halves), Games (purple controller with d-pad + buttons), WinFlag (waving 4-pane flag F65314/7CBB00/00A1F1/FFBB08), NEW tray icons: TrayFlag (action center), NetworkBars (Win7 5-bar), Volume (speaker + waves)
+- chrome.tsx: Start menu programs ab REAL icons (saare emoji icons gaye), right-pane = original Win7 links (Documents/Pictures/Music/Games/Computer/Control Panel/Devices and Printers/Default Programs/JARVIS/Help and Support), "All Programs ▶" row added, search box me magnifier icon; tray order: Radio | ^ | flag | network-bars | volume | clock | show-desktop; clock format DD-MM-YYYY (reference jaisa); taskbar gradient darker authentic navy-black (top light line 0.6 → 0.97 bottom); start orb BRIGHT glassy banaya (lighter radial + white sheen overlay + 22px waving flag)
+- page.tsx BUG FIX: onTaskClick closed window pe return karta tha — ab pinned superbar buttons (folder/media) window OPEN karte he (real Win7 launch behavior)
+- next.config.ts: devIndicators: false (dev "N" button start orb ke upar overlap ho raha tha)
+- Verified: tsc 0 src errors, eslint clean, browser console clean, mobile viewport OK
+- Screenshots: download/win7_original_theme_final.png (desktop), win7_original_window2.png (window chrome), start menu verified visually vs reference
+- ZIP regenerated: download/harish-win7-portfolio.zip (924K, unzip -t OK)
+
+Stage Summary:
+- Theme = ORIGINAL Harmony wallpaper (user ki hi photo), icons = original Win7 style SVG set, start menu = original layout with authentic links
+- Superbar launch fix + orb/tray/clock polish; dev clean, zip updated

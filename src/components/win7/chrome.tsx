@@ -1,8 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
-import { Wifi, ChevronUp } from "lucide-react";
-import { IEIcon, MediaIcon, FolderIcon, WinFlag } from "./icons";
+import { ChevronUp } from "lucide-react";
+import {
+  IEIcon,
+  MediaIcon,
+  FolderIcon,
+  WinFlag,
+  NotepadIcon,
+  PdfIcon,
+  ContactIcon,
+  ComputerIcon,
+  GearIcon,
+  GamesIcon,
+  TrayFlagIcon,
+  NetworkBarsIcon,
+  VolumeIcon,
+} from "./icons";
 import { useToast } from "@/hooks/use-toast";
 import { profile } from "@/lib/portfolio";
 import { getRadioSnapshot, subscribeRadio, togglePlayPause, nextSong, radioStart } from "@/lib/radio";
@@ -29,7 +43,7 @@ export function Clock() {
   }, []);
   if (!now) return <div className="w-[70px]" />;
   const time = now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
-  const date = now.toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "numeric" });
+  const date = now.toLocaleDateString("en-GB").split("/").join("-"); // DD-MM-YYYY — real Win7 jaisa
   return (
     <div className="text-center leading-[1.25] px-2 cursor-default select-none">
       <div className="text-[11.5px] text-white/95">{time}</div>
@@ -95,8 +109,8 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
       className="fixed bottom-0 inset-x-0 h-[40px] z-[4000] flex items-stretch select-none"
       style={{
         background:
-          "linear-gradient(to bottom, rgba(118,132,148,0.48) 0%, rgba(52,66,84,0.72) 9%, rgba(20,28,40,0.87) 42%, rgba(3,9,17,0.94) 100%)",
-        borderTop: "1px solid rgba(255,255,255,0.34)",
+          "linear-gradient(to bottom, rgba(210,230,248,0.6) 0%, rgba(110,140,175,0.66) 7%, rgba(38,60,92,0.86) 18%, rgba(12,24,44,0.94) 48%, rgba(1,4,10,0.97) 100%)",
+        borderTop: "1px solid rgba(255,255,255,0.45)",
         backdropFilter: "blur(18px) saturate(1.35)",
         WebkitBackdropFilter: "blur(18px) saturate(1.35)",
       }}
@@ -109,16 +123,24 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
           className="win7-no-touch absolute -top-[5px] left-0 w-[56px] h-[47px] flex items-center justify-center group"
         >
           <span
-            className={`w-[40px] h-[40px] rounded-full flex items-center justify-center transition-all duration-150 group-hover:scale-[1.06] ${startOpen ? "win7-breathe" : ""}`}
+            className={`relative w-[40px] h-[40px] rounded-full flex items-center justify-center transition-all duration-150 group-hover:scale-[1.06] ${startOpen ? "win7-breathe" : ""}`}
             style={{
               background:
-                "radial-gradient(circle at 34% 26%, #e8f8ff 0%, #8ecdf2 22%, #3f9de0 48%, #135fb8 74%, #0a3f86 92%, #062c66 100%)",
+                "radial-gradient(circle at 35% 24%, #f2fbff 0%, #a8dcf8 18%, #52aeee 44%, #1a6fc4 70%, #0b4a97 88%, #073568 100%)",
               boxShadow: startOpen
-                ? "0 0 18px 5px rgba(130,205,255,0.75), inset 0 2px 5px rgba(255,255,255,0.75), inset 0 -5px 9px rgba(0,20,55,0.6)"
-                : "0 2px 6px rgba(0,0,0,0.65), 0 0 10px 2px rgba(90,160,230,0.35), inset 0 2px 5px rgba(255,255,255,0.7), inset 0 -5px 9px rgba(0,20,55,0.6)",
+                ? "0 0 20px 6px rgba(130,205,255,0.8), inset 0 2px 6px rgba(255,255,255,0.85), inset 0 -6px 10px rgba(0,25,60,0.65)"
+                : "0 2px 7px rgba(0,0,0,0.7), 0 0 12px 3px rgba(90,160,230,0.4), inset 0 2px 6px rgba(255,255,255,0.8), inset 0 -6px 10px rgba(0,25,60,0.65)",
             }}
           >
-            <WinFlag className="w-[21px] h-[21px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.55)]" />
+            {/* glass sheen — Win7 orb ki chamak */}
+            <span
+              className="absolute inset-[2px] rounded-full pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(to bottom, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.25) 32%, rgba(255,255,255,0) 52%)",
+              }}
+            />
+            <WinFlag className="relative z-10 w-[22px] h-[22px] drop-shadow-[0_1px_1px_rgba(0,10,30,0.6)]" />
           </span>
         </button>
       </div>
@@ -188,11 +210,28 @@ export function Taskbar({ tasks, activeId, minimized, onTaskClick, onStartToggle
           <ChevronUp className="w-3.5 h-3.5 text-white/85" />
         </button>
         <button
+          aria-label="Action Center"
+          title="Action Center"
+          className="win7-no-touch p-1 rounded-[3px] hover:bg-white/20 hidden sm:block"
+          onClick={() => toast({ title: "Action Center", description: "Sab kuch under control he, sir. Koi urgent message nahi. ✅" })}
+        >
+          <TrayFlagIcon className="w-[15px] h-[15px]" />
+        </button>
+        <button
           aria-label="Network"
+          title="Network — Connected"
           className="win7-no-touch p-1 rounded-[3px] hover:bg-white/20 hidden sm:block"
           onClick={() => toast({ title: "Network", description: "Connected to: DesiNet_5G (bars full, speed full, data khatam 😭)" })}
         >
-          <Wifi className="w-4 h-4 text-white/85" />
+          <NetworkBarsIcon className="w-[15px] h-[15px]" />
+        </button>
+        <button
+          aria-label="Volume"
+          title="Volume"
+          className="win7-no-touch p-1 rounded-[3px] hover:bg-white/20 hidden sm:block"
+          onClick={() => toast({ title: "Volume", description: "Speakers: Desi 5.1 surround. Volume abhi 100% he — padosi approve karte he 😄" })}
+        >
+          <VolumeIcon className="w-[15px] h-[15px]" />
         </button>
         <Clock />
         {/* Show desktop */}
@@ -225,17 +264,21 @@ export function StartMenu({ onClose, onOpen, onShutdown, onJarvisOpen }: StartMe
     return () => clearTimeout(t);
   }, []);
 
+  const jarvisOrb = (
+    <span className="block w-6 h-6 rounded-full bg-[radial-gradient(circle_at_35%_28%,#dffaff_0%,#5fd4f5_40%,#0f8cc2_80%,#075e8a_100%)] shadow-[0_0_8px_rgba(80,220,255,0.65),inset_0_1px_2px_rgba(255,255,255,0.65)]" />
+  );
+
   const programs: { id: WinId | "ie" | "games" | "jarvis"; label: string; icon: ReactNode; sub?: string }[] = [
     { id: "ie", label: "Internet Explorer", icon: <IEIcon className="w-6 h-6" /> },
-    { id: "about", label: "About_Me.txt", icon: <span className="text-lg">📝</span> },
+    { id: "about", label: "About_Me.txt", icon: <NotepadIcon className="w-6 h-6" /> },
     { id: "projects", label: "My Projects", icon: <FolderIcon className="w-6 h-6" /> },
-    { id: "skills", label: "Skills.exe", icon: <span className="text-lg">⚙️</span>, sub: "Skill Manager 7" },
-    { id: "resume", label: "Resume.pdf", icon: <span className="text-lg">📄</span> },
-    { id: "contact", label: "Contact.exe", icon: <span className="text-lg">📨</span> },
-    { id: "computer", label: "Computer", icon: <span className="text-lg">💻</span> },
-    { id: "music", label: "Music Library", icon: <span className="text-lg">🎵</span>, sub: "151 songs • YT Music" },
-    { id: "jarvis", label: "J.A.R.V.I.S", icon: <span className="text-lg">🤖</span>, sub: "AI assistant — password protected" },
-    { id: "games", label: "Games", icon: <span className="text-lg">🎮</span> },
+    { id: "skills", label: "Skills.exe", icon: <GearIcon className="w-6 h-6" />, sub: "Skill Manager 7" },
+    { id: "resume", label: "Resume.pdf", icon: <PdfIcon className="w-6 h-6" /> },
+    { id: "contact", label: "Contact.exe", icon: <ContactIcon className="w-6 h-6" /> },
+    { id: "computer", label: "Computer", icon: <ComputerIcon className="w-6 h-6" /> },
+    { id: "music", label: "Music Library", icon: <MediaIcon className="w-6 h-6" />, sub: "151 songs • YT Music" },
+    { id: "jarvis", label: "J.A.R.V.I.S", icon: jarvisOrb, sub: "AI assistant — password protected" },
+    { id: "games", label: "Games", icon: <GamesIcon className="w-6 h-6" /> },
   ];
 
   const filtered = programs.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
@@ -251,10 +294,14 @@ export function StartMenu({ onClose, onOpen, onShutdown, onJarvisOpen }: StartMe
   const links: { label: string; action: () => void; highlight?: boolean }[] = [
     { label: profile.name, action: () => launch("about"), highlight: true },
     { label: "Documents", action: () => launch("resume") },
+    { label: "Pictures", action: () => { onClose(); toast({ title: "Pictures", description: "Wallpaper toh dekh hi liya 😄 Gallery jald aa rahi he." }); } },
     { label: "Music", action: () => launch("music") },
+    { label: "Games", action: () => launch("games") },
     { label: "Computer", action: () => launch("computer") },
-    { label: "J.A.R.V.I.S", action: () => onJarvisOpen() },
     { label: "Control Panel", action: () => launch("skills") },
+    { label: "Devices and Printers", action: () => { onClose(); toast({ title: "Devices and Printers", description: "1 device found: HARISH-PC. Printer 2011 se so raha he 😴" }); } },
+    { label: "Default Programs", action: () => { onClose(); toast({ title: "Default Programs", description: "Sab kuch classic set he. IE bhi yahin hai, chupchaap. 🪟" }); } },
+    { label: "J.A.R.V.I.S", action: () => onJarvisOpen() },
     { label: "Help and Support", action: () => { onClose(); toast({ title: "Help and Support", description: "Support aadmi so gaya. J.A.R.V.I.S se pucho — wo 24x7 jagta he 😄" }); } },
   ];
 
@@ -291,18 +338,32 @@ export function StartMenu({ onClose, onOpen, onShutdown, onJarvisOpen }: StartMe
               </button>
             ))}
           </div>
-          <div className="p-2 border-t border-[#dfe6ec]">
-            <input
-              ref={inputRef}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && filtered[0]) launch(filtered[0].id);
-                if (e.key === "Escape") onClose();
-              }}
-              placeholder="Search programs and files"
-              className="w-full h-[24px] text-[12px] px-2.5 rounded-[3px] border border-[#b8c8d6] bg-white outline-none focus:border-[#5aabe0] focus:shadow-[0_0_5px_#8ec9ee]"
-            />
+          {/* All Programs — authentic Win7 separator row */}
+          <button
+            onClick={() => toast({ title: "All Programs", description: "Yahi sab programs he bro — Win7 me bhi itna hi milta tha 😄" })}
+            className="flex items-center justify-between w-full px-3 py-[5px] border-t border-[#dfe6ec] text-[12px] font-semibold text-[#1a2a38] hover:bg-gradient-to-b hover:from-[#e8f4fd] hover:to-[#c9e4f8]"
+          >
+            <span>All Programs</span>
+            <span className="text-[#4a6a8a] text-[10px]">▶</span>
+          </button>
+          <div className="p-2 pt-1.5 border-t border-[#dfe6ec]">
+            <div className="relative">
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && filtered[0]) launch(filtered[0].id);
+                  if (e.key === "Escape") onClose();
+                }}
+                placeholder="Search programs and files"
+                className="w-full h-[24px] text-[12px] pl-2.5 pr-7 rounded-[3px] border border-[#b8c8d6] bg-white outline-none focus:border-[#5aabe0] focus:shadow-[0_0_5px_#8ec9ee]"
+              />
+              <svg viewBox="0 0 16 16" className="w-[13px] h-[13px] absolute right-2 top-[5.5px] opacity-70 pointer-events-none">
+                <circle cx="6.8" cy="6.8" r="4.2" fill="none" stroke="#4a6a8a" strokeWidth="1.6" />
+                <path d="M10 10l3.4 3.4" stroke="#4a6a8a" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </div>
           </div>
         </div>
 

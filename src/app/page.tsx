@@ -272,7 +272,11 @@ export default function DesktopPage() {
     (id: WinId) => {
       setStartOpen(false);
       const cur = windowsRef.current[id];
-      if (!cur.open) return;
+      if (!cur.open) {
+        // superbar pinned buttons launch the app — real Win7 jaisa
+        openWindow(id);
+        return;
+      }
       if (!cur.min && activeId === id) {
         setWindows((w) => ({ ...w, [id]: { ...w[id], min: true } }));
         setActiveId(null);
@@ -283,7 +287,7 @@ export default function DesktopPage() {
         setActiveId(id);
       }
     },
-    [activeId]
+    [activeId, openWindow]
   );
 
   const minimizeAll = useCallback(() => {
@@ -362,7 +366,7 @@ export default function DesktopPage() {
 
       {/* Wallpaper */}
       <div className="absolute inset-0" onClick={onDesktopClick} onContextMenu={(e) => { e.preventDefault(); setCtxMenu({ x: e.clientX, y: e.clientY }); setSelectedIcon(null); }}>
-        <img src="/win7-wallpaper.png" alt="Windows 7 style wallpaper" className="w-full h-full object-cover select-none" draggable={false} />
+        <img src="/harmony-wallpaper.jpg" alt="Windows 7 Harmony — original default wallpaper" className="w-full h-full object-cover select-none" draggable={false} />
       </div>
 
       {/* Desktop icons */}

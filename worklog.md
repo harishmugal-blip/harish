@@ -208,3 +208,24 @@ Stage Summary:
 - Pranks: My Ex Photos = jumpscare (face + scream + shake + GOTCHA), Private Videos = fake hack loader → dog meme
 - Sab broken icons crisp Win7-style SVG ab; taskbar/superbar/tray/start-menu/windows sab jagah apply
 - Files: icons.tsx (7 redraws + 2 new), chrome.tsx (WinId), page.tsx (launchIcon + JumpScare + closeScare), contents.tsx (PrivateVideosContent), globals.css (scare anims), public/scary-face.jpg, public/private-meme.jpg, public/jumpscare.mp3, scripts/make_jumpscare_sound.py
+
+---
+Task ID: 23
+Agent: Super Z (main)
+Task: "CR Office" — user apna CR (Class Representative) ka office site me banana chahta he. Sirf PLANNING + DEMO mockup (user: "cod mat karna abhi plan banate he"). AskUserQuestion se requirements lock ki gayi.
+
+Work Log:
+- Requirements locked (user answers): Purpose = masti+utility+portfolio (tino), Concept = SARKARI daftar parody, Sections = Shikayat/Complaint Box (sirf yehi selected), Save = REAL DB (Prisma), Tone = full Hinglish, Extra = visitor counter, Content = dummy funny (user baad me apna data dega), Approach = DEMO FIRST (approval ke baad full build)
+- Demo mockup banaya: public/cr-office-mockup.html (standalone, src/ code ko touch NAHI kiya) — Google Fonts CDN (Tiro Devanagari Hindi + Special Elite + Share Tech Mono) — locally Devanagari font nahi he lekin CDN accessible
+- Mockup design: real Harmony wallpaper backdrop + fake desktop icons (Computer/My Files/CR Office sarkari folder icon with red CR wax seal) + Win7 Aero window chrome + tricolor strip + sarkari letterhead (CR KARYALAYA seal, कार्यालय DAFTAR-E-CR, संचालक HARISH (CR), OFFICIAL watermark, फॉर्म सं. 7-C)
+- Form 7-C: Naam (optional/anonymous), shikayat-kis-khilaaf dropdown (7 funny options), textarea, "मैंने झूठ नहीं बोला — maa kasam" checkbox (Rule 7(b) validation), DARJ KARO / Naa chhodo buttons
+- Right panel: AAJ KE VISITORS flip counter (7-seg style, live ticks + chai cups), CR STATUS LED board (chai break / maujood cycle), AAJ KA OFFICIAL JAWAB panel
+- शिकायत पंजिका LIVE REGISTER: 3 dummy rows typewriter stamps (PROFESSOR KO FORWARD 😈, CR DEKH LEGA, RESOLVED ✅) + submit pe naya row + stamp animation (डार्ज हो गया ✅ TOKEN #0070)
+- Interactions: DARJ validation (khali form → नियम 12 error, kasam unticked → Rule 7(b) error), close X → shake + "office band nahi hota sirf lunch pe jata he", Naa chhodo → button text cycle (Soch lo 😏 → Okay jaao 🥲), coming-soon sidebar toasts
+- Polish: sidebar COMING SOON badges text overlap fix (12px font + 66px right padding)
+- Verified: fonts loaded (document.fonts.check true), DARJ flow tested via agent-browser (stamp overlay + row add + counter increment OK), console/errors clean, 2 screenshots: download/cr_office_demo_1.png (main view), cr_office_demo_2.png (stamp overlay + fresh register row)
+
+Stage Summary:
+- Demo APPROVAL PENDING — user ko mockup + screenshots dikhaye gaye, live URL: /cr-office-mockup.html (preview proxy se accessible)
+- NEXT (approval ke baad): real build — Prisma schema (Complaint model: naam/target/text/token/stamp/status), POST /api/cr-complaints + GET list, CROfficeContent in contents.tsx (real Win7 window + DB), DESKTOP_ICONS me 11th "CR Office" icon + launchIcon routing + start menu entry, visitor counter DB/localStorage based
+- Demo file public/cr-office-mockup.html approval ke baad delete ho jayegi

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CR Office — Demo Mockup (DAFTAR-E-CR)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Special+Elite&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; }
+  body {
+    font-family:"Segoe UI", system-ui, -apple-system, sans-serif;
+    background:#0a2a52 url("/harmony-wallpaper.jpg") center/cover no-repeat fixed;
+    overflow-x:hidden; color:#222;
+  }
+  .dev { font-family:"Tiro Devanagari Hindi", "Noto Serif Devanagari", serif; }
+  .hidden { display:none !important; }
+
+  /* ---------- desktop icons ---------- */
+  #icons { position:fixed; top:14px; left:14px; display:flex; flex-direction:column; gap:8px; z-index:5; }
+  .dicon { width:96px; padding:8px 4px; text-align:center; border:1px solid transparent; border-radius:3px; cursor:default; }
+  .dicon img, .dicon svg { width:46px; height:46px; filter:drop-shadow(0 2px 3px rgba(0,0,0,.45)); }
+  .dicon .dlabel { color:#fff; font-size:12px; margin-top:5px; text-shadow:0 1px 2px #000, 0 0 4px rgba(0,0,0,.8); line-height:1.25; }
+  .dicon.sel { background:rgba(61,122,192,.5); border-color:rgba(160,200,240,.7); }
+
+  /* ---------- win7 window ---------- */
+  #win {
+    width:min(1160px, 96vw); margin:34px auto 90px; position:relative; z-index:4;
+    border:1px solid rgba(255,255,255,.4); border-radius:8px 8px 3px 3px;
+    box-shadow:0 0 0 1px rgba(20,40,70,.55), 0 14px 44px rgba(0,0,0,.55), 0 0 26px rgba(80,150,230,.28);
+    overflow:hidden; background:#f7f0df;
+  }
+  #win.shake { animation:winshake .45s ease; }
+  @keyframes winshake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-9px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
+  #titlebar {
+    height:34px; display:flex; align-items:center; justify-content:space-between; padding-left:10px;
+    background:linear-gradient(180deg, rgba(158,196,235,.62) 0%, rgba(90,135,190,.55) 46%, rgba(40,72,118,.72) 100%);
+    border-bottom:1px solid rgba(255,255,255,.35);
+  }
+  .t-left { display:flex; align-items:center; gap:8px; color:#fff; font-size:13px; text-shadow:0 1px 2px rgba(0,0,0,.7); }
+  .t-seal { width:19px; height:19px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #2e8b4f, #14532d); color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 1.5px rgba(255,255,255,.75), 0 1px 3px rgba(0,0,0,.5); }
+  .t-btns { display:flex; height:100%; }
+  .t-btns button { width:30px; height:100%; border:0; cursor:pointer; background:linear-gradient(180deg, rgba(210,232,250,.85), rgba(130,170,210,.8)); border-left:1px solid rgba(255,255,255,.4); color:#12283f; font-size:11px; font-weight:700; }
+  .t-btns button.close { width:46px; background:linear-gradient(180deg, #e88474, #c8352a 55%, #a41e14); color:#fff; font-size:13px; }
+  .t-btns button.close:hover { background:linear-gradient(180deg, #f6a08e, #d84b3c); }
+
+  /* ---------- office interior (sarkari paper) ---------- */
+  #office { background:#f7f0df repeating-linear-gradient(0deg, rgba(120,90,40,.028) 0 2px, transparent 2px 4px); }
+  .tri { height:5px; background:linear-gradient(90deg,#f0862c 0 33%, #f5efdc 33% 66%, #2e7d3a 66% 100%); }
+
+  #letterhead { display:flex; align-items:center; gap:18px; padding:16px 22px 12px; border-bottom:3px double #14532d; position:relative; }
+  .seal { flex:0 0 auto; width:76px; height:76px; border-radius:50%; background:radial-gradient(circle at 36% 30%, #35945a, #14532d 72%); box-shadow:inset 0 0 0 3px rgba(245,239,220,.85), inset 0 0 0 5px rgba(20,83,45,.9), 0 2px 5px rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; flex-direction:column; color:#f5efdc; }
+  .seal b { font-size:24px; letter-spacing:1px; font-family:Georgia, serif; line-height:1; }
+  .seal i { font-style:normal; font-size:7.5px; letter-spacing:1.5px; margin-top:3px; opacity:.9; }
+  .lh-mid { flex:1; min-width:0; }
+  .lh-mid h1 { font-size:29px; color:#14532d; line-height:1.12; text-shadow:0 1px 0 rgba(255,255,255,.5); }
+  .lh-mid h1 .en { font-family:Georgia, "Times New Roman", serif; font-size:20px; color:#8a5a1c; letter-spacing:2.5px; vertical-align:middle; }
+  .lh-sub { font-size:13.5px; color:#5c4a26; margin-top:2px; }
+  .lh-meta { font-size:11.5px; color:#7a6740; margin-top:5px; letter-spacing:.3px; }
+  .lh-meta b { color:#14532d; }
+  .lh-right { text-align:right; }
+  .datebox { border:1.5px solid #14532d; padding:5px 10px; display:inline-block; background:#fffdf2; }
+  .datebox span { font-size:10px; color:#14532d; display:block; }
+  .datebox b { font-size:14px; color:#222; letter-spacing:1px; }
+  .formno { margin-top:7px; font-size:12px; color:#5c4a26; }
+  .formno b { font-size:15px; color:#8a1f1f; font-family:Georgia, serif; }
+  .watermark { position:absolute; right:120px; top:8px; font-family:Georgia, serif; font-size:54px; color:rgba(176,42,42,.10); transform:rotate(-9deg); pointer-events:none; letter-spacing:2px; font-weight:700; }
+
+  /* ---------- main grid ---------- */
+  #grid { display:grid; grid-template-columns:196px 1fr 232px; gap:0; }
+  #side { background:#ece0c2; border-right:2px solid #c9b488; padding:14px 10px; display:flex; flex-direction:column; gap:8px; }
+  .sbtn { text-align:left; padding:8px 66px 8px 9px; font-size:12px; line-height:1.4; border:1px solid #b9a77d; background:linear-gradient(180deg,#f6efdc,#e6d9b8); color:#5c4a26; cursor:default; border-radius:2px; position:relative; }
+  .sbtn em { position:absolute; right:7px; top:8px; font-size:8px; font-style:normal; font-family:Verdana, sans-serif; background:#a4906a; color:#fff; padding:2px 5px; border-radius:8px; letter-spacing:.5px; }
+  .sbtn.active { background:linear-gradient(180deg,#2e7d45,#14532d); color:#f5efdc; border-color:#0e3d21; box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 2px 4px rgba(0,0,0,.25); }
+  .side-note { margin-top:auto; font-size:11.5px; color:#7a6740; border-top:1px dashed #b9a77d; padding-top:10px; line-height:1.55; }
+  .side-note b { color:#14532d; }
+
+  #formwrap { padding:18px 24px 20px; position:relative; }
+  #formwrap h2 { font-size:20px; color:#8a1f1f; }
+  .form-sub { font-size:12px; color:#7a6740; margin:2px 0 14px; font-style:italic; }
+  label.fl { display:block; font-size:13.5px; color:#23305c; margin:13px 0 4px; font-weight:600; }
+  label.fl i { font-weight:400; color:#7a6740; font-size:12px; }
+  #formwrap input[type=text], #formwrap select, #formwrap textarea {
+    width:100%; border:0; border-bottom:1.6px dotted #4a5578; background:rgba(255,253,242,.75); padding:8px 9px; font-size:14px; color:#222; font-family:inherit; outline:none; border-radius:3px 3px 0 0;
+  }
+  #formwrap textarea { height:74px; resize:vertical; border:1.6px dotted #4a5578; border-radius:3px; line-height:1.5; }
+  #formwrap input:focus, #formwrap textarea:focus, #formwrap select:focus { background:#fffef7; border-bottom-color:#14532d; box-shadow:0 1px 4px rgba(20,83,45,.15); }
+  .chk { display:flex; align-items:center; gap:8px; margin-top:14px; font-size:13px; color:#23305c; cursor:pointer; }
+  .chk input { width:16px; height:16px; accent-color:#14532d; }
+  .chk i { color:#7a6740; font-size:11.5px; }
+  .fbtns { display:flex; gap:12px; margin-top:16px; }
+  #darj { background:linear-gradient(180deg,#2e8b4f,#14532d 70%); color:#f5efdc; border:1px solid #0e3d21; padding:10px 26px; font-size:15px; letter-spacing:1.5px; font-family:Georgia, serif; cursor:pointer; border-radius:3px; box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 2px 5px rgba(0,0,0,.3); }
+  #darj:hover { filter:brightness(1.1); }
+  #darj:active { transform:translateY(1px); }
+  #naa { background:transparent; color:#8a1f1f; border:1.6px solid #8a1f1f; padding:10px 20px; font-size:14px; cursor:pointer; border-radius:3px; font-family:inherit; }
+  #naa:hover { background:rgba(176,42,42,.08); }
+  .fineprint { font-size:11.5px; color:#7a6740; margin-top:14px; font-style:italic; }
+  .err { background:#fbeaea; border:1.5px solid #c86a6a; border-left:5px solid #b02a2a; color:#8a1f1f; font-size:13px; padding:9px 12px; margin-top:12px; border-radius:3px; animation:errin .3s ease; }
+  @keyframes errin { from{opacity:0; transform:translateY(-6px)} to{opacity:1} }
+
+  /* stamp overlay */
+  #stamp-overlay { position:absolute; inset:0; background:rgba(247,240,223,.55); display:flex; align-items:center; justify-content:center; z-index:9; }
+  .bigstamp { font-family:"Tiro Devanagari Hindi", serif; border:5px double #14532d; color:#14532d; background:rgba(255,254,246,.92); padding:22px 44px; text-align:center; font-size:34px; transform:rotate(-7deg); box-shadow:0 6px 18px rgba(20,83,45,.3); animation:stampin .5s cubic-bezier(.2,2.2,.4,1); }
+  .bigstamp span { display:block; font-family:"Special Elite", monospace; font-size:16px; margin-top:8px; letter-spacing:2px; color:#8a5a1c; }
+  @keyframes stampin { 0%{transform:rotate(-7deg) scale(2.6); opacity:0} 60%{transform:rotate(-7deg) scale(.94); opacity:1} 100%{transform:rotate(-7deg) scale(1)} }
+
+  /* right column */
+  #right { border-left:2px solid #c9b488; background:#efe4c6; padding:14px 12px; display:flex; flex-direction:column; gap:12px; }
+  .panel { background:#fffdf2; border:1.5px solid #b9a77d; border-radius:3px; padding:11px 12px; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+  .p-title { font-size:10.5px; letter-spacing:2.5px; color:#8a5a1c; font-weight:700; border-bottom:1px dashed #c9b488; padding-bottom:6px; margin-bottom:9px; text-align:center; }
+  .digits { font-family:"Share Tech Mono", monospace; font-size:44px; text-align:center; color:#ff8c1a; background:#191410; border-radius:3px; padding:8px 4px 5px; letter-spacing:8px; text-shadow:0 0 10px rgba(255,140,26,.75), 0 0 2px rgba(255,140,26,.9); line-height:1; }
+  .p-foot { text-align:center; font-size:11px; color:#7a6740; margin-top:8px; }
+  .p-foot b { color:#b02a2a; }
+  .statusline { display:flex; align-items:center; gap:9px; font-size:13px; color:#23305c; min-height:34px; }
+  .led { width:12px; height:12px; border-radius:50%; background:#f5b31a; box-shadow:0 0 8px rgba(245,179,26,.9); flex:0 0 auto; animation:ledpulse 1.6s infinite; }
+  .led.green { background:#2e8b4f; box-shadow:0 0 8px rgba(46,139,79,.9); }
+  @keyframes ledpulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+  .jawab { font-size:12.5px; color:#5c4a26; font-style:italic; line-height:1.55; }
+  .jawab b { color:#8a1f1f; }
+
+  /* register */
+  #register { border-top:3px double #14532d; background:#f2e9d0; padding:12px 22px 16px; }
+  .r-head { font-size:16px; color:#14532d; margin-bottom:10px; }
+  .r-head small { font-family:Georgia, serif; font-size:11px; letter-spacing:2px; color:#8a5a1c; margin-left:8px; }
+  .row { display:flex; align-items:center; gap:14px; padding:9px 6px; border-bottom:1px dashed #c9b488; font-size:13.5px; }
+  .row.fresh { background:rgba(46,139,79,.09); animation:errin .4s ease; }
+  .r-no { font-family:"Share Tech Mono", monospace; color:#8a1f1f; flex:0 0 58px; }
+  .r-text { flex:1; color:#3a3a3a; min-width:0; }
+  .r-stamp { font-family:"Special Elite", monospace; font-size:11.5px; color:#b02a2a; border:2.5px double #b02a2a; padding:3px 10px; transform:rotate(-3deg); letter-spacing:1px; white-space:nowrap; opacity:.88; mix-blend-mode:multiply; }
+  .r-stamp.green { color:#14532d; border-color:#14532d; }
+
+  /* statusbar + taskbar */
+  #statusbar { display:flex; gap:20px; font-size:11px; color:#5c4a26; background:#e9dcc0; border-top:1px solid #c9b488; padding:4px 14px; }
+  #taskbar { position:fixed; bottom:0; left:0; right:0; height:44px; z-index:20; display:flex; align-items:center; gap:8px; padding:0 8px; background:linear-gradient(180deg, rgba(20,32,52,.92), rgba(8,14,26,.97)); border-top:1px solid rgba(120,160,210,.35); }
+  #orb { width:38px; height:38px; border-radius:50%; background:radial-gradient(circle at 38% 32%, #4a7dbb, #16365e 78%); display:flex; align-items:center; justify-content:center; box-shadow:0 0 10px rgba(90,150,230,.5), inset 0 1px 2px rgba(255,255,255,.4); }
+  #orb img { width:20px; height:20px; filter:drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
+  .task-win { flex:0 0 auto; max-width:300px; height:34px; display:flex; align-items:center; gap:8px; padding:0 14px; font-size:12px; color:#fff; border-radius:3px; background:linear-gradient(180deg, rgba(150,190,235,.45), rgba(60,100,150,.55)); border:1px solid rgba(160,200,240,.45); box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 0 9px rgba(90,150,230,.35); }
+  #tray { margin-left:auto; color:#e8eef6; font-size:11.5px; display:flex; align-items:center; gap:10px; text-shadow:0 1px 1px #000; }
+
+  #demo-chip { position:fixed; top:12px; right:14px; z-index:30; background:rgba(15,20,30,.82); color:#ffd479; font-size:12px; padding:7px 13px; border-radius:20px; border:1px solid rgba(255,212,121,.4); backdrop-filter:blur(6px); }
+  #toast { position:fixed; bottom:58px; left:50%; transform:translateX(-50%); z-index:40; background:#fffdf2; border:1px solid #b9a77d; border-left:5px solid #14532d; color:#23305c; font-size:13.5px; padding:11px 18px; border-radius:4px; box-shadow:0 6px 20px rgba(0,0,0,.35); max-width:88vw; }
+
+  @media (max-width:940px) {
+    #grid { grid-template-columns:1fr; }
+    #side { flex-direction:row; flex-wrap:wrap; border-right:0; border-bottom:2px solid #c9b488; }
+    .side-note { display:none; }
+    #right { border-left:0; border-top:2px solid #c9b488; flex-direction:row; flex-wrap:wrap; }
+    .panel { flex:1 1 180px; }
+    #icons { display:none; }
+    .watermark { display:none; }
+    .lh-mid h1 { font-size:22px; }
+  }
+</style>
+</head>
+<body>
+  <!-- desktop icons -->
+  <div id="icons">
+    <div class="dicon"><img src="/icons/monitor.png" alt=""><div class="dlabel">Computer</div></div>
+    <div class="dicon"><img src="/icons/folder.png" alt=""><div class="dlabel">My Files</div></div>
+    <div class="dicon sel">
+      <svg viewBox="0 0 48 48" aria-label="CR Office">
+        <defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7df9a"/><stop offset="1" stop-color="#e0b558"/></linearGradient></defs>
+        <path d="M4 9h14l4 5h22a2 2 0 0 1 2 2v22a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V11a2 2 0 0 1 2-2z" fill="#caa14e"/>
+        <path d="M2 17h44v21a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="url(#fg)" stroke="#b8923e" stroke-width="0.8"/>
+        <circle cx="24" cy="29" r="8.4" fill="#b02a2a" stroke="#7d1b1b" stroke-width="1"/>
+        <circle cx="24" cy="29" r="5.9" fill="none" stroke="rgba(255,235,235,.55)" stroke-width="0.9" stroke-dasharray="1.6 1.4"/>
+        <text x="24" y="32" text-anchor="middle" font-family="Georgia,serif" font-size="7.2" font-weight="bold" fill="#ffecec">CR</text>
+      </svg>
+      <div class="dlabel">CR Office</div>
+    </div>
+  </div>
+
+  <!-- CR Office window -->
+  <div id="win">
+    <div id="titlebar">
+      <div class="t-left"><span class="t-seal">CR</span><span>CR Office — शिकायत प्रबंधन प्रणाली (Demo)</span></div>
+      <div class="t-btns"><button id="btnmin">—</button><button id="btnmax">▢</button><button id="btnclose" class="close">✕</button></div>
+    </div>
+    <div id="office">
+      <div class="tri"></div>
+
+      <div id="letterhead">
+        <div class="watermark">OFFICIAL</div>
+        <div class="seal"><b>CR</b><i>KARYALAYA</i></div>
+        <div class="lh-mid">
+          <h1><span class="dev">कार्यालय</span> <span class="en">DAFTAR-E-CR</span></h1>
+          <p class="lh-sub dev">कक्ष प्रतिनिधि कार्यालय • Class Representative Office • Est. 2025</p>
+          <p class="lh-meta dev">संचालक: <b>HARISH (CR)</b> • शाखा: हर क्लास, हर फ्लोर • टैगलाइन: "आपकी हर शिकायत, हमारी अनसुनी ज़िम्मेदारी"</p>
+        </div>
+        <div class="lh-right">
+          <div class="datebox"><span class="dev">दिनांक</span><b id="today">--</b></div>
+          <div class="formno dev">फॉर्म सं. <b>7-C</b></div>
+        </div>
+      </div>
+
+      <div id="grid">
+        <aside id="side">
+          <button class="sbtn active dev">🪑 शिकायत कक्ष</button>
+          <button class="sbtn dev">📌 सूचना पट्ट<em>COMING SOON</em></button>
+          <button class="sbtn dev">📊 कक्षा रिकॉर्ड<em>COMING SOON</em></button>
+          <button class="sbtn dev">🎫 टोकन सिस्टम<em>COMING SOON</em></button>
+          <div class="side-note dev">कार्यालय समय:<br><b>Attendance भरने तक</b><br><br>छुट्टी हेतु अनुमति:<br><b>पहले प्रिंसिपल, फिर माँ</b></div>
+        </aside>
+
+        <section id="formwrap">
+          <h2 class="dev">फॉर्म 7-C — शिकायत दर्ज करने हेतु</h2>
+          <p class="form-sub">Complaint Registration Form — Hinglish me likhna bhi allowed he 😊</p>
+          <div id="err" class="err hidden"></div>
+
+          <label class="fl" for="fname">नाम / Naam <i>(optional — darr lag raha ho toh "Anonymous" likh do 😅)</i></label>
+          <input type="text" id="fname" placeholder="Ramesh Sharma, Class 12-B">
+
+          <label class="fl" for="ftarget">शिकायत किस विरुद्ध है? / Kis khilaaf he?</label>
+          <select id="ftarget">
+            <option>Professor (unke against bolna ho toh volume kam rakhna)</option>
+            <option>Attendance (7:30 baje wali class)</option>
+            <option>WiFi (2 baje ke baad 2G)</option>
+            <option>Canteen (maggi ka rate badh gaya)</option>
+            <option>CR khud (hmm… risky move 😏)</option>
+            <option>Assignment (kab milega, koi batayega?)</option>
+            <option>Other (sab kuch chal raha he)</option>
+          </select>
+
+          <label class="fl" for="ftext">पूरा सच-सच लिखो * / Pura sach likho *</label>
+          <textarea id="ftext" placeholder="Sir, WiFi 2 baje se 2G ho jata he, YT video 360p pe bhi girti he…"></textarea>
+
+          <label class="chk"><input type="checkbox" id="fkasam"> मैंने झूठ नहीं बोला — maa kasam 🤞 <i>(Rule 7(b) — tick karna zaroori he)</i></label>
+
+          <div class="fbtns">
+            <button id="darj">DARJ KARO ✍</button>
+            <button id="naa">Naa, chhodo</button>
+          </div>
+          <p class="fineprint dev">* हर शिकायत का जवाब चाय के बाद मिलेगा। ज़रूरी शिकायत हो तो चाय भी साथ लेकर आएँ। फॉर्म भरने से हुई नींद की ज़िम्मेदारी CR ki nahi.</p>
+
+          <div id="stamp-overlay" class="hidden"><div class="bigstamp">डार्ज हो गया ✅<span id="tokentxt">TOKEN #0070</span></div></div>
+        </section>
+
+        <aside id="right">
+          <div class="panel">
+            <div class="p-title">AAJ KE VISITORS</div>
+            <div class="digits" id="count">0069</div>
+            <div class="p-foot">chai cups consumed: <b id="chai">14</b> ☕</div>
+          </div>
+          <div class="panel">
+            <div class="p-title">CR STATUS</div>
+            <div class="statusline"><span class="led" id="led"></span><span id="crstat">Chai break — 5 min</span></div>
+          </div>
+          <div class="panel">
+            <div class="p-title">AAJ KA OFFICIAL JAWAB</div>
+            <p class="jawab">"WiFi slow ho toh <b>router se pucho</b>, main kya hi kar sakta hu."<br><br>— CR, bilkul kal se</p>
+          </div>
+        </aside>
+      </div>
+
+      <div id="register">
+        <div class="r-head dev">📜 शिकायत पंजिका <small>LIVE REGISTER — SAB DEKH SAKTE HE</small></div>
+        <div id="rows">
+          <div class="row"><span class="r-no">#0069</span><span class="r-text">"WiFi 2 baje se slow kyu hota he?" — Anonymous, Class 11-A</span><span class="r-stamp">PROFESSOR KO FORWARD 😈</span></div>
+          <div class="row"><span class="r-no">#0068</span><span class="r-text">"Assignment kab milenge sir?" — Ramesh Sharma</span><span class="r-stamp">CR DEKH LEGA</span></div>
+          <div class="row"><span class="r-no">#0067</span><span class="r-text">"Canteen wale bhaiya se maggi kam me dilwao" — Pooja</span><span class="r-stamp green">RESOLVED ✅ (maggi ₹10 me mili)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="statusbar">
+      <span>फॉर्म 7-C ready</span><span>📶 WiFi: 2G (is shikayat par karya jaari)</span><span>CR: bahar — chai ke liye</span><span id="regcount">Register me: 3 shikayat</span>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <div id="orb"><img src="/win7-logo.svg" alt="Start"></div>
+    <div class="task-win"><span>🪑</span> CR Office — शिकायत प्रणाली</div>
+    <div id="tray"><span>🔊</span><span id="clock">--</span></div>
+  </div>
+
+  <div id="demo-chip">🧪 DEMO MOCKUP — final version tere real project ke andar + database ke saath hoga</div>
+  <div id="toast" class="hidden"></div>
+
+  <script>
+  (function(){
+    const $ = id => document.getElementById(id);
+    const pad = n => String(n).padStart(2, "0");
+
+    /* date + clock */
+    const d = new Date();
+    $("today").textContent = pad(d.getDate()) + "-" + pad(d.getMonth()+1) + "-" + d.getFullYear();
+    function tick(){
+      const n = new Date(); let h = n.getHours();
+      const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12;
+      $("clock").textContent = pad(n.getDate()) + "-" + pad(n.getMonth()+1) + "-" + n.getFullYear() + ", " + h + ":" + pad(n.getMinutes()) + " " + ap;
+    }
+    tick(); setInterval(tick, 10000);
+
+    /* visitor counter + chai */
+    let vis = 69, chai = 14;
+    function paint(){
+      $("count").textContent = String(vis).padStart(4, "0");
+      $("chai").textContent = chai;
+    }
+    paint();
+    setInterval(() => { if (Math.random() < .55) { vis++; if (Math.random() < .4) chai++; paint(); } }, 5000);
+
+    /* CR status cycle */
+    const stats = [
+      ["green", "Karyalay me maujood — bol de jaldi"],
+      ["", "Chai break — 5 min"],
+      ["", "File dhoond raha he (apni hi)"],
+      ["green", "Available — attendance lagwa raha hu"]
+    ];
+    let si = 0;
+    setInterval(() => {
+      si = (si + 1) % stats.length;
+      $("led").className = "led" + (stats[si][0] ? " " + stats[si][0] : "");
+      $("crstat").textContent = stats[si][1];
+    }, 6000);
+
+    /* toast */
+    let tt;
+    function toast(msg){
+      const t = $("toast"); t.textContent = msg; t.classList.remove("hidden");
+      clearTimeout(tt); tt = setTimeout(() => t.classList.add("hidden"), 3400);
+    }
+
+    /* DARJ KARO */
+    let token = 70;
+    $("darj").addEventListener("click", function(){
+      const err = $("err"); err.classList.add("hidden");
+      const txt = $("ftext").value.trim();
+      if (!txt) {
+        err.textContent = "अधूरा फॉर्म! (फॉर्म 7-C, नियम 12) — Pehle shikayat toh likho, khali form sarkari daftar me nahi chalta 😤";
+        err.classList.remove("hidden"); return;
+      }
+      if (!$("fkasam").checked) {
+        err.textContent = "Rule 7(b) violated! 'Maa kasam' wala box tick karna zaroori he 🤞 — bina kasam ke sab jhooth maana jayega 😄";
+        err.classList.remove("hidden"); return;
+      }
+      const naam = $("fname").value.trim() || "Anonymous";
+      const target = $("ftarget").value.split("(")[0].trim();
+      const pools = ["CR DEKH LEGA", "PROFESSOR KO FORWARD 😈", "MEETING ME UTHAYA JAYEGA", "CHAI KE BAAD DISCUSS", "FILE ME SAFE 😌"];
+      const stamp = pools[Math.floor(Math.random() * pools.length)];
+      const row = document.createElement("div");
+      row.className = "row fresh";
+      row.innerHTML =
+        '<span class="r-no">#' + String(token).padStart(4, "0") + '</span>' +
+        '<span class="r-text">"' + txt.replace(/</g, "&lt;") + '" — ' + naam.replace(/</g, "&lt;") + ' (vs ' + target + ')</span>' +
+        '<span class="r-stamp">' + stamp + '</span>';
+      $("rows").prepend(row);
+      $("tokentxt").textContent = "TOKEN #" + String(token).padStart(4, "0") + " • " + new Date().toLocaleDateString();
+      $("stamp-overlay").classList.remove("hidden");
+      vis++; chai++; paint();
+      $("regcount").textContent = "Register me: " + $("rows").children.length + " shikayat";
+      setTimeout(() => $("stamp-overlay").classList.add("hidden"), 2400);
+      token++;
+      $("ftext").value = ""; $("fname").value = ""; $("fkasam").checked = false;
+    });
+
+    /* Naa, chhodo */
+    const naaLines = ["Naa chhodo", "Soch lo 😏", "Pakka? 🥺", "Okay jaao 🥲"];
+    let ni = 0;
+    $("naa").addEventListener("click", function(){
+      ni = (ni + 1) % naaLines.length;
+      this.textContent = naaLines[ni];
+      if (ni === naaLines.length - 1) toast("Sarkari daftar se khali haath jaana mana he — chai pi ke ja 😄");
+    });
+
+    /* titlebar buttons */
+    function shakeWin(){ const w = $("win"); w.classList.remove("shake"); void w.offsetWidth; w.classList.add("shake"); }
+    $("btnclose").addEventListener("click", () => { shakeWin(); toast("CR Office band nahi hota — sirf lunch pe jata he 😂 (Demo me close button sirf decoration he)"); });
+    $("btnmin").addEventListener("click", () => toast("Minimize final version me milega — ye pura Win7 window system ke andar hoga 🙂"));
+    $("btnmax").addEventListener("click", () => toast("Maximize bhi final version me — ye sirf look-and-feel demo he 😎"));
+
+    /* coming-soon sidebar */
+    document.querySelectorAll(".sbtn:not(.active)").forEach(b =>
+      b.addEventListener("click", () => toast("Ye section abhi 'Coming Soon' he — bata dena andar kya chahiye, wahi banega 🙂"))
+    );
+
+    /* desktop icons */
+    document.querySelectorAll(".dicon").forEach(dc =>
+      dc.addEventListener("dblclick", () => { shakeWin(); toast("Asli site me is icon se CR Office window khulegi — ye demo page directly khulta he 🙂"); })
+    );
+  })();
+  </script>
+</body>
+</html>

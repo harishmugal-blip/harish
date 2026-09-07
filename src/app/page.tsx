@@ -511,7 +511,7 @@ function BootScreen({ onDone }: { onDone: () => void }) {
       document.addEventListener("pointerdown", kick);
       document.addEventListener("keydown", kick);
     });
-    const t = setTimeout(onDone, 5300);
+    const t = setTimeout(onDone, 6300);
     return () => {
       clearTimeout(t);
       document.removeEventListener("pointerdown", kick);
@@ -522,31 +522,25 @@ function BootScreen({ onDone }: { onDone: () => void }) {
   return (
     <div className="win7-boot-fadeout fixed inset-0 z-[9000] bg-black flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden" onClick={onDone}>
       <div className="relative w-[360px] h-[310px] flex items-center justify-center">
-        {/* soft ambient glow behind the flag */}
-        <div className="win7-boot-ambient absolute w-[270px] h-[270px] rounded-full" />
-        {/* slow light rays */}
-        <div className="win7-boot-rays absolute w-[430px] h-[430px]" />
-        {/* four glowing ribbons swirl in along curved paths */}
-        <div className="win7-orb win7-orb-red" />
-        <div className="win7-orb win7-orb-green" />
-        <div className="win7-orb win7-orb-blue" />
-        <div className="win7-orb win7-orb-yellow" />
-        {/* convergence flash */}
-        <div className="win7-boot-bloom" />
-        {/* the real Windows 7 flag materializes from light */}
+        {/* four glowing dots — tight orbit, then merge (matches the real animation) */}
+        <div className="win7-dot win7-dot-red" />
+        <div className="win7-dot win7-dot-green" />
+        <div className="win7-dot win7-dot-blue" />
+        <div className="win7-dot win7-dot-yellow" />
+        {/* warm bloom as the dots merge */}
+        <div className="win7-merge-bloom" />
+        {/* the flag condenses out of the light with a focus-pull */}
         <div className="win7-boot-flag relative">
           <img
             src="/win7-logo.svg"
             alt="Windows 7"
             className="w-[150px] h-auto"
-            style={{ filter: "drop-shadow(0 0 20px rgba(150,210,255,0.85)) drop-shadow(0 0 60px rgba(80,160,240,0.45))" }}
+            style={{
+              filter:
+                "drop-shadow(-9px -9px 18px rgba(255,90,30,0.42)) drop-shadow(9px -9px 18px rgba(124,187,0,0.36)) drop-shadow(-9px 9px 18px rgba(0,161,241,0.42)) drop-shadow(9px 9px 18px rgba(255,187,0,0.42))",
+            }}
             draggable={false}
           />
-          {/* tiny twinkles */}
-          <span className="win7-spark win7-spark-1" />
-          <span className="win7-spark win7-spark-2" />
-          <span className="win7-spark win7-spark-3" />
-          <span className="win7-spark win7-spark-4" />
         </div>
       </div>
       <div className="win7-boot-text text-white/95 text-[21px] sm:text-[23px] font-light mt-7" style={{ fontFamily: '"Segoe UI", "Frutiger", "Helvetica Neue", Arial, sans-serif', textShadow: "0 0 18px rgba(160,215,255,0.55)" }}>Starting Windows</div>

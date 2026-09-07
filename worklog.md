@@ -166,3 +166,23 @@ Stage Summary:
 - Original Win7 startup-style chime /win7-startup.mp3 boot pe bajta hai (autoplay-policy safe gesture fallback ke saath)
 - win7-logo.svg intrinsic dimensions fix — ab start orb, login branding, About dialog, favicon sab jagah crisp full logo
 - Key files: src/app/globals.css (boot CSS rewrite), src/app/page.tsx (BootScreen + audio), public/win7-logo.svg (dims fix), public/win7-startup.mp3 (new), scripts/make_startup_sound.py (regeneratable)
+
+---
+Task ID: 21-b
+Agent: Super Z (main)
+Task: User ne Tenor GIF reference diya (real Win7 Starting Windows animation) — animation ko frame-by-frame match karwa gaya
+
+Work Log:
+- Tenor GIF (postid 4114252130509551445) ka MP4 download karke ffmpeg se 38 frames extract kiye, contact sheets banayi, exact choreography reverse-engineer ki
+- REAL timeline: 0-0.9s chhote glowing dots staggered fade-in -> 0.9-2.6s tight circular orbit (radius 55->14px, ~1.15 rev, 90° phase separation) -> 2.6-2.9s warm multicolor merge bloom -> 3.0-3.7s flag blur focus-pull se condense (scale-pop NAHI) -> hold with per-quadrant color glow. NO rays, NO long trails (purana version galat tha)
+- Python se orbit waypoints mathematically generate kiye (cos/sin, 8 waypoints per revolution, clockwise)
+- globals.css boot block v2: .win7-dot (16px radial-gradient orbs + soft halos), win7-orbit-{red,green,blue,yellow} keyframes (delays .05/.25/.45/.65s, easeInOutSine), win7-merge-bloom (white core + conic 4-color swirl), win7-flag-focus (blur 18->0, brightness 1.9->1, 2.5s delay) + win7-flag-pulse (subtle 1.07 brightness), text 3.4s, fadeout 5.6s
+- page.tsx BootScreen v2: dots + merge bloom only, flag img par 4 directional drop-shadows (red TL/green TR/blue BL/yellow BR = reference jaisa multicolor bleed), boot total 6.3s
+- DEBUGGING: Turbopack watcher ne Python-script se likha CSS patch pick NAHI kiya (served CSS stale — win7-dot missing, purane delays) -> dev server restart kiya, phir Edit tool ke changes hot-reload ho rahe hain. Note for future: globals.css ko script se patch karne ke baad server restart zaroori
+- Verification: Web Animations API (document.getAnimations) se animations exact timestamps pe pause karke 6 deterministic screenshots — sab reference frames se match. Full flow boot->login->jarvis->desktop pass, console clean, tsc 0, eslint clean
+
+Stage Summary:
+- Starting Windows animation ab real GIF ke frame-by-frame jaisa: dots fade-in -> tight orbit -> colorful merge bloom -> flag focus-pull -> 4-color glow hold
+- Purane fake-looking elements (rays, long comet trails, blue ambient, white flash) hataye — ab original jaisa subtle aur premium
+- Boot total 6.3s; startup chime 5.25s boot ke hold phase mein khatam hota hai (real Win7 jaisa)
+- Files: src/app/globals.css, src/app/page.tsx, scripts/patch_boot_css.py, download/task21{b,c,d,e}_*.png (verification sheets)

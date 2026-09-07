@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARISH WEB AGENCY — Virtual Office (Live Demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Special+Elite&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; }
+  body {
+    font-family:"Segoe UI", system-ui, -apple-system, sans-serif;
+    background:#0a2a52 url("/harmony-wallpaper.jpg") center/cover no-repeat fixed;
+    overflow-x:hidden; color:#222;
+  }
+  .dev { font-family:"Tiro Devanagari Hindi", serif; }
+  .hidden { display:none !important; }
+
+  /* ---------- desktop icons ---------- */
+  #icons { position:fixed; top:14px; left:14px; display:flex; flex-direction:column; gap:8px; z-index:5; }
+  .dicon { width:96px; padding:8px 4px; text-align:center; border:1px solid transparent; border-radius:3px; cursor:default; }
+  .dicon img, .dicon svg { width:46px; height:46px; filter:drop-shadow(0 2px 3px rgba(0,0,0,.45)); }
+  .dicon .dlabel { color:#fff; font-size:12px; margin-top:5px; text-shadow:0 1px 2px #000, 0 0 4px rgba(0,0,0,.8); line-height:1.25; }
+  .dicon.sel { background:rgba(61,122,192,.5); border-color:rgba(160,200,240,.7); }
+
+  /* ---------- win7 window ---------- */
+  #win {
+    width:min(1240px, 97vw); margin:34px auto 90px; position:relative; z-index:4;
+    border:1px solid rgba(255,255,255,.4); border-radius:8px 8px 3px 3px;
+    box-shadow:0 0 0 1px rgba(20,40,70,.55), 0 14px 44px rgba(0,0,0,.55), 0 0 26px rgba(80,150,230,.28);
+    overflow:hidden; background:#eef1f5;
+  }
+  #win.shake { animation:winshake .45s ease; }
+  @keyframes winshake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-9px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
+  #titlebar {
+    height:34px; display:flex; align-items:center; justify-content:space-between; padding-left:10px;
+    background:linear-gradient(180deg, rgba(158,196,235,.62) 0%, rgba(90,135,190,.55) 46%, rgba(40,72,118,.72) 100%);
+    border-bottom:1px solid rgba(255,255,255,.35);
+  }
+  .t-left { display:flex; align-items:center; gap:8px; color:#fff; font-size:13px; text-shadow:0 1px 2px rgba(0,0,0,.7); }
+  .t-seal { width:20px; height:20px; border-radius:4px; background:linear-gradient(180deg,#f0913a,#c25e12); color:#fff; font-size:11px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 1.5px rgba(255,255,255,.75), 0 1px 3px rgba(0,0,0,.5); }
+  .t-btns { display:flex; height:100%; }
+  .t-btns button { width:30px; height:100%; border:0; cursor:pointer; background:linear-gradient(180deg, rgba(210,232,250,.85), rgba(130,170,210,.8)); border-left:1px solid rgba(255,255,255,.4); color:#12283f; font-size:11px; font-weight:700; }
+  .t-btns button.close { width:46px; background:linear-gradient(180deg, #e88474, #c8352a 55%, #a41e14); color:#fff; font-size:13px; }
+
+  /* ---------- agency bar ---------- */
+  #agencybar { display:flex; align-items:center; gap:16px; padding:12px 20px; background:linear-gradient(180deg,#1b3a5f,#122a45); color:#fff; }
+  .alogo { width:52px; height:52px; border-radius:10px; background:linear-gradient(180deg,#f0913a,#c25e12); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:17px; letter-spacing:.5px; box-shadow:inset 0 2px 0 rgba(255,255,255,.35), 0 3px 8px rgba(0,0,0,.4); flex:0 0 auto; }
+  .amid { flex:1; min-width:0; }
+  .amid b { font-size:20px; letter-spacing:1.5px; text-shadow:0 1px 2px rgba(0,0,0,.6); }
+  .amid span { display:block; font-size:12px; color:#bcd3ea; margin-top:2px; }
+  .live { display:flex; align-items:center; gap:7px; background:#3a0f12; border:1px solid #e33; color:#ff6b6b; font-weight:800; letter-spacing:2px; font-size:13px; padding:6px 14px; border-radius:16px; flex:0 0 auto; }
+  .ldot { width:9px; height:9px; border-radius:50%; background:#ff3b3b; box-shadow:0 0 9px #ff3b3b; animation:ledpulse 1.2s infinite; }
+  @keyframes ledpulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+  .presence { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); padding:6px 13px; border-radius:16px; font-size:12.5px; flex:0 0 auto; }
+  .presence b { color:#ffd479; }
+
+  /* ---------- main grid ---------- */
+  #main { display:grid; grid-template-columns:1fr 330px; }
+
+  /* office floor */
+  #floor { padding:14px; background:repeating-linear-gradient(0deg, #e7e2d5 0 34px, #dcd6c6 34px 36px), repeating-linear-gradient(90deg, rgba(0,0,0,.02) 0 34px, transparent 34px 36px); }
+  #wall { display:flex; gap:14px; margin-bottom:14px; }
+  .wboard { flex:1; background:#2e4d3a; border:8px solid #8a6a44; border-radius:4px; color:#eef5ee; padding:10px 14px; font-size:12.5px; box-shadow:0 3px 8px rgba(0,0,0,.25); }
+  .wboard b { display:block; font-size:13.5px; color:#ffe9b0; margin-bottom:5px; letter-spacing:.5px; }
+  .wboard span { display:block; margin:3px 0; opacity:.95; }
+  .wproj { flex:1; background:#fff; border:1px solid #c9d2dd; border-radius:4px; padding:10px 14px; box-shadow:0 2px 6px rgba(0,0,0,.12); }
+  .p-title { font-size:10.5px; letter-spacing:2.5px; color:#8a5a1c; font-weight:700; border-bottom:1px dashed #d8c9a5; padding-bottom:5px; margin-bottom:8px; text-align:center; }
+  .pbar { margin:7px 0; }
+  .pbar small { display:block; font-size:11.5px; color:#45526b; margin-bottom:3px; }
+  .pbar .rowline { display:flex; align-items:center; gap:8px; }
+  .track { flex:1; height:12px; background:#e3e8ef; border-radius:7px; overflow:hidden; border:1px solid #c3ccd8; }
+  .track i { display:block; height:100%; background:linear-gradient(180deg,#4f9e63,#2e7d45); border-radius:7px; transition:width 1.2s ease; box-shadow:inset 0 1px 0 rgba(255,255,255,.4); }
+  .pbar b { font-family:"Share Tech Mono", monospace; font-size:12.5px; color:#2e7d45; width:40px; text-align:right; }
+
+  #desks { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .desk { background:#fff; border:1px solid #c9d2dd; border-radius:6px; padding:10px 12px; box-shadow:0 2px 6px rgba(0,0,0,.12); position:relative; }
+  .desk.boss { grid-column:1 / -1; background:linear-gradient(180deg,#fffaf0,#fdf3dd); border-color:#d8b97a; }
+  .mon { height:52px; background:#0d1420; border:3px solid #233246; border-radius:5px; padding:6px 9px; font-family:"Share Tech Mono", monospace; font-size:11.5px; color:#5eff8a; overflow:hidden; white-space:nowrap; margin-bottom:8px; box-shadow:inset 0 0 12px rgba(30,255,110,.12); }
+  .mon .cur { animation:blink 1s steps(1) infinite; }
+  @keyframes blink { 50%{opacity:0} }
+  .drow { display:flex; align-items:center; gap:10px; }
+  .ava { width:38px; height:38px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #ffe9c9, var(--c,#3a7bd5)); display:flex; align-items:center; justify-content:center; font-size:19px; box-shadow:inset 0 -3px 6px rgba(0,0,0,.22), 0 0 0 2.5px rgba(255,255,255,.85), 0 1px 4px rgba(0,0,0,.3); flex:0 0 auto; }
+  .meta { flex:1; min-width:0; }
+  .meta b { font-size:14px; color:#1d2c42; display:block; line-height:1.2; }
+  .meta span { font-size:11px; color:#7a879c; }
+  .led { width:11px; height:11px; border-radius:50%; background:#2e8b4f; box-shadow:0 0 8px rgba(46,139,79,.9); flex:0 0 auto; animation:ledpulse 1.6s infinite; }
+  .led.y { background:#f5b31a; box-shadow:0 0 8px rgba(245,179,26,.9); }
+  .stat { margin-top:7px; font-size:12px; color:#5a6a85; font-style:italic; background:#f3f6fa; border:1px dashed #c9d2dd; border-radius:4px; padding:5px 9px; }
+  .desk.rec { background:linear-gradient(180deg,#f0f7ff,#e2eefc); border-color:#9dbede; display:flex; flex-direction:column; justify-content:center; }
+  .rec-title { font-weight:800; color:#1d4f8a; font-size:14px; letter-spacing:1px; margin-bottom:5px; }
+  .desk.rec p { font-size:12.5px; color:#3a5a80; margin:2px 0; }
+  .desk.rec b { color:#c25e12; font-family:"Share Tech Mono", monospace; }
+
+  /* CRM column */
+  #right { border-left:2px solid #c9d2dd; background:#f0f3f7; padding:12px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; }
+  .crm-head { background:linear-gradient(180deg,#1b3a5f,#122a45); color:#fff; border-radius:6px; padding:10px 12px; }
+  .crm-head b { font-size:14px; letter-spacing:1.5px; }
+  .crm-head span { display:block; font-size:11px; color:#bcd3ea; margin-top:3px; }
+  .crm-head span em { color:#ffd479; font-style:normal; font-weight:700; }
+  .panel { background:#fff; border:1px solid #c9d2dd; border-radius:6px; padding:10px 11px; box-shadow:0 1px 4px rgba(0,0,0,.09); }
+  .pipeline { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .pcol { border-radius:5px; border:1px solid #d5dce5; overflow:hidden; background:#fafbfd; }
+  .phead { font-size:9.5px; font-weight:800; letter-spacing:1.5px; color:#fff; padding:4px 8px; }
+  .pcol.new .phead { background:#3a7bd5; } .pcol.cont .phead { background:#c98a12; }
+  .pcol.proj .phead { background:#7a4fd0; } .pcol.done .phead { background:#2e8b4f; }
+  .pcard { margin:6px; background:#fff; border:1px solid #dbe2ea; border-radius:4px; padding:5px 7px; font-size:11px; color:#2c3a52; box-shadow:0 1px 2px rgba(0,0,0,.08); line-height:1.35; }
+  .pcard small { color:#8a97ab; font-size:10px; }
+  .pcard.fresh { animation:cardin .5s ease; }
+  @keyframes cardin { from{opacity:0; transform:translateY(-8px)} to{opacity:1} }
+  .gcard { text-align:center; }
+  .gcard .gname { font-size:15px; font-weight:700; color:#1d2c42; }
+  .gcard .gname span { color:#c25e12; }
+  .stars { color:#f5a623; font-size:14px; letter-spacing:2px; margin:4px 0 2px; }
+  .gline { font-size:11.5px; color:#5a6a85; margin:3px 0; }
+  .gbadge { display:inline-block; margin-top:6px; background:#e8f5ec; border:1px solid #2e8b4f; color:#1e6b3a; font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:10px; letter-spacing:.5px; }
+  .crm-sec label { display:block; font-size:12px; color:#45526b; margin:8px 0 3px; font-weight:600; }
+  .crm-sec input, .crm-sec select { width:100%; border:1px solid #c3ccd8; border-radius:4px; padding:7px 9px; font-size:12.5px; font-family:inherit; outline:none; background:#fbfcfe; }
+  .crm-sec input:focus, .crm-sec select:focus { border-color:#3a7bd5; box-shadow:0 0 0 3px rgba(58,123,213,.15); }
+  #esend { width:100%; margin-top:11px; background:linear-gradient(180deg,#f0913a,#c25e12); color:#fff; border:1px solid #a34e0e; padding:9px; font-size:13.5px; font-weight:700; letter-spacing:1px; border-radius:5px; cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 2px 5px rgba(0,0,0,.2); }
+  #esend:hover { filter:brightness(1.08); }
+  #wa { display:block; text-align:center; margin-top:9px; background:#e8f7ee; border:1.5px solid #25a35a; color:#1e7a42; font-size:12.5px; font-weight:700; padding:8px; border-radius:5px; text-decoration:none; }
+  #wa:hover { background:#d9f2e3; }
+
+  /* ticker */
+  #ticker { display:flex; align-items:stretch; border-top:2px solid #c9d2dd; background:#fff; }
+  .tbadge { flex:0 0 auto; display:flex; align-items:center; padding:0 13px; background:#3a0f12; color:#ff6b6b; font-weight:800; letter-spacing:2px; font-size:11px; border-right:1px solid #e3d5d5; }
+  #tlist { flex:1; padding:7px 13px; height:74px; overflow:hidden; }
+  .tline { font-size:12px; color:#3a4a65; padding:2.5px 0; border-bottom:1px dotted #e2e8ef; animation:cardin .4s ease; }
+  .tline:last-child { border-bottom:0; }
+
+  #statusbar { display:flex; gap:20px; font-size:11px; color:#5a6a85; background:#e8edf3; border-top:1px solid #c9d2dd; padding:4px 14px; }
+  #statusbar b { color:#1d4f8a; }
+
+  /* stamp overlay */
+  #stamp-overlay { position:absolute; inset:0; background:rgba(240,243,247,.6); display:flex; align-items:center; justify-content:center; z-index:9; }
+  .bigstamp { border:5px double #c25e12; color:#a34e0e; background:rgba(255,254,246,.94); padding:22px 44px; text-align:center; font-size:30px; font-weight:700; transform:rotate(-7deg); box-shadow:0 6px 18px rgba(194,94,18,.3); animation:stampin .5s cubic-bezier(.2,2.2,.4,1); }
+  .bigstamp span { display:block; font-family:"Special Elite", monospace; font-size:15px; margin-top:8px; letter-spacing:2px; color:#8a5a1c; }
+  @keyframes stampin { 0%{transform:rotate(-7deg) scale(2.6); opacity:0} 60%{transform:rotate(-7deg) scale(.94); opacity:1} 100%{transform:rotate(-7deg) scale(1)} }
+
+  /* taskbar + misc */
+  #taskbar { position:fixed; bottom:0; left:0; right:0; height:44px; z-index:20; display:flex; align-items:center; gap:8px; padding:0 8px; background:linear-gradient(180deg, rgba(20,32,52,.92), rgba(8,14,26,.97)); border-top:1px solid rgba(120,160,210,.35); }
+  #orb { width:38px; height:38px; border-radius:50%; background:radial-gradient(circle at 38% 32%, #4a7dbb, #16365e 78%); display:flex; align-items:center; justify-content:center; box-shadow:0 0 10px rgba(90,150,230,.5), inset 0 1px 2px rgba(255,255,255,.4); }
+  #orb img { width:20px; height:20px; filter:drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
+  .task-win { flex:0 0 auto; max-width:320px; height:34px; display:flex; align-items:center; gap:8px; padding:0 14px; font-size:12px; color:#fff; border-radius:3px; background:linear-gradient(180deg, rgba(150,190,235,.45), rgba(60,100,150,.55)); border:1px solid rgba(160,200,240,.45); box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 0 9px rgba(90,150,230,.35); }
+  #tray { margin-left:auto; color:#e8eef6; font-size:11.5px; display:flex; align-items:center; gap:10px; text-shadow:0 1px 1px #000; }
+  #demo-chip { position:fixed; top:12px; right:14px; z-index:30; background:rgba(15,20,30,.82); color:#ffd479; font-size:12px; padding:7px 13px; border-radius:20px; border:1px solid rgba(255,212,121,.4); backdrop-filter:blur(6px); }
+  #toast { position:fixed; bottom:58px; left:50%; transform:translateX(-50%); z-index:40; background:#fffdf2; border:1px solid #c9d2dd; border-left:5px solid #c25e12; color:#2c3a52; font-size:13.5px; padding:11px 18px; border-radius:4px; box-shadow:0 6px 20px rgba(0,0,0,.35); max-width:88vw; }
+
+  @media (max-width:1000px) {
+    #main { grid-template-columns:1fr; }
+    #right { border-left:0; border-top:2px solid #c9d2dd; }
+    #desks { grid-template-columns:1fr; }
+    #wall { flex-direction:column; }
+    #icons { display:none; }
+    .amid b { font-size:16px; }
+  }
+</style>
+</head>
+<body>
+  <!-- desktop icons -->
+  <div id="icons">
+    <div class="dicon"><img src="/icons/monitor.png" alt=""><div class="dlabel">Computer</div></div>
+    <div class="dicon"><img src="/icons/folder.png" alt=""><div class="dlabel">My Files</div></div>
+    <div class="dicon sel">
+      <svg viewBox="0 0 48 48" aria-label="Harish Web Agency">
+        <defs><linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5a94e"/><stop offset="1" stop-color="#c25e12"/></linearGradient></defs>
+        <rect x="5" y="15" width="38" height="26" rx="3.5" fill="url(#bg1)" stroke="#94470c" stroke-width="1"/>
+        <path d="M17 15v-3.5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3V15" fill="none" stroke="#94470c" stroke-width="2.6"/>
+        <rect x="19" y="24" width="10" height="7" rx="1.5" fill="#ffe3c2" stroke="#94470c" stroke-width="1.2"/>
+        <rect x="5" y="15" width="38" height="7" rx="3" fill="rgba(255,255,255,.28)"/>
+      </svg>
+      <div class="dlabel">Harish Web Agency</div>
+    </div>
+  </div>
+
+  <!-- Virtual Office window -->
+  <div id="win">
+    <div id="titlebar">
+      <div class="t-left"><span class="t-seal">💼</span><span>Harish Web Agency — Virtual Office (Live Demo)</span></div>
+      <div class="t-btns"><button id="btnmin">—</button><button id="btnmax">▢</button><button id="btnclose" class="close">✕</button></div>
+    </div>
+
+    <div id="agencybar">
+      <div class="alogo">HWA</div>
+      <div class="amid">
+        <b>HARISH WEB AGENCY</b>
+        <span>Websites • SEO (Google pe upar lane ka kaam) • POS Software — sab in-house team se</span>
+      </div>
+      <div class="live"><span class="ldot"></span>LIVE</div>
+      <div class="presence" id="presence">👥 Office me: <b>4 + AAP</b></div>
+    </div>
+
+    <div id="main">
+      <!-- OFFICE FLOOR -->
+      <div id="floor">
+        <div id="wall">
+          <div class="wboard">
+            <b>📌 AAJ KA TARGET</b>
+            <span>✔ Client delivery: 1 website</span>
+            <span>✔ Naye leads: 5 (CRM me darj)</span>
+            <span>☐ Chai limit: KOI NAHI 😎</span>
+          </div>
+          <div class="wproj">
+            <div class="p-title">LIVE CLIENT PROJECTS</div>
+            <div class="pbar"><small>Patel Electronics — POS + Website</small>
+              <div class="rowline"><div class="track"><i id="pb1" style="width:78%"></i></div><b id="pbv1">78%</b></div>
+            </div>
+            <div class="pbar"><small>Verma Travels — Booking Website</small>
+              <div class="rowline"><div class="track"><i id="pb2" style="width:34%"></i></div><b id="pbv2">34%</b></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="desks">
+          <!-- BOSS -->
+          <div class="desk boss">
+            <div class="mon"><span id="mon-harish"></span><span class="cur">▊</span></div>
+            <div class="drow">
+              <div class="ava" style="--c:#c25e12">👔</div>
+              <div class="meta"><b>Harish — BOSS CABIN</b><span>Founder &amp; Service Manager • deal closer</span></div>
+              <span class="led"></span>
+            </div>
+            <div class="stat" id="stat-harish">Client se deal kar raha he…</div>
+          </div>
+          <!-- TEAM -->
+          <div class="desk">
+            <div class="mon"><span id="mon-ravi"></span><span class="cur">▊</span></div>
+            <div class="drow">
+              <div class="ava" style="--c:#7a4fd0">🧑‍🎨</div>
+              <div class="meta"><b>Ravi</b><span>Web Designer — UI/UX, logo</span></div>
+              <span class="led y"></span>
+            </div>
+            <div class="stat" id="stat-ravi">Design polish kar raha he…</div>
+          </div>
+          <div class="desk">
+            <div class="mon"><span id="mon-amit"></span><span class="cur">▊</span></div>
+            <div class="drow">
+              <div class="ava" style="--c:#1d6fb8">👨‍💻</div>
+              <div class="meta"><b>Amit</b><span>Developer — code, deploy</span></div>
+              <span class="led"></span>
+            </div>
+            <div class="stat" id="stat-amit">Code likh raha he…</div>
+          </div>
+          <div class="desk">
+            <div class="mon"><span id="mon-sneha"></span><span class="cur">▊</span></div>
+            <div class="drow">
+              <div class="ava" style="--c:#2e8b4f">📈</div>
+              <div class="meta"><b>Sneha</b><span>SEO Expert — Google pe upar</span></div>
+              <span class="led"></span>
+            </div>
+            <div class="stat" id="stat-sneha">Keywords research kar rahi he…</div>
+          </div>
+          <div class="desk">
+            <div class="mon"><span id="mon-pankaj"></span><span class="cur">▊</span></div>
+            <div class="drow">
+              <div class="ava" style="--c:#b8860b">☕</div>
+              <div class="meta"><b>Pankaj</b><span>Chai &amp; Morale Manager</span></div>
+              <span class="led y"></span>
+            </div>
+            <div class="stat" id="stat-pankaj">Chai distribute kar raha he…</div>
+          </div>
+          <!-- RECEPTION -->
+          <div class="desk rec">
+            <div class="rec-title">🛎️ RECEPTION</div>
+            <p>"Welcome! Aap aaj ke <b id="vtoken">VISITOR #0071</b> ho"</p>
+            <p>Kaam batao — website? Google pe dikhna he? POS?</p>
+            <p class="dev" style="font-size:12px; color:#7a5a30; margin-top:6px;">Naam likh ke jao — chai free he ☕</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM SERVICE MANAGER -->
+      <div id="right">
+        <div class="crm-head">
+          <b>📊 CRM — SERVICE MANAGER</b>
+          <span>Aaj: <em>5 naye leads</em> • <em>2 meetings</em> • revenue target <em>68%</em></span>
+        </div>
+
+        <div class="panel">
+          <div class="p-title">LEADS PIPELINE (KANBAN)</div>
+          <div class="pipeline">
+            <div class="pcol new"><div class="phead">NEW</div>
+              <div class="pcard">Sharma Ji Ka Dukan<br><small>website + Google listing</small></div>
+              <div class="pcard">Verma Travels<br><small>booking website</small></div>
+            </div>
+            <div class="pcol cont"><div class="phead">CONTACTED</div>
+              <div class="pcard">Gupta Kirana Store<br><small>SEO package — ₹4,999/mo</small></div>
+            </div>
+            <div class="pcol proj"><div class="phead">PROJECT</div>
+              <div class="pcard">Patel Electronics<br><small>POS + web — 78% done</small></div>
+            </div>
+            <div class="pcol done"><div class="phead">DONE ✅</div>
+              <div class="pcard">Reddy Sweets<br><small>delivered — ★★★★★ review</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel gcard">
+          <div class="p-title">GOOGLE BUSINESS CARD</div>
+          <div class="gname">HARISH <span>WEB AGENCY</span></div>
+          <div class="stars">★★★★★ <small style="color:#5a6a85">4.9 • 127 reviews</small></div>
+          <div class="gline">📍 Rank <b>#1</b> — "website developer near me"</div>
+          <div class="gline">📈 Clients ka Google traffic: <b>avg 3.2x ↑</b></div>
+          <div class="gbadge">🏆 "GOOGLE PE DICHLA NA HE TOH YAHIN SE"</div>
+        </div>
+
+        <div class="panel crm-sec">
+          <div class="p-title">BUSINESS ENQUIRY — FREE ME PUCHO</div>
+          <label for="ename">Naam / Business ka naam</label>
+          <input id="ename" type="text" placeholder="Sharma Ji Ka Dukan">
+          <label for="ework">Kya kaam he?</label>
+          <select id="ework">
+            <option>Website banana he</option>
+            <option>Google pe dikhna he (SEO)</option>
+            <option>POS / billing software chahiye</option>
+            <option>Sab kuch 💪</option>
+          </select>
+          <button id="esend">ENQUIRY BHEJO 🚀</button>
+          <a id="wa" class="hidden" target="_blank" rel="noopener" href="#">💬 WhatsApp pe turant bhej do →</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="ticker">
+      <div class="tbadge">LIVE 🔴</div>
+      <div id="tlist"></div>
+    </div>
+
+    <div id="statusbar">
+      <span>🟢 OFFICE LIVE</span><span>Visitors today: <b id="sbvis">71</b></span><span>Leads today: <b id="sblead">5</b></span><span>Chai consumed: <b id="sbchai">23</b> cups</span><span>Uptime: <b>99.98%</b></span>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <div id="orb"><img src="/win7-logo.svg" alt="Start"></div>
+    <div class="task-win"><span>💼</span> Harish Web Agency — Virtual Office</div>
+    <div id="tray"><span>🔊</span><span id="clock">--</span></div>
+  </div>
+
+  <div id="demo-chip">🧪 DEMO MOCKUP — final version tere project me + REAL database ke saath</div>
+  <div id="toast" class="hidden"></div>
+  <div id="stamp-overlay" class="hidden"><div class="bigstamp">ENQUIRY DARJ ✅<span id="leadtxt">LEAD #L-129 • CRM ME ADD HO GAYA</span></div></div>
+
+  <script>
+  (function(){
+    const $ = id => document.getElementById(id);
+    const pad = n => String(n).padStart(2, "0");
+    const ri = arr => arr[Math.floor(Math.random() * arr.length)];
+
+    /* clock */
+    function tick(){
+      const n = new Date(); let h = n.getHours();
+      const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12;
+      $("clock").textContent = pad(n.getDate()) + "-" + pad(n.getMonth()+1) + "-" + n.getFullYear() + ", " + h + ":" + pad(n.getMinutes()) + " " + ap;
+    }
+    tick(); setInterval(tick, 10000);
+
+    /* LIVE typing on monitors */
+    const lines = {
+      "mon-harish": ["deal: Sharma Ji — website + GMB … ₹18,000", "estimate.pdf bhej raha he…", "WhatsApp: 'bhai discount?' → 'quality dekho pehle'", "invoice #INV-0231 paid ✅"],
+      "mon-ravi":   ["figma: sharma-dukai-v7.fig", "logo polish… 3rd revision 😮‍💨", "hero section: 'Dukan se Brand tak'", "client: 'kuch naya dikha do' (7th time)"],
+      "mon-amit":   ["npm run build ▓▓▓▓▓▓▓▓░░ 84%", "fix: checkout bug (khud ka likha 😅)", "deploy → vercel … live 🚀", "+247 lines · -31 bugs"],
+      "mon-sneha":  ["keyword: 'kirana near me' → POS 3 ▲", "backlink #12 bana…", "'gupta kirana' page 2 → page 1 🏆", "GMB posts: 4/4 done"],
+      "mon-pankaj": ["chai order: 4 cups · ginger 2", "biscuit inventory: PARLE-G x3 ✅", "morale report: 98% ☕", "meeting room: chai refill done"]
+    };
+    Object.keys(lines).forEach(id => {
+      const el = $(id); let li = 0, ci = 0;
+      (function type(){
+        const line = lines[id][li];
+        if (ci <= line.length) { el.textContent = line.slice(0, ci); ci++; setTimeout(type, 34 + Math.random() * 40); }
+        else { setTimeout(() => { li = (li + 1) % lines[id].length; ci = 0; type(); }, 1700); }
+      })();
+    });
+
+    /* status rotators */
+    const stats = {
+      "stat-harish": ["Client se deal kar raha he…", "Estimate bhej raha he…", "'Payment aa gayi' — smile kar raha he 😄", "Google Business optimize kar raha he…", "Team ko chai pe bhej raha he…"],
+      "stat-ravi": ["Design polish kar raha he…", "Client ka logo 3rd revision me he…", "'bas thoda sa left' — client bol raha he", "Hero section ban raha he…"],
+      "stat-amit": ["Code likh raha he…", "Bug dhund raha he (khud ka likha 😅)", "Deploy kar raha he 🚀", "DB migrate kar raha he…"],
+      "stat-sneha": ["Keywords research kar rahi he…", "Client ko Google page 1 pe laa rahi he…", "Backlinks bana rahi he…", "GMB reviews manage kar rahi he…"],
+      "stat-pankaj": ["Chai distribute kar raha he…", "Team ka mood check kar raha he…", "Biscuit audit chal raha he…", "Ginger chai ready kar raha he…"]
+    };
+    Object.keys(stats).forEach(id => {
+      setInterval(() => { $(id).textContent = ri(stats[id]); }, 7000 + Math.random() * 3000);
+    });
+
+    /* LIVE ticker */
+    const feed = [
+      "🟢 Sneha ne 'Gupta Kirana' ko Google page 2 se page 1 dala",
+      "👨‍💻 Amit ne aaj 1,247 lines likhe — 3 chai + 1 samosa me",
+      "📞 Client: 'bhaiya thoda discount?' → Harish: 'quality ka mazaak na 😤'",
+      "🏆 'Sharma Ji Ka Dukan' website LIVE — delivery se 3 din pehle",
+      "📈 CRM me 5 naye leads aaye — 2 meeting book hui",
+      "☕ Pankaj report: team morale 98% (chai level: FULL)",
+      "🖥️ Server uptime 99.98% — bijli gayi toh inverter ne bachaya",
+      "💰 Payment received ✅ — puri team: 'PARTY! 🎉'",
+      "🧑‍🎨 Ravi: 7th revision chal raha he — patience level: monk 🧘",
+      "📝 Naya enquiry: 'Patel Electronics' — POS + website (CRM me darj)"
+    ];
+    let fi = 0;
+    function pushFeed(){
+      const t = $("tlist");
+      const d = document.createElement("div");
+      d.className = "tline";
+      d.textContent = feed[fi % feed.length]; fi++;
+      t.prepend(d);
+      while (t.children.length > 3) t.removeChild(t.lastChild);
+    }
+    pushFeed(); pushFeed(); pushFeed();
+    setInterval(pushFeed, 3400);
+
+    /* progress bars drift */
+    setInterval(() => {
+      [["pb1","pbv1"],["pb2","pbv2"]].forEach(([b, v]) => {
+        const cur = parseInt($(b).style.width) || 0;
+        const nv = Math.min(99, cur + Math.floor(Math.random() * 3));
+        $(b).style.width = nv + "%"; $(v).textContent = nv + "%";
+      });
+    }, 9000);
+
+    /* presence + counters */
+    let vis = 71, chai = 23, inOffice = 4;
+    setInterval(() => {
+      const r = Math.random();
+      if (r < .35) chai++;
+      if (r < .25) { vis++; $("vtoken").textContent = "VISITOR #" + String(vis).padStart(4, "0"); }
+      if (r < .18) inOffice = 3 + Math.floor(Math.random() * 3);
+      $("presence").innerHTML = '👥 Office me: <b>' + inOffice + ' + AAP</b>';
+      $("sbvis").textContent = vis; $("sbchai").textContent = chai;
+    }, 6000);
+
+    /* toast */
+    let tt;
+    function toast(msg){
+      const t = $("toast"); t.textContent = msg; t.classList.remove("hidden");
+      clearTimeout(tt); tt = setTimeout(() => t.classList.add("hidden"), 3400);
+    }
+
+    /* ENQUIRY submit */
+    let lead = 129;
+    $("esend").addEventListener("click", function(){
+      const naam = $("ename").value.trim();
+      if (!naam) { toast("Naam toh likho bhai! Free enquiry he, naam ka bhi charge nahi 😄"); return; }
+      const kaam = $("ework").value;
+      $("leadtxt").textContent = "LEAD #L-" + lead + " • " + naam.toUpperCase() + " • CRM ME ADD HO GAYA";
+      $("stamp-overlay").classList.remove("hidden");
+      setTimeout(() => $("stamp-overlay").classList.add("hidden"), 2600);
+      /* new card in NEW column */
+      const col = document.querySelector(".pcol.new");
+      const c = document.createElement("div");
+      c.className = "pcard fresh";
+      c.innerHTML = naam.replace(/</g, "&lt;") + "<br><small>" + kaam + " — abhi aaya ⚡</small>";
+      col.appendChild(c);
+      /* whatsapp */
+      const msg = encodeURIComponent("Hi Harish! " + kaam + " ke liye enquiry he. Naam: " + naam + " (Lead #L-" + lead + ")");
+      $("wa").href = "https://wa.me/917668483250?text=" + msg;
+      $("wa").classList.remove("hidden");
+      /* counters */
+      lead++;
+      const sb = $("sblead"); sb.textContent = parseInt(sb.textContent) + 1;
+      toast("Lead CRM me darj ho gayi ✅ — Harish 24hr me contact karega (chai ke baad ☕)");
+      $("ename").value = "";
+    });
+
+    /* titlebar + icons jokes */
+    function shakeWin(){ const w = $("win"); w.classList.remove("shake"); void w.offsetWidth; w.classList.add("shake"); }
+    $("btnclose").addEventListener("click", () => { shakeWin(); toast("Agency kabhi band nahi hoti — sirf client meeting me '5 min me aaya' bol ke gayab hota he 😂"); });
+    $("btnmin").addEventListener("click", () => toast("Minimize final version me — pura Win7 window system ke andar hoga 🙂"));
+    $("btnmax").addEventListener("click", () => toast("Maximize bhi final me — ye look-and-feel demo he 😎"));
+    document.querySelectorAll(".dicon").forEach(dc =>
+      dc.addEventListener("dblclick", () => { shakeWin(); toast("Asli site me ye desktop icon se Virtual Office khulega 🙂"); })
+    );
+  })();
+  </script>
+</body>
+</html>

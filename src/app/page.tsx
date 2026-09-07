@@ -14,6 +14,8 @@ import {
   GearIcon,
   MediaIcon,
   WinFlag,
+  FolderPhotosIcon,
+  FolderPrivateIcon,
 } from "@/components/win7/icons";
 import {
   AboutContent,
@@ -24,6 +26,7 @@ import {
   ComputerContent,
   RecycleContent,
   MusicLibraryContent,
+  PrivateVideosContent,
 } from "@/components/win7/contents";
 import { JarvisMode } from "@/components/jarvis/JarvisMode";
 import { profile } from "@/lib/portfolio";
@@ -49,6 +52,7 @@ const WIN_CONFIGS: WinConfig[] = [
   { id: "contact", title: "New Message — Contact.exe", icon: <ContactIcon />, w: 560, h: 560, content: <ContactContent /> },
   { id: "computer", title: "Computer — System Info", icon: <ComputerIcon />, w: 640, h: 470, content: <ComputerContent /> },
   { id: "music", title: `Music Library — ${TOTAL_SONGS} Songs (YT Music)`, icon: <MediaIcon />, w: 560, h: 520, content: <MusicLibraryContent /> },
+  { id: "privatevid", title: "Private_Videos — Explorer", icon: <FolderPrivateIcon />, w: 640, h: 540, content: <PrivateVideosContent /> },
   { id: "recycle", title: "Recycle Bin", icon: <RecycleBinIcon />, w: 560, h: 380, content: <RecycleContent /> },
 ];
 
@@ -59,6 +63,8 @@ const DESKTOP_ICONS: { id: WinId; label: string; icon: React.ReactNode }[] = [
   { id: "skills", label: "Skills.exe", icon: <GearIcon /> },
   { id: "resume", label: "Resume.pdf", icon: <PdfIcon /> },
   { id: "music", label: "Music Library", icon: <MediaIcon /> },
+  { id: "myex", label: "My Ex Photos", icon: <FolderPhotosIcon /> },
+  { id: "privatevid", label: "Private Videos", icon: <FolderPrivateIcon /> },
   { id: "contact", label: "Contact.exe", icon: <ContactIcon /> },
   { id: "recycle", label: "Recycle Bin", icon: <RecycleBinIcon /> },
 ];
@@ -77,6 +83,8 @@ const initialWindows = (): Record<WinId, WinState> => {
   WIN_CONFIGS.forEach((c) => {
     o[c.id] = { open: false, min: false, max: false, x: 0, y: 0, z: 10 };
   });
+  /* "myex" is not a window — fullscreen jumpscare instead — but keep the Record complete */
+  if (!o.myex) o.myex = { open: false, min: false, max: false, x: 0, y: 0, z: 10 };
   return o;
 };
 
@@ -202,6 +210,8 @@ export default function DesktopPage() {
   const [selectedIcon, setSelectedIcon] = useState<WinId | null>(null);
   const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [scare, setScare] = useState(false);
+  const closeScare = useCallback(() => setScare(false), []);
 
   const zTop = useRef(20);
   const cascade = useRef(0);
@@ -314,9 +324,24 @@ export default function DesktopPage() {
     icon: c.icon,
   }));
 
+  /* prank routing — "My Ex Photos" folder koi window nahi kholta… JUMPscare deta he 😈 */
+  const launchIcon = useCallback(
+    (id: WinId) => {
+      if (id === "myex") {
+        setSelectedIcon(null);
+        setCtxMenu(null);
+        setStartOpen(false);
+        setScare(true);
+        return;
+      }
+      openWindow(id);
+    },
+    [openWindow]
+  );
+
   const handleIconClick = (id: WinId) => {
     if (coarse.current) {
-      openWindow(id);
+      launchIcon(id);
     } else {
       setSelectedIcon(id);
     }
@@ -328,7 +353,7 @@ export default function DesktopPage() {
   }, []);
 
   const openWindowForJarvis = useCallback((id: string) => {
-    if (["about", "projects", "skills", "resume", "contact", "computer", "music", "recycle"].includes(id)) {
+    if (["about", "projects", "skills", "resume", "contact", "computer", "music", "recycle", "privatevid"].includes(id)) {
       openWindow(id as WinId);
     }
   }, [openWindow]);
@@ -381,10 +406,10 @@ export default function DesktopPage() {
             }}
             onDoubleClick={(e) => {
               e.stopPropagation();
-              openWindow(d.id);
+              launchIcon(d.id);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") openWindow(d.id);
+              if (e.key === "Enter") launchIcon(d.id);
             }}
             className={`win7-no-touch w-[80px] sm:w-[88px] flex flex-col items-center gap-1 py-1.5 px-1 rounded-[3px] border cursor-default ${
               selectedIcon === d.id ? "bg-[#3d7ac0]/50 border-[#8fc3ea]" : "border-transparent hover:bg-white/15 hover:border-white/25"
@@ -459,6 +484,9 @@ export default function DesktopPage() {
 
       {/* Activate Windows watermark → JARVIS easter egg */}
       <ActivateWatermark onActivate={() => setPhase("jarvis-install")} />
+
+      {/* My Ex Photos — fullscreen jumpscare prank */}
+      {scare && <JumpScare onDone={closeScare} />}
 
       {/* Welcome bubble on first visit */}
       {phase === "desktop" && <WelcomeBubble onOpen={() => openWindow("music")} />}
@@ -832,6 +860,96 @@ function WelcomeBubble({ onOpen }: { onOpen: () => void }) {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ================= "My Ex Photos" — fullscreen jumpscare prank ================= */
+
+function JumpScare({ onDone }: { onDone: () => void }) {
+  const [stage, setStage] = useState<"dark" | "boom" | "gotcha">("dark");
+  /* onDone identity har DesktopPage re-render pe badalta he — effect ko mount-once
+     rakhte he aur latest callback ref me rakhte he (timer restart bug se bachne ke liye) */
+  const onDoneRef = useRef(onDone);
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  }, [onDone]);
+
+  useEffect(() => {
+    /* scream — user gesture (folder click) ke turant baad chal jata he,
+       warna pehle pointerdown pe kick (boot audio jaisa fallback) */
+    const a = new Audio("/jumpscare.mp3");
+    a.volume = 1;
+    a.preload = "auto";
+    const kick = () => {
+      a.play().catch(() => {});
+      document.removeEventListener("pointerdown", kick);
+      document.removeEventListener("keydown", kick);
+    };
+    const t1 = setTimeout(() => {
+      setStage("boom");
+      a.play().catch(() => {
+        document.addEventListener("pointerdown", kick);
+        document.addEventListener("keydown", kick);
+      });
+    }, 900);
+    const t2 = setTimeout(() => setStage("gotcha"), 3200);
+    const t3 = setTimeout(() => onDoneRef.current(), 8200);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      document.removeEventListener("pointerdown", kick);
+      document.removeEventListener("keydown", kick);
+      a.pause();
+    };
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-[10002] bg-black overflow-hidden select-none"
+      onClick={stage === "gotcha" ? onDone : undefined}
+      data-stage={stage}
+    >
+      {stage === "dark" && (
+        <div className="absolute inset-0 flex items-end justify-center pb-8">
+          <div className="text-white/25 text-[12px] tracking-wide">Loading photos…</div>
+        </div>
+      )}
+
+      {stage === "boom" && (
+        <div className="win7-scare-shake absolute inset-0">
+          <img
+            src="/scary-face.jpg"
+            alt=""
+            className="win7-scare-face absolute inset-0 w-full h-full object-cover"
+            draggable={false}
+          />
+          {/* red flash vignette */}
+          <div
+            className="win7-scare-red absolute inset-0 pointer-events-none"
+            style={{ background: "radial-gradient(ellipse at center, transparent 42%, rgba(160,0,0,0.55) 100%)" }}
+          />
+        </div>
+      )}
+
+      {stage === "gotcha" && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer">
+          <div className="win7-gotcha-in text-[64px] sm:text-[84px] leading-none">😂</div>
+          <div
+            className="win7-gotcha-in text-white font-black text-[34px] sm:text-[46px] mt-3 tracking-wide"
+            style={{ fontFamily: "Impact, 'Arial Black', sans-serif", textShadow: "0 3px 0 #000, 0 0 34px rgba(80,180,255,0.5)" }}
+          >
+            GOTCHA!
+          </div>
+          <div className="win7-gotcha-in text-white/80 text-[14px] sm:text-[15.5px] mt-4 text-center px-8 leading-relaxed">
+            Koi ex nahi, koi photos nahi 😌
+            <br />
+            Ye folder sirf ek prank tha — ab shanti se portfolio enjoy karo 😎
+          </div>
+          <div className="absolute bottom-7 text-white/35 text-[11.5px] tracking-wide">click anywhere to close</div>
+        </div>
+      )}
     </div>
   );
 }

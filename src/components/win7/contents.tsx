@@ -633,3 +633,113 @@ export function RecycleContent() {
     </div>
   );
 }
+
+/* ---------- Private Videos (prank: fake security bypass → meme reveal 😂) ---------- */
+
+export function PrivateVideosContent() {
+  const [stage, setStage] = useState<"load" | "meme">("load");
+  const [pct, setPct] = useState(0);
+  const [line, setLine] = useState(0);
+
+  const statusLines = [
+    "Bypassing security…",
+    "Decrypting files…",
+    "Buffering private video…",
+    "Access granted 😉",
+  ];
+
+  useEffect(() => {
+    if (stage !== "load") return;
+    const iv = setInterval(() => {
+      setPct((p) => Math.min(100, p + 3 + Math.floor(Math.random() * 8)));
+    }, 80);
+    const lv = setInterval(() => {
+      setLine((l) => Math.min(statusLines.length - 1, l + 1));
+    }, 620);
+    const done = setTimeout(() => {
+      setPct(100);
+      setStage("meme");
+    }, 2600);
+    return () => {
+      clearInterval(iv);
+      clearInterval(lv);
+      clearTimeout(done);
+    };
+  }, [stage]);
+
+  const replay = () => {
+    setPct(0);
+    setLine(0);
+    setStage("load");
+  };
+
+  if (stage === "load") {
+    return (
+      <div className="flex flex-col h-full bg-[#0e1620] select-none">
+        <MenuBar items={["File", "Edit", "View", "Help"]} />
+        <div className="flex-1 flex flex-col items-center justify-center px-8">
+          <div className="text-[40px] leading-none mb-4">🔐</div>
+          <div className="text-[#dce8f2] text-[15px] font-semibold mb-1">Private_Videos</div>
+          <div className="text-[#7d95a8] text-[12px] mb-6">This folder is protected by AES-404 encryption</div>
+          <div className="w-[300px] max-w-full h-[16px] rounded-[8px] bg-[#1c2a38] border border-[#31485c] overflow-hidden shadow-inner">
+            <div
+              className="h-full rounded-[8px] transition-[width] duration-100 ease-out"
+              style={{
+                width: `${pct}%`,
+                background: "linear-gradient(to bottom, #8fd0f5 0%, #3d9ad4 45%, #1f6ea6 100%)",
+                boxShadow: "0 0 10px rgba(90,180,240,0.65) inset",
+              }}
+            />
+          </div>
+          <div className="mt-3 text-[12.5px] text-[#9fc0d8] font-mono">
+            {statusLines[line]} <span className="text-[#5da9dd]">{pct}%</span>
+          </div>
+        </div>
+        <div className="h-[22px] px-2 bg-[#f1f5f9] border-t border-[#d6dde4] flex items-center text-[11px] text-[#4a5560] select-none">
+          <span>{pct >= 100 ? "Done" : "Working…"}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full bg-[#14181d] select-none">
+      <MenuBar items={["File", "Edit", "View", "Help"]} />
+      <div className="flex-1 min-h-0 relative">
+        <img src="/private-meme.jpg" alt="Private video meme" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
+        {/* classic meme captions */}
+        <div
+          className="absolute top-2.5 left-0 right-0 text-center text-white uppercase font-black text-[15px] sm:text-[19px] leading-tight px-3"
+          style={{
+            fontFamily: "Impact, 'Arial Black', sans-serif",
+            textShadow: "2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000, 0 3px 8px rgba(0,0,0,0.6)",
+            letterSpacing: "0.03em",
+          }}
+        >
+          When you open someone&apos;s
+          <br />
+          &quot;Private Videos&quot; folder
+        </div>
+        <div
+          className="absolute bottom-2.5 left-0 right-0 text-center text-white uppercase font-black text-[16px] sm:text-[21px] leading-tight px-3"
+          style={{
+            fontFamily: "Impact, 'Arial Black', sans-serif",
+            textShadow: "2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000, 0 3px 8px rgba(0,0,0,0.6)",
+            letterSpacing: "0.03em",
+          }}
+        >
+          Just a very good boy 😂
+        </div>
+      </div>
+      <div className="h-[30px] px-2.5 bg-[#f0f6fb] border-t border-[#d6dde4] flex items-center justify-between shrink-0">
+        <span className="text-[11px] text-[#3a4a58]">0 videos found — 1 golden retriever detected 🐶 · trolled by {profile.name}</span>
+        <button
+          onClick={replay}
+          className="text-[11px] px-2.5 py-[3px] rounded-[3px] text-[#123a5e] border border-[#7ba6c9] bg-[linear-gradient(to_bottom,#ffffff_0%,#e6f2fc_50%,#cfe6f8_100%)] hover:border-[#5a9ae0]"
+        >
+          Watch again
+        </button>
+      </div>
+    </div>
+  );
+}

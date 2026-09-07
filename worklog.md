@@ -186,3 +186,25 @@ Stage Summary:
 - Purane fake-looking elements (rays, long comet trails, blue ambient, white flash) hataye — ab original jaisa subtle aur premium
 - Boot total 6.3s; startup chime 5.25s boot ke hold phase mein khatam hota hai (real Win7 jaisa)
 - Files: src/app/globals.css, src/app/page.tsx, scripts/patch_boot_css.py, download/task21{b,c,d,e}_*.png (verification sheets)
+
+---
+Task ID: 22
+Agent: Super Z (main)
+Task: "sabhi icon fix karo sahi nahi dikh rha" + prank folders — "My Ex Photos" (click pe jumpscare/shock) aur "Private Videos" (open pe meme)
+
+Work Log:
+- ICON AUDIT: desktop/start-menu/superbar zoom screenshots se broken extracted PNGs mile — notepad (torn spiral), media-player (mangled blob + cyan shards), users (white streak artifact), recycle-full (wispy mess), speaker (odd shape), folder-videos (cyan halo), gear (flat)
+- 6 BROKEN ICONS ko hand-crafted Win7 Aero SVG se REDRAW kiya (icons.tsx): RecycleBinIcon (glass basket + strands + metallic rim + chasing green arrows + crumpled paper), NotepadIcon (spiral loops + ruled lines + red margin), ContactIcon (blue back + green front glossy people, white rim separation), GearIcon (two-pass silhouette trick: stroke pass under gradient fill pass, 8 teeth + gloss), MediaIcon (WMP glossy orange radial ball + gloss ellipse + white triangle), VolumeIcon (crisp 16px white speaker + waves), FolderVideosIcon (manila folder + film strip with sprocket holes)
+- 2 NAYE prank folder icons: FolderPhotosIcon (folder + peeking polaroid with pink heart), FolderPrivateIcon (folder + gold padlock)
+- BROKEN PNGs deleted: notepad/media-player/users/recycle-full/speaker/folder-videos .png — public/icons me sirf 7 good PNGs bache (monitor, folder, ie, info, shield-check, cd-music, wav-file)
+- JUMPSCARE assets: public/scary-face.jpg (AI-generated horror demon face, 1024px) + public/jumpscare.mp3 (scripts/make_jumpscare_sound.py — detuned saw shriek gliss up + ring-mod + noise burst + sub thump + echo, tanh clip, stereo haas, 2.2s, 192kbps)
+- "My Ex Photos" folder: DESKTOP_ICONS + launchIcon routing (myex → scare, kabhi window nahi). JumpScare component (page.tsx): 3 stages — dark 0.9s ("Loading photos…"), boom (fullscreen face pop + 6× shake + red vignette + scream), gotcha (😂 GOTCHA! Impact text + "Koi ex nahi" message, click/auto close 8.2s). BUG FIX: onDone inline arrow identity churn se effect restart hota tha (gotcha kabhi nahi aata tha) → mount-only effect + onDoneRef + stable closeScare useCallback
+- "Private Videos" folder: WinId union me myex+privatevid, WIN_CONFIGS me Private_Videos — Explorer (640x540). PrivateVideosContent (contents.tsx): stage 1 = AES-404 fake loader (progress bar + rotating status: Bypassing security/Decrypting/Buffering/Access granted 😉, 2.6s), stage 2 = golden retriever meme (AI-generated) + Impact captions ("When you open someone's Private Videos folder" / "Just a very good boy 😂") + status bar "0 videos found — 1 golden retriever detected 🐶 · trolled by Harish" + Watch again replay
+- globals.css: win7-scare-pop (scale 0.22→1.14 overshoot + brightness flash), win7-scare-shake (6 runs), win7-scare-red vignette, win7-gotcha-in pop
+- Verified: agent-browser full flow — desktop 10 icons zoom (sab clean), My Ex Photos dblclick → dark→boom(face)→gotcha screenshots, click-close, Private Videos → loader 94% → meme reveal, mobile 390x844 scare full-screen OK, start menu + tray speaker clean, tsc 0 src errors, eslint clean, console no errors
+
+Stage Summary:
+- Desktop ab 10 icons: original 8 + My Ex Photos + Private Videos (Music Library ke baad)
+- Pranks: My Ex Photos = jumpscare (face + scream + shake + GOTCHA), Private Videos = fake hack loader → dog meme
+- Sab broken icons crisp Win7-style SVG ab; taskbar/superbar/tray/start-menu/windows sab jagah apply
+- Files: icons.tsx (7 redraws + 2 new), chrome.tsx (WinId), page.tsx (launchIcon + JumpScare + closeScare), contents.tsx (PrivateVideosContent), globals.css (scare anims), public/scary-face.jpg, public/private-meme.jpg, public/jumpscare.mp3, scripts/make_jumpscare_sound.py

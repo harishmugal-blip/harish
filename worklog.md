@@ -250,3 +250,29 @@ Stage Summary:
 - Demo APPROVAL PENDING — live URL: /agency-office-mockup.html
 - NEXT (approval pe): real build — Prisma Lead model (naam/kaam/token/status pipeline/created_at), POST+GET /api/agency-leads, AgencyOfficeContent in contents.tsx (real Win7 window + DB-backed pipeline + live ticker), desktop icon "Harish Web Agency" (briefcase SVG already ready) + start menu, WhatsApp deep-link with real lead data
 - Sarkari CR Office demo (cr-office-mockup.html) user ke 'Dono chahiye' bole to alag window ban jayega — file saved
+
+---
+Task ID: 24
+Agent: Super Z (main)
+Task: User ne 2 reference images bheji ("Bro is type ka samjhe ya nahi") — "Virtual Office v1.2" jaisa ISOMETRIC pixel-art office (glass cubicles, log desks pe kaam karte, side me Live User Status green/red dots, clickable hand icons). User ko ISI STYLE me virtual office chahiye. Demo-first me naya iso mockup banaya.
+
+Work Log:
+- Reference analyze kiya: Habbo-style isometric floor + upright character sprites + Win7 window ke andar — exactly user ke Win7 portfolio pe fit
+- NEW demo: public/cr-office-iso-mockup.html (~700 lines, src/ untouched, purane demos intact)
+- Architecture (3 iterations se seekha): pure CSS 3D world (rotateX(59) rotateZ(45)) me floor + glass walls; FURNITURE + CHARACTERS 2D screen-mapped sprite layer me JS W2S() projection se (x-y)*0.7071 / (x+y-528)*0.364 formula — painter's algorithm zIndex = x+y sort (3D billboard approach per-pixel clipping me fail hua tha — .ppl triangles ban rahe the)
+- mkBox2(): 2D iso boxes via skewY(±27.26deg) faces + rotateX(59)rotateZ(45) top — desks/table/rack/coffee; deskZi pe persons deskZi+2 (sitting-behind-desk look), monitors deskZi+1
+- Scene: Meeting Area (table + Harish + 2 clients + AAJ KA TARGET whiteboard), Cubicle Zone 1 (Amit developer code-monitor + Rahul designer art-monitor), SEO/GMB Desk (Sneha + animated chart bars), Reception/Enquiry desk (glowing green sign), Server rack (blinking LEDs), Common Area (coffee machine + plants), Main Entrance (WELCOME doormat)
+- 7 CSS-drawn pixel characters: Harish (Founder & Service Manager, blue), Amit (Full-Stack Dev, green), Rahul (Designer, purple), Sneha (SEO & Google Business, red — "Clickable" tag ke saath), Pankaj (Chai & Morale Manager — WALKING karta hai footsteps 👣 ke saath, waypoints loop, chai deliver hota he), 2 dummy clients
+- LIVE SHOW: speech bubbles (Hinglish funny lines, 3.4s rotation), task rotators sidebar me 7s, LIVE 🔴 pill (viewers count live), AAJ KE VISITORS 7-seg counter, chai cups counter, CAM-01 clock, typing/flicker monitors
+- Right sidebar: LIVE TEAM STATUS (reference jaisa) — avatar circle + name + live task + green dots, 6/6 counter, reception row (token #L-129)
+- CRM strip (bottom): 5-stage pipeline (NEW → CONTACTED → MEETING → WEBSITE BUILT → GOOGLE PE #1) with lead chips auto-advancing 4.5s + NEW ENQUIRY button
+- Enquiry modal: Naam validation ("Naam to batao bhai! Rule 1"), kaam dropdown (Website/Google Business/SEO/Sab Kuch), submit → "ENQUIRY DARJ ✅ TOKEN #L-130" stamp animation → CRM NEW me chip prepend → WhatsApp button reveal (wa.me/917668483250 prefilled with naam+kaam — REAL number resume se)
+- Interactions: person click → Win7 profile dialog (avatar, role—LIVE, abhi-kya-kar-rha, skills chips, funny quote), green hand click, close X → shake + "LIVE office band nahi hota" toast, Help menu → tips toast
+- Verified via agent-browser: 34 sprites/7 boxes/7 people render, profile dialog OK, enquiry→stamp→WhatsApp link (real number + prefilled text) OK, CRM chips advance OK, console/errors clean
+- Screenshots: download/cr_office_iso_demo_1.png (full view), cr_office_iso_demo_2.png (bubble + Clickable + pipeline GOOGLE PE #1 me 2 leads)
+
+Stage Summary:
+- Demo APPROVAL PENDING — live URL: /cr-office-iso-mockup.html (preview proxy se accessible)
+- Isotype reference wala demo READY: isometric floor + team working + live status sidebar + CRM pipeline + enquiry→WhatsApp
+- 3 demos ab available: cr-office-mockup.html (sarkari), agency-office-mockup.html (flat agency), cr-office-iso-mockup.html (ISOMETRIC — user ke reference images wala)
+- NEXT (approval pe): real build — Prisma Lead model + /api/agency-leads, AgencyOfficeContent (iso scene + DB pipeline + real team data), desktop icon + start menu entry, demo files delete

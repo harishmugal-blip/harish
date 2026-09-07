@@ -145,3 +145,24 @@ Work Log:
 
 Stage Summary:
 - Boot ab REAL Starting Windows jaisa (ribbons converge -> flag bloom + rays); desktop/start menu/tray/windows me REAL glossy icons (user ki sheet se); sound UI (speaker/WAV/CD) real icons pe — sab user-uploaded assets se
+
+---
+Task ID: 21
+Agent: Super Z (main)
+Task: Starting Windows animation ko original Windows 7 jaisa banana + authentic startup sound
+
+Work Log:
+- User reference image (classic glossy Win7 flag) + upload/Windows_7-Logo.wine.svg analyze kiya
+- ROOT CAUSE mila: public/win7-logo.svg mein width="1200" height="800" attributes the lekin viewBox sirf 435.5x445.368 — transparent margins ki wajah se flag ~32% chhota render ho raha tha (68px instead of 104px) — isliye "fake" lag raha tha
+- SVG fix: width/height ko viewBox aspect se match kiya (435.5 x 445.368) — ab img full-size crisp render hota hai
+- globals.css boot section poora rewrite: naye .win7-orb glowing ribbons (radial-gradient heads + blurred 170px comet trails ::after + halo ::before), 4 curved multi-waypoint flight paths (swirl -> hook -> dive into center, easeInOutSine), convergence flash 1.9s pe, flag materialize (blur 15px + brightness 3 -> settle), ambient glow breathing, subtle wide rays (14s rotation), 4 twinkling sparks, fadeout 4.65s
+- page.tsx BootScreen rewrite: 360x310 stage, flag 150px full-size, Segoe UI stack text 21-23px, total boot 5.3s
+- Startup sound synthesized: scripts/make_startup_sound.py (numpy) — Bb major bell arpeggio (Bb3/D4/F4/Bb4) + warm pad swell + chord bloom at 1.3s + high shimmer + feedback-delay reverb, stereo detuned, 5.2s, ffmpeg -> public/win7-startup.mp3 (124KB, 192kbps)
+- Audio wiring: module-level singleton HTMLAudioElement — autoplay blocked ho to pointerdown/keydown gesture fallback; skip-click pe sound kill nahi hota (real Win7 ki tarah login pe chime tail chalta rehta hai)
+- Verification: agent-browser se 5 time-point screenshots (orbs t0.8, flash t1.5, formed flag + rays + text t2.9), full flow boot->login(harish)->activate(jarvis)->JARVIS->desktop pass, console clean, tsc 0 src errors, eslint clean
+
+Stage Summary:
+- Starting Windows animation ab authentic: glowing ribbons curved swirl paths pe, bright convergence flash se flag materialize hota hai, glossy original logo full-size, breathing glow + rays + sparkles, Segoe UI "Starting Windows" text
+- Original Win7 startup-style chime /win7-startup.mp3 boot pe bajta hai (autoplay-policy safe gesture fallback ke saath)
+- win7-logo.svg intrinsic dimensions fix — ab start orb, login branding, About dialog, favicon sab jagah crisp full logo
+- Key files: src/app/globals.css (boot CSS rewrite), src/app/page.tsx (BootScreen + audio), public/win7-logo.svg (dims fix), public/win7-startup.mp3 (new), scripts/make_startup_sound.py (regeneratable)

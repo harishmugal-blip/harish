@@ -81,114 +81,203 @@
   transform-origin: bottom left;
 }
 
-/* Boot screen — real "Starting Windows": four light ribbons converge -> flag bloom */
-@keyframes win7-comet-tl {
-  0%   { transform: translate(-215px, -215px) rotate(45deg) scale(1); opacity: 0; }
-  10%  { opacity: 1; }
-  55%  { transform: translate(-78px, -118px) rotate(22deg) scale(0.92); }
-  84%  { transform: translate(-10px, -18px) rotate(8deg) scale(0.45); opacity: 1; }
-  100% { transform: translate(0, 0) rotate(0deg) scale(0.12); opacity: 0; }
-}
-@keyframes win7-comet-tr {
-  0%   { transform: translate(215px, -215px) rotate(-45deg) scale(1); opacity: 0; }
-  10%  { opacity: 1; }
-  55%  { transform: translate(78px, -118px) rotate(-22deg) scale(0.92); }
-  84%  { transform: translate(10px, -18px) rotate(-8deg) scale(0.45); opacity: 1; }
-  100% { transform: translate(0, 0) rotate(0deg) scale(0.12); opacity: 0; }
-}
-@keyframes win7-comet-bl {
-  0%   { transform: translate(-215px, 215px) rotate(-45deg) scale(1); opacity: 0; }
-  10%  { opacity: 1; }
-  55%  { transform: translate(-78px, 118px) rotate(-22deg) scale(0.92); }
-  84%  { transform: translate(-10px, 18px) rotate(-8deg) scale(0.45); opacity: 1; }
-  100% { transform: translate(0, 0) rotate(0deg) scale(0.12); opacity: 0; }
-}
-@keyframes win7-comet-br {
-  0%   { transform: translate(215px, 215px) rotate(45deg) scale(1); opacity: 0; }
-  10%  { opacity: 1; }
-  55%  { transform: translate(78px, 118px) rotate(22deg) scale(0.92); }
-  84%  { transform: translate(10px, 18px) rotate(8deg) scale(0.45); opacity: 1; }
-  100% { transform: translate(0, 0) rotate(0deg) scale(0.12); opacity: 0; }
-}
-.win7-comet {
+/* ================================================================
+   Boot screen — authentic "Starting Windows"
+   four glowing ribbons swirl along curved paths -> converge ->
+   bright flash -> flag materializes from light -> gentle glow pulse
+   ================================================================ */
+
+/* ---- glowing ribbon orbs (head + trailing light streak) ---- */
+.win7-orb {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 40px;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border-radius: 50%;
+  opacity: 0;
+}
+.win7-orb::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 55%;
+  width: 170px;
   height: 11px;
-  margin-left: -6px;
-  margin-top: -5px;
   border-radius: 9999px;
-  filter: blur(0.4px);
+  transform: translateY(-50%);
+  filter: blur(7px);
+  transform-origin: right center;
 }
-.win7-comet-tl {
-  background: linear-gradient(to right, rgba(246, 83, 20, 0), #f65314 62%, #ffd9c9 96%);
-  box-shadow: 0 0 18px 4px rgba(246, 83, 20, 0.55);
-  animation: win7-comet-tl 1.2s cubic-bezier(0.3, 0.65, 0.35, 1) 0.1s both;
-}
-.win7-comet-tr {
-  background: linear-gradient(to left, rgba(124, 187, 0, 0), #7cbb00 62%, #e4ffb8 96%);
-  box-shadow: 0 0 18px 4px rgba(124, 187, 0, 0.55);
-  animation: win7-comet-tr 1.2s cubic-bezier(0.3, 0.65, 0.35, 1) 0.3s both;
-}
-.win7-comet-bl {
-  background: linear-gradient(to right, rgba(0, 161, 241, 0), #00a1f1 62%, #c3ecff 96%);
-  box-shadow: 0 0 18px 4px rgba(0, 161, 241, 0.55);
-  animation: win7-comet-bl 1.2s cubic-bezier(0.3, 0.65, 0.35, 1) 0.5s both;
-}
-.win7-comet-br {
-  background: linear-gradient(to left, rgba(255, 187, 0, 0), #ffbb00 62%, #fff2c4 96%);
-  box-shadow: 0 0 18px 4px rgba(255, 187, 0, 0.55);
-  animation: win7-comet-br 1.2s cubic-bezier(0.3, 0.65, 0.35, 1) 0.7s both;
+.win7-orb::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  filter: blur(4px);
 }
 
+.win7-orb-red {
+  background: radial-gradient(circle at 38% 34%, #ffe3d4 0%, #ff8a4a 42%, #f65314 78%, #d13c07 100%);
+  box-shadow: 0 0 22px 7px rgba(255, 122, 60, 0.85), 0 0 64px 26px rgba(246, 83, 20, 0.4);
+}
+.win7-orb-red::before { background: rgba(255, 130, 70, 0.55); }
+.win7-orb-red::after {
+  background: linear-gradient(to left, rgba(255, 158, 100, 0.95) 0%, rgba(246, 83, 20, 0.5) 38%, rgba(246, 83, 20, 0.12) 72%, transparent 96%);
+}
+
+.win7-orb-green {
+  background: radial-gradient(circle at 38% 34%, #f0ffd2 0%, #a4d81e 42%, #7cbb00 78%, #528600 100%);
+  box-shadow: 0 0 22px 7px rgba(150, 214, 30, 0.85), 0 0 64px 26px rgba(124, 187, 0, 0.4);
+}
+.win7-orb-green::before { background: rgba(158, 222, 36, 0.55); }
+.win7-orb-green::after {
+  background: linear-gradient(to left, rgba(196, 240, 110, 0.95) 0%, rgba(124, 187, 0, 0.5) 38%, rgba(124, 187, 0, 0.12) 72%, transparent 96%);
+}
+
+.win7-orb-blue {
+  background: radial-gradient(circle at 38% 34%, #dcf3ff 0%, #47b9ff 42%, #00a1f1 78%, #0069b0 100%);
+  box-shadow: 0 0 22px 7px rgba(60, 178, 255, 0.85), 0 0 64px 26px rgba(0, 161, 241, 0.4);
+}
+.win7-orb-blue::before { background: rgba(80, 188, 255, 0.55); }
+.win7-orb-blue::after {
+  background: linear-gradient(to left, rgba(140, 214, 255, 0.95) 0%, rgba(0, 161, 241, 0.5) 38%, rgba(0, 161, 241, 0.12) 72%, transparent 96%);
+}
+
+.win7-orb-yellow {
+  background: radial-gradient(circle at 38% 34%, #fff6d0 0%, #ffd23c 42%, #ffbb00 78%, #d68f00 100%);
+  box-shadow: 0 0 22px 7px rgba(255, 200, 60, 0.85), 0 0 64px 26px rgba(255, 187, 0, 0.4);
+}
+.win7-orb-yellow::before { background: rgba(255, 210, 80, 0.55); }
+.win7-orb-yellow::after {
+  background: linear-gradient(to left, rgba(255, 226, 130, 0.95) 0%, rgba(255, 187, 0, 0.5) 38%, rgba(255, 187, 0, 0.12) 72%, transparent 96%);
+}
+
+/* ---- curved flight paths (swirl -> dive into center) ---- */
+@keyframes win7-orb-red {
+  0%   { transform: translate(-270px, -185px) rotate(35deg) scale(0.85); opacity: 0; }
+  10%  { opacity: 1; }
+  28%  { transform: translate(-155px, -128px) rotate(52deg) scale(1); }
+  52%  { transform: translate(-18px, -92px)  rotate(74deg) scale(0.96); }
+  72%  { transform: translate(88px, -42px)   rotate(128deg) scale(0.8); }
+  90%  { transform: translate(16px, 6px)     rotate(212deg) scale(0.5); opacity: 1; }
+  100% { transform: translate(0, 0)          rotate(250deg) scale(0.1); opacity: 0; }
+}
+@keyframes win7-orb-green {
+  0%   { transform: translate(285px, -55px)  rotate(158deg) scale(0.85); opacity: 0; }
+  10%  { opacity: 1; }
+  28%  { transform: translate(168px, 4px)    rotate(174deg) scale(1); }
+  52%  { transform: translate(92px, 92px)    rotate(198deg) scale(0.96); }
+  72%  { transform: translate(-30px, 66px)   rotate(252deg) scale(0.8); }
+  90%  { transform: translate(-10px, 4px)    rotate(300deg) scale(0.5); opacity: 1; }
+  100% { transform: translate(0, 0)          rotate(340deg) scale(0.1); opacity: 0; }
+}
+@keyframes win7-orb-blue {
+  0%   { transform: translate(-175px, 235px) rotate(-142deg) scale(0.85); opacity: 0; }
+  10%  { opacity: 1; }
+  28%  { transform: translate(-135px, 115px) rotate(-162deg) scale(1); }
+  52%  { transform: translate(-72px, -38px)  rotate(-186deg) scale(0.96); }
+  72%  { transform: translate(28px, -78px)   rotate(-228deg) scale(0.8); }
+  90%  { transform: translate(6px, -6px)     rotate(-282deg) scale(0.5); opacity: 1; }
+  100% { transform: translate(0, 0)          rotate(-320deg) scale(0.1); opacity: 0; }
+}
+@keyframes win7-orb-yellow {
+  0%   { transform: translate(235px, 215px)  rotate(-38deg) scale(0.85); opacity: 0; }
+  10%  { opacity: 1; }
+  28%  { transform: translate(178px, 112px)  rotate(-56deg) scale(1); }
+  52%  { transform: translate(98px, -28px)   rotate(-106deg) scale(0.96); }
+  72%  { transform: translate(-16px, -82px)  rotate(-156deg) scale(0.8); }
+  90%  { transform: translate(-6px, -4px)    rotate(-216deg) scale(0.5); opacity: 1; }
+  100% { transform: translate(0, 0)          rotate(-250deg) scale(0.1); opacity: 0; }
+}
+.win7-orb-red    { animation: win7-orb-red    1.35s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.15s both; }
+.win7-orb-green  { animation: win7-orb-green  1.35s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.30s both; }
+.win7-orb-blue   { animation: win7-orb-blue   1.35s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.45s both; }
+.win7-orb-yellow { animation: win7-orb-yellow 1.35s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.60s both; }
+
+/* ---- convergence flash ---- */
 @keyframes win7-boot-bloom {
-  0%   { transform: scale(0.25); opacity: 0; }
-  30%  { opacity: 0.95; }
-  100% { transform: scale(2.2); opacity: 0; }
+  0%   { transform: scale(0.18); opacity: 0; }
+  22%  { opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
 }
 .win7-boot-bloom {
-  background: radial-gradient(circle, #ffffff 0%, #bfe4ff 30%, rgba(120, 190, 250, 0.5) 55%, transparent 72%);
-  animation: win7-boot-bloom 0.75s ease-out 1.55s both;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130px;
+  height: 130px;
+  margin: -65px 0 0 -65px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, #eaf7ff 20%, rgba(160, 210, 255, 0.85) 40%, rgba(90, 160, 240, 0.35) 58%, transparent 74%);
+  animation: win7-boot-bloom 0.8s cubic-bezier(0.17, 0.67, 0.4, 1) 1.9s both;
 }
 
+/* ---- flag materializes out of the flash ---- */
 @keyframes win7-boot-flag {
-  0%   { transform: scale(0.42); opacity: 0; filter: blur(9px) brightness(2.4); }
-  55%  { transform: scale(1.09); opacity: 1; filter: blur(0) brightness(1.4); }
+  0%   { transform: scale(0.5); opacity: 0; filter: blur(15px) brightness(3); }
+  42%  { opacity: 1; filter: blur(2px) brightness(1.9); }
+  68%  { transform: scale(1.06); filter: blur(0) brightness(1.3); }
   100% { transform: scale(1); opacity: 1; filter: blur(0) brightness(1); }
 }
 .win7-boot-flag {
-  animation: win7-boot-flag 0.85s cubic-bezier(0.2, 0.8, 0.3, 1) 1.6s both;
+  animation: win7-boot-flag 0.9s cubic-bezier(0.2, 0.75, 0.3, 1) 1.95s both;
 }
 
+/* ---- ambient glow behind the flag (fades in, then breathes) ---- */
+@keyframes win7-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes win7-breathe-soft {
+  0%, 100% { opacity: 0.72; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.08); }
+}
+.win7-boot-ambient {
+  background: radial-gradient(circle, rgba(165, 216, 255, 0.5) 0%, rgba(95, 165, 240, 0.22) 40%, rgba(60, 120, 200, 0.08) 62%, transparent 72%);
+  filter: blur(6px);
+  animation: win7-fade-in 0.9s ease 2.1s both, win7-breathe-soft 2.6s ease-in-out 3s infinite;
+}
+
+/* ---- light rays (subtle, wide, slow) ---- */
 @keyframes win7-boot-rays {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
-@keyframes win7-boot-rays-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
 .win7-boot-rays {
-  background: repeating-conic-gradient(from 0deg, rgba(165, 216, 255, 0.13) 0deg 7deg, transparent 7deg 22deg);
-  -webkit-mask-image: radial-gradient(circle, black 0%, transparent 66%);
-  mask-image: radial-gradient(circle, black 0%, transparent 66%);
-  animation: win7-boot-rays 10s linear infinite, win7-boot-rays-in 1.2s ease 1.7s both;
+  background: repeating-conic-gradient(from 0deg, rgba(170, 220, 255, 0.09) 0deg 5deg, transparent 5deg 18deg);
+  -webkit-mask-image: radial-gradient(circle, black 0%, rgba(0, 0, 0, 0.5) 42%, transparent 68%);
+  mask-image: radial-gradient(circle, black 0%, rgba(0, 0, 0, 0.5) 42%, transparent 68%);
+  animation: win7-boot-rays 14s linear infinite, win7-fade-in 1.3s ease 2.15s both;
 }
 
-@keyframes win7-boot-text {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+/* ---- tiny twinkles around the formed flag ---- */
+.win7-spark {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, rgba(190, 230, 255, 0.9) 40%, transparent 70%);
+  opacity: 0;
 }
+@keyframes win7-spark-tw {
+  0%   { opacity: 0; transform: scale(0.2); }
+  35%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.25); }
+}
+.win7-spark-1 { top: -14%;  left: 18%;  animation: win7-spark-tw 1.8s ease-in-out 2.5s infinite; }
+.win7-spark-2 { top: 30%;   right: -16%; animation: win7-spark-tw 2.1s ease-in-out 3.1s infinite; }
+.win7-spark-3 { bottom: 6%; left: -14%; animation: win7-spark-tw 1.9s ease-in-out 3.6s infinite; }
+.win7-spark-4 { bottom: -12%; right: 22%; animation: win7-spark-tw 2.3s ease-in-out 4s infinite; }
+
+/* ---- text ---- */
 .win7-boot-text {
-  animation: win7-boot-text 0.9s ease 2.05s both;
+  animation: win7-fade-in 0.9s ease 2.35s both;
 }
 
 @keyframes win7-boot-fadeout {
   to { opacity: 0; visibility: hidden; }
 }
 .win7-boot-fadeout {
-  animation: win7-boot-fadeout 0.55s ease 3.7s forwards;
+  animation: win7-boot-fadeout 0.55s ease 4.65s forwards;
 }
 
 @keyframes win7-breathe {

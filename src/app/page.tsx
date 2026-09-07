@@ -486,38 +486,70 @@ export default function DesktopPage() {
 
 /* ================= Boot screen ================= */
 
+/* module-level singleton so the chime survives a "click to skip" —
+   real Win7 keeps the startup sound playing as the login screen appears */
+let bootAudio: HTMLAudioElement | null = null;
+
 function BootScreen({ onDone }: { onDone: () => void }) {
   useEffect(() => {
-    const t = setTimeout(onDone, 4400);
-    return () => clearTimeout(t);
+    /* startup sound — try immediately, fall back to first user gesture
+       (browser autoplay policy blocks audio without interaction) */
+    if (!bootAudio) {
+      bootAudio = new Audio("/win7-startup.mp3");
+      bootAudio.volume = 0.85;
+      bootAudio.preload = "auto";
+    }
+    const el = bootAudio;
+    const kick = () => {
+      el.currentTime = 0;
+      el.play().catch(() => {});
+      document.removeEventListener("pointerdown", kick);
+      document.removeEventListener("keydown", kick);
+    };
+    el.currentTime = 0;
+    el.play().catch(() => {
+      document.addEventListener("pointerdown", kick);
+      document.addEventListener("keydown", kick);
+    });
+    const t = setTimeout(onDone, 5300);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener("pointerdown", kick);
+      document.removeEventListener("keydown", kick);
+    };
   }, [onDone]);
 
   return (
     <div className="win7-boot-fadeout fixed inset-0 z-[9000] bg-black flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden" onClick={onDone}>
-      <div className="relative w-[220px] h-[220px] flex items-center justify-center">
-        {/* soft ambient glow */}
-        <div className="absolute w-[190px] h-[190px] rounded-full bg-[#4aa8e8]/15 blur-3xl" />
-        {/* rotating light rays (fade in with the flag) */}
-        <div className="win7-boot-rays absolute inset-0" />
-        {/* four light ribbons converging from the corners — real Starting Windows */}
-        <div className="win7-comet win7-comet-tl" />
-        <div className="win7-comet win7-comet-tr" />
-        <div className="win7-comet win7-comet-bl" />
-        <div className="win7-comet win7-comet-br" />
+      <div className="relative w-[360px] h-[310px] flex items-center justify-center">
+        {/* soft ambient glow behind the flag */}
+        <div className="win7-boot-ambient absolute w-[270px] h-[270px] rounded-full" />
+        {/* slow light rays */}
+        <div className="win7-boot-rays absolute w-[430px] h-[430px]" />
+        {/* four glowing ribbons swirl in along curved paths */}
+        <div className="win7-orb win7-orb-red" />
+        <div className="win7-orb win7-orb-green" />
+        <div className="win7-orb win7-orb-blue" />
+        <div className="win7-orb win7-orb-yellow" />
         {/* convergence flash */}
-        <div className="win7-boot-bloom absolute w-[150px] h-[150px] rounded-full" />
-        {/* the real Windows 7 flag */}
+        <div className="win7-boot-bloom" />
+        {/* the real Windows 7 flag materializes from light */}
         <div className="win7-boot-flag relative">
           <img
             src="/win7-logo.svg"
             alt="Windows 7"
-            className="w-[104px] h-auto"
-            style={{ filter: "drop-shadow(0 0 22px rgba(140,210,255,0.9)) drop-shadow(0 0 62px rgba(80,160,240,0.45))" }}
+            className="w-[150px] h-auto"
+            style={{ filter: "drop-shadow(0 0 20px rgba(150,210,255,0.85)) drop-shadow(0 0 60px rgba(80,160,240,0.45))" }}
             draggable={false}
           />
+          {/* tiny twinkles */}
+          <span className="win7-spark win7-spark-1" />
+          <span className="win7-spark win7-spark-2" />
+          <span className="win7-spark win7-spark-3" />
+          <span className="win7-spark win7-spark-4" />
         </div>
       </div>
-      <div className="win7-boot-text text-white/95 text-[19px] sm:text-[21px] font-light mt-9" style={{ textShadow: "0 0 16px rgba(160,215,255,0.6)" }}>Starting Windows</div>
+      <div className="win7-boot-text text-white/95 text-[21px] sm:text-[23px] font-light mt-7" style={{ fontFamily: '"Segoe UI", "Frutiger", "Helvetica Neue", Arial, sans-serif', textShadow: "0 0 18px rgba(160,215,255,0.55)" }}>Starting Windows</div>
       <div className="absolute bottom-6 text-white/30 text-[11px] tracking-[0.2em]">© {profile.name.toUpperCase()} PC • PORTFOLIO 7 ULTIMATE</div>
       <div className="absolute bottom-2 right-3 text-white/25 text-[10px]">click to skip</div>
     </div>

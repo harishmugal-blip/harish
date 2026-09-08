@@ -16,6 +16,7 @@ import {
   WinFlag,
   FolderPhotosIcon,
   FolderPrivateIcon,
+  AgencyIcon,
 } from "@/components/win7/icons";
 import {
   AboutContent,
@@ -27,6 +28,7 @@ import {
   RecycleContent,
   MusicLibraryContent,
   PrivateVideosContent,
+  AgencyOfficeContent,
 } from "@/components/win7/contents";
 import { JarvisMode } from "@/components/jarvis/JarvisMode";
 import { profile } from "@/lib/portfolio";
@@ -52,6 +54,7 @@ const WIN_CONFIGS: WinConfig[] = [
   { id: "contact", title: "New Message — Contact.exe", icon: <ContactIcon />, w: 560, h: 560, content: <ContactContent /> },
   { id: "computer", title: "Computer — System Info", icon: <ComputerIcon />, w: 640, h: 470, content: <ComputerContent /> },
   { id: "music", title: `Music Library — ${TOTAL_SONGS} Songs (YT Music)`, icon: <MediaIcon />, w: 560, h: 520, content: <MusicLibraryContent /> },
+  { id: "office", title: "Harish Web Agency — Virtual Office (LIVE)", icon: <AgencyIcon />, w: 1150, h: 680, content: <AgencyOfficeContent /> },
   { id: "privatevid", title: "Private_Videos — Explorer", icon: <FolderPrivateIcon />, w: 640, h: 540, content: <PrivateVideosContent /> },
   { id: "recycle", title: "Recycle Bin", icon: <RecycleBinIcon />, w: 560, h: 380, content: <RecycleContent /> },
 ];
@@ -63,6 +66,7 @@ const DESKTOP_ICONS: { id: WinId; label: string; icon: React.ReactNode }[] = [
   { id: "skills", label: "Skills.exe", icon: <GearIcon /> },
   { id: "resume", label: "Resume.pdf", icon: <PdfIcon /> },
   { id: "music", label: "Music Library", icon: <MediaIcon /> },
+  { id: "office", label: "Virtual Office", icon: <AgencyIcon /> },
   { id: "myex", label: "My Ex Photos", icon: <FolderPhotosIcon /> },
   { id: "privatevid", label: "Private Videos", icon: <FolderPrivateIcon /> },
   { id: "contact", label: "Contact.exe", icon: <ContactIcon /> },
@@ -353,7 +357,7 @@ export default function DesktopPage() {
   }, []);
 
   const openWindowForJarvis = useCallback((id: string) => {
-    if (["about", "projects", "skills", "resume", "contact", "computer", "music", "recycle", "privatevid"].includes(id)) {
+    if (["about", "projects", "skills", "resume", "contact", "computer", "music", "office", "recycle", "privatevid"].includes(id)) {
       openWindow(id as WinId);
     }
   }, [openWindow]);

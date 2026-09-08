@@ -743,3 +743,17 @@ export function PrivateVideosContent() {
     </div>
   );
 }
+
+/* ---------------- Harish Web Agency — Virtual Office (LIVE show) ---------------- */
+
+export function AgencyOfficeContent() {
+  return (
+    <div className="h-full w-full bg-[#0b1526] overflow-hidden select-none">
+      <iframe
+        src="/cr-office-iso-mockup.html?embed=1"
+        title="Harish Web Agency — Virtual Office LIVE"
+        className="h-full w-full border-0 block"
+      />
+    </div>
+  );
+}

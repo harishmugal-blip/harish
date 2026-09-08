@@ -13,6 +13,7 @@ import {
   ComputerIcon,
   GearIcon,
   GamesIcon,
+  AgencyIcon,
   TrayFlagIcon,
   NetworkBarsIcon,
   VolumeIcon,
@@ -21,7 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import { profile } from "@/lib/portfolio";
 import { getRadioSnapshot, subscribeRadio, togglePlayPause, nextSong, radioStart } from "@/lib/radio";
 
-export type WinId = "about" | "projects" | "skills" | "resume" | "contact" | "computer" | "recycle" | "music" | "privatevid" | "myex";
+export type WinId = "about" | "projects" | "skills" | "resume" | "contact" | "computer" | "recycle" | "music" | "privatevid" | "myex" | "office";
 
 export interface TaskItem {
   id: WinId;
@@ -277,6 +278,7 @@ export function StartMenu({ onClose, onOpen, onShutdown, onJarvisOpen }: StartMe
     { id: "contact", label: "Contact.exe", icon: <ContactIcon className="w-6 h-6" /> },
     { id: "computer", label: "Computer", icon: <ComputerIcon className="w-6 h-6" /> },
     { id: "music", label: "Music Library", icon: <MediaIcon className="w-6 h-6" />, sub: "151 songs • YT Music" },
+    { id: "office", label: "Virtual Office — LIVE", icon: <AgencyIcon className="w-6 h-6" />, sub: "Harish Web Agency" },
     { id: "jarvis", label: "J.A.R.V.I.S", icon: jarvisOrb, sub: "AI assistant — password protected" },
     { id: "games", label: "Games", icon: <GamesIcon className="w-6 h-6" /> },
   ];

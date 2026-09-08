@@ -447,3 +447,61 @@ export function FolderPrivateIcon({ className = "w-12 h-12" }: { className?: str
     </svg>
   );
 }
+
+/* Harish Web Agency — glass office building with LIVE broadcast dot */
+export function AgencyIcon({ className = "w-12 h-12" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className}>
+      <defs>
+        <linearGradient id="agGlass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#cfe9ff" />
+          <stop offset="0.5" stopColor="#7fb6e6" />
+          <stop offset="1" stopColor="#3f74aa" />
+        </linearGradient>
+        <linearGradient id="agSide" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#a8ccf0" />
+          <stop offset="1" stopColor="#5c8bbd" />
+        </linearGradient>
+        <linearGradient id="agShine" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.75" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0.05" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="24" cy="43.5" rx="17" ry="1.8" fill="#1c3a52" opacity="0.25" />
+      {/* side wing */}
+      <rect x="5" y="24" width="10" height="19" fill="url(#agSide)" stroke="#39608c" strokeWidth="1" />
+      <g fill="#eaf6ff" opacity="0.75">
+        <rect x="7" y="26.5" width="2.6" height="3" />
+        <rect x="11" y="26.5" width="2.6" height="3" />
+        <rect x="7" y="31.5" width="2.6" height="3" />
+        <rect x="11" y="31.5" width="2.6" height="3" />
+        <rect x="7" y="36.5" width="2.6" height="3" />
+        <rect x="11" y="36.5" width="2.6" height="3" />
+      </g>
+      {/* main glass tower */}
+      <rect x="16" y="7" width="21" height="36" rx="1.2" fill="url(#agGlass)" stroke="#2f567f" strokeWidth="1.2" />
+      {/* window grid */}
+      <g fill="#eef8ff" opacity="0.85">
+        <rect x="19" y="11" width="3.6" height="4" />
+        <rect x="24.7" y="11" width="3.6" height="4" />
+        <rect x="30.4" y="11" width="3.6" height="4" />
+        <rect x="19" y="17" width="3.6" height="4" />
+        <rect x="24.7" y="17" width="3.6" height="4" />
+        <rect x="30.4" y="17" width="3.6" height="4" />
+        <rect x="19" y="23" width="3.6" height="4" />
+        <rect x="24.7" y="23" width="3.6" height="4" />
+        <rect x="30.4" y="23" width="3.6" height="4" />
+        <rect x="19" y="29" width="3.6" height="4" />
+        <rect x="24.7" y="29" width="3.6" height="4" />
+        <rect x="30.4" y="29" width="3.6" height="4" />
+      </g>
+      {/* door */}
+      <rect x="24" y="37" width="5.5" height="6" rx="0.8" fill="#1f4468" stroke="#17324d" strokeWidth="0.8" />
+      {/* antenna + LIVE dot */}
+      <line x1="26.7" y1="7" x2="26.7" y2="3.6" stroke="#2f567f" strokeWidth="1.2" />
+      <circle cx="26.7" cy="2.8" r="1.7" fill="#ff4b4b" stroke="#a32626" strokeWidth="0.7" />
+      {/* glass shine */}
+      <path d="M17.5 40 32 9.5l3.5 1.8L21.5 41.5z" fill="url(#agShine)" opacity="0.3" />
+    </svg>
+  );
+}

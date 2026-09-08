@@ -318,3 +318,29 @@ Stage Summary:
 - Virtual Office ab LIVE SITE pe he — desktop 11th icon "Virtual Office" + start menu entry, dblclick/tap se kholo
 - 3 demo files abhi bhi public/ me (sarkari + flat agency + iso) — iso wala ab integrated
 - NEXT (jab user bole): real DB build — Prisma Lead model + POST/GET /api/agency-leads (enquiry form real save), CRM pipeline DB-backed, real team data, demo iframe ko native component me convert
+
+---
+Task ID: 27
+Agent: Super Z (main)
+Task: User ne "Karo Bhai" bola — Virtual Office me REAL DATABASE lagana approve hua. Enquiry form ki leads ab actually SQLite me save hoti he.
+
+Work Log:
+- prisma/schema.prisma: Lead model add — token (unique int), naam, kaam, phone?, msg?, stage (0-4 = NEW..GOOGLE PE #1), source, createdAt
+- npx prisma db push + generate (SQLite db/custom.db) OK
+- NEW: src/app/api/agency-leads/route.ts — GET (latest 30, desc) + POST (validate naam, token = max(129, maxToken)+1, 400 on empty naam, 500 db-unavailable fallback)
+- cr-office-iso-mockup.html wiring (6 edits):
+  * loadDbLeads IIFE (tokenN ke baad) — GET se leads ko 🟢 realchip banake CRM me render + tokenN sync + Reception Desk "#L-{token}" update + toast "💾 N real lead database se load hui"
+  * .realchip CSS (green glow border)
+  * renderStages chip builder: db leads ko '🟢 ' prefix + realchip class
+  * auto-advance filter se db leads EXCLUDE (real pipeline sirf Harish move karega)
+  * enqGo async rewrite: button disable + "DARJ ho rha he…", POST /api/agency-leads (naam/kaam/phone/msg), saved.token se stamp TOKEN, fail → offline fallback (local token), WhatsApp prefill me msg bhi add
+  * rcToken id Reception row me
+- Verified: tsc 0 src errors, eslint clean; curl POST → {token:130} 201, GET → lead wapas; agent-browser full flow — office iframe me "🟢 Curl Test Lea…" chip + Reception "#L-130" DB se sync, form submit (Sharma Saree Center + phone + msg) → stamp "TOKEN #L-131" + toast "💾 Lead DATABASE me save — #L-131" + WhatsApp button; GET confirm id=2 full data ke saath
+- Cleanup: curl test lead (id=1) DB se delete — "Sharma Saree Center" (id=2) intentional first real lead baaki
+- Screenshots: download/office_db_live.png
+- Commit 0353077 GitHub push OK
+
+Stage Summary:
+- Virtual Office ab FULL-STACK he: enquiry → POST API → Prisma → SQLite → real token → CRM green chip → reload pe wapas load → WhatsApp deep link real data ke saath
+- DB me abhi 1 lead (Sharma Saree Center #L-131)
+- NEXT ideas: admin panel (leads move/stage update), leads ko Harish ke liye /agency-admin window, visitor counter DB-based, team data real karna, ya dusre demos (sarkari/flat) bhi DB pe

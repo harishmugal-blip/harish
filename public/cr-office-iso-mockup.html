@@ -218,6 +218,7 @@ body{
 .stage .sl{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:1px;color:#a8c4ea}
 .stage .sl .cnt{margin-left:auto;font-family:Consolas,monospace;color:#5cff9d;font-size:10.5px}
 .stage .chips{display:flex;gap:4px;overflow:hidden;margin-top:4px;height:16px}
+.realchip{border-color:#3ce08c!important;box-shadow:0 0 9px rgba(62,240,150,.5)!important;color:#dcffe9!important;background:rgba(35,150,85,.38)!important}
 .chip{font-size:8.5px;color:#eaf3ff;background:rgba(90,140,220,.28);border:1px solid rgba(140,180,240,.4);
   padding:1px 7px;border-radius:10px;white-space:nowrap;animation:popin .45s cubic-bezier(.2,1.6,.4,1)}
 .chip.hot{background:rgba(70,220,130,.25);border-color:rgba(90,230,150,.55)}
@@ -553,7 +554,7 @@ function buildRows(){
   });
   const rv=el('trow');
   rv.innerHTML=`<div class="ava" style="background:linear-gradient(160deg,#3fbd6d,#237a48)">🎫</div>
-    <div class="inf"><div class="nm">Reception Desk</div><div class="tk">Visitor Token #L-129 • next: aap?</div></div><div class="dot"></div>`;
+    <div class="inf"><div class="nm">Reception Desk</div><div class="tk" id="rcToken">Visitor Token #L-129 • next: aap?</div></div><div class="dot"></div>`;
   rv.onclick=openEnquiry;rc.appendChild(rv);
 }
 buildRows();
@@ -614,13 +615,13 @@ function renderStages(){
     const st=el('stage');
     st.innerHTML=`<div class="sl">${s}<span class="cnt">${inS.length}</span></div><div class="chips"></div>`;
     const ch=st.querySelector('.chips');
-    inS.slice(-2).forEach(l=>{const c=el('chip'+(STAGE_CLS[i]?' '+STAGE_CLS[i]:''),l.n);ch.appendChild(c)});
+    inS.slice(-2).forEach(l=>{const c=el('chip'+(l.db?' realchip':(STAGE_CLS[i]?' '+STAGE_CLS[i]:'')),(l.db?'🟢 ':'')+l.n);ch.appendChild(c)});
     sc.appendChild(st);
   });
 }
 renderStages();
 setInterval(()=>{
-  const adv=leads.filter(l=>l.s<4);
+  const adv=leads.filter(l=>l.s<4&&!l.db); /* real DB leads auto-advance nahi hote — wo Harish khud move karega */
   if(adv.length&&Math.random()<.85){const l=adv[Math.floor(Math.random()*adv.length)];l.s++;
     if(l.s===4)toast(`🏆 ${l.n} ab Google pe #1 — champagne moment! 🍾`)}
   else if(leads.length<7){leads.push({n:LEAD_POOL[li++%LEAD_POOL.length],s:0});toast('🔔 Naya enquiry aaya he — CRM me add ho gaya!')}
@@ -651,31 +652,56 @@ function openProfile(id){
 }
 /* enquiry */
 let tokenN=129;
+/* ---- REAL DB LEADS — /api/agency-leads (Prisma + SQLite) ---- */
+(async function loadDbLeads(){
+  try{
+    const r=await fetch('/api/agency-leads');if(!r.ok)return;
+    const js=await r.json();const ls=js.leads||[];
+    if(!ls.length)return;
+    ls.slice().reverse().forEach(l=>{leads.push({n:l.naam.length>13?l.naam.slice(0,13)+'…':l.naam,s:Math.min(4,l.stage|0),db:1})});
+    const mx=ls.reduce((m,l)=>Math.max(m,l.token|0),0);
+    if(mx>tokenN)tokenN=mx;
+    renderStages();
+    const rc=$('#rcToken');if(rc)rc.textContent='Visitor Token #L-'+tokenN+' • next: aap?';
+    toast('💾 '+ls.length+' real lead database se load hui — CRM ab LIVE he!');
+  }catch(e){}
+})();
 function openEnquiry(){
   $('#enqForm').style.display='block';$('#enqOk').style.display='none';$('#stampOv').classList.remove('on');
   $('#enqErr').style.display='none';
   openDlg('#dlgEnq');
 }
 $('#enqBtn').onclick=openEnquiry;
-$('#enqGo').onclick=()=>{
+$('#enqGo').onclick=async()=>{
   const naam=$('#enqNaam').value.trim();
   if(!naam){const e=$('#enqErr');e.style.display='block';
     e.textContent='⚠ Naam to batao bhai! (Rule 1 — anonymous enquiry ka koi scope nahi, ye office he IIT ka nahi 😜)';return}
-  tokenN++;
+  const gB=$('#enqGo');gB.disabled=true;const gOld=gB.textContent;gB.textContent='DARJ ho rha he…';
   const kaam=$('#enqKaam').value;
+  const ph=$('#enqPhone').value.trim();
+  const msgv=$('#enqMsg').value.trim();
+  /* REAL DB SAVE — Prisma + SQLite */
+  let saved=null;
+  try{
+    const r=await fetch('/api/agency-leads',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({naam,kaam,phone:ph,msg:msgv})});
+    if(r.ok)saved=(await r.json()).lead;
+  }catch(err){}
+  tokenN=saved&&saved.token?saved.token:tokenN+1;
   const tok='#L-'+tokenN;
   $('#stampTk').textContent='TOKEN '+tok;$('#stampTk2').textContent='TOKEN '+tok;
-  leads.push({n:naam.length>13?naam.slice(0,13)+'…':naam,s:0});renderStages();
-  const ph=$('#enqPhone').value.trim();
-  const wa=encodeURIComponent(`Hi Harish! Enquiry: ${kaam} — Naam: ${naam}${ph?' (Ph: '+ph+')':''}`);
+  leads.push({n:naam.length>13?naam.slice(0,13)+'…':naam,s:0,db:saved?1:0});renderStages();
+  const wa=encodeURIComponent(`Hi Harish! Enquiry: ${kaam} — Naam: ${naam}${ph?' (Ph: '+ph+')':''}${msgv?' — Details: '+msgv:''}`);
   $('#wappBtn').href=`https://wa.me/917668483250?text=${wa}`;
+  const rc=$('#rcToken');if(rc)rc.textContent='Visitor Token #L-'+tokenN+' • next: aap?';
   $('#stampOv').classList.add('on');
   setTimeout(()=>{
     $('#stampOv').classList.remove('on');
     $('#enqForm').style.display='none';$('#enqOk').style.display='block';
     $('#wappWrap').style.display='block';
     $('#enqNaam').value='';$('#enqPhone').value='';$('#enqMsg').value='';
-    toast('✅ Lead CRM pipeline (NEW) me add ho gayi — '+(ph?'WhatsApp se baat karo 💬':'Harish chai ke baad contact karega ☕'));
+    toast(saved?('💾 Lead DATABASE me save — '+tok+' — CRM (NEW) me bhi LIVE!'):('✅ Lead CRM me add (offline mode) — '+(ph?'WhatsApp se baat karo 💬':'Harish chai ke baad contact karega ☕')));
+    gB.disabled=false;gB.textContent=gOld;
   },2100);
 };
 

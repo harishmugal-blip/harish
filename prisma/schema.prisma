@@ -30,3 +30,16 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Harish Web Agency — Virtual Office CRM leads (enquiry form se aate he)
+model Lead {
+  id        Int      @id @default(autoincrement())
+  token     Int      @unique // #L-130, #L-131 ...
+  naam      String
+  kaam      String   @default("Website Banwana He")
+  phone     String?
+  msg       String?
+  stage     Int      @default(0) // 0=NEW 1=CONTACTED 2=MEETING 3=WEBSITE_BUILT 4=GOOGLE_PE_1
+  source    String   @default("virtual-office")
+  createdAt DateTime @default(now())
+}

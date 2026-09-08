@@ -297,3 +297,24 @@ Stage Summary:
 - .env ab git-tracked nahi — fresh clone pe recreate karna hoga (DATABASE_URL=file:./db/custom.db)
 - User ko advise kiya: token chat me paste hua tha, baad me regenerate karna chahiye (GitHub Settings > Developer settings > Personal access tokens)
 - Pending: 3 office demo approval (sarkari / flat agency / ISOMETRIC) => approval pe real build (Prisma Lead model + /api/agency-leads + AgencyOfficeContent + desktop icon 11)
+
+---
+Task ID: 26
+Agent: Super Z (main)
+Task: User bola "OFFICE NAHI DIKH RASHA HE" — debug kiya: site chal rahi thi (dev.log GET / 200), lekin office sirf standalone demo HTML tha, desktop app me integrated NAHI tha. Isliye ISO virtual office ko turant desktop me integrate kar diya (user ka intent clear tha — office site pe dikhna chahiye).
+
+Work Log:
+- Debug: localhost sab 200, external proxy curl se 404 (container egress block — dev.log me real user traffic 200 confirm), src/ me office integration zero tha
+- chrome.tsx: WinId union me "office" add + AgencyIcon import + StartMenu "Virtual Office — LIVE" entry (sub: Harish Web Agency)
+- icons.tsx: naya AgencyIcon — Win7-style glass office building (tower + side wing + window grid + door + antenna pe LIVE red dot + glass shine)
+- contents.tsx: AgencyOfficeContent = full-size iframe /cr-office-iso-mockup.html?embed=1
+- page.tsx: WIN_CONFIGS office entry (1150x680, title "Harish Web Agency — Virtual Office (LIVE)") + DESKTOP_ICONS 11th icon (Music Library ke baad) + openWindowForJarvis list me office
+- cr-office-iso-mockup.html: ?embed=1 mode — html.embed class se body wallpaper/centering off, #win 100% chrome-less, #titlebar/#menubar/#taskbar hidden (fake taskbar CRM strip cover kar raha tha — fix)
+- Verified: tsc 0 src errors, eslint clean, agent-browser — desktop pe 11 icons + glass building icon dikha, dblclick → Win7 window me full office render (iso scene + 6 chars + LIVE TEAM STATUS 6/6 + visitors 000042 + chai counter + CRM pipeline NEW/CONTACTED/MEETING/WEBSITE BUILT/GOOGLE PE #1 + NEW ENQUIRY), console clean, mobile 390x844 fullscreen window OK
+- Screenshots: download/office_desktop_live.png + office_mobile_live.png
+- Commit fad4227 GitHub pe push (github.com/harishmugal-blip/harish)
+
+Stage Summary:
+- Virtual Office ab LIVE SITE pe he — desktop 11th icon "Virtual Office" + start menu entry, dblclick/tap se kholo
+- 3 demo files abhi bhi public/ me (sarkari + flat agency + iso) — iso wala ab integrated
+- NEXT (jab user bole): real DB build — Prisma Lead model + POST/GET /api/agency-leads (enquiry form real save), CRM pipeline DB-backed, real team data, demo iframe ko native component me convert

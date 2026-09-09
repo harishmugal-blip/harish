@@ -43,3 +43,18 @@ model Lead {
   source    String   @default("virtual-office")
   createdAt DateTime @default(now())
 }
+
+// Harish Web Agency — Workrooms Meeting Room team members (add/role/remove admin panel se ya office me)
+model TeamMember {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String   @default("Full-Stack Developer")
+  color     String   @default("#3b82f6") // shirt color (avatar)
+  skin      String   @default("#e8b98a")
+  hair      String   @default("#2b2b2b")
+  hairstyle Int      @default(0) // 0..3 hair variants
+  task      String   @default("Kaam pe he") // live status line
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}

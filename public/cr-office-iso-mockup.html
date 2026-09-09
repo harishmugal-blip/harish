@@ -305,6 +305,183 @@ body{
 .tbi img{width:20px;height:20px}
 #tbclk{margin-left:auto;font-size:11.5px;color:#dceafb;text-align:right;line-height:1.3;text-shadow:0 1px 2px #000;font-family:Consolas,monospace}
 /*__CSS2__*/
+/* ================= TEAM ROOM (Workrooms style) ================= */
+#teamroom{position:absolute;inset:0;display:none;overflow:hidden;user-select:none}
+#teamroom.on{display:block}
+#twall{position:absolute;inset:0;background:
+  radial-gradient(120% 100% at 50% 0%,#3a3f47 0%,#26292f 40%,#17181c 100%)}
+#twall::after{content:"";position:absolute;inset:0;opacity:.5;
+  background:radial-gradient(90% 80% at 50% 42%,transparent 40%,rgba(0,0,0,.55))}
+#tceil{position:absolute;left:0;right:0;top:0;height:15%;
+  background:repeating-linear-gradient(90deg,#8a6b47 0 26px,#75593a 26px 52px,#9c7b52 52px 54px);
+  transform-origin:top;transform:perspective(320px) rotateX(38deg);box-shadow:0 8px 22px rgba(0,0,0,.5)}
+#tceil::before,#tceil::after{content:"";position:absolute;left:38%;width:5px;height:60%;top:10%;
+  background:#ffe9b0;box-shadow:0 0 18px 4px rgba(255,230,160,.75);border-radius:3px}
+#tceil::after{left:58%}
+.twin{position:absolute;top:14%;width:15%;height:46%;border-radius:6px;border:5px solid #1d1f24;
+  background:linear-gradient(180deg,#8fd0f0 0%,#b5e2f4 55%,#7fae74 55%,#5d8f52 100%);
+  box-shadow:0 0 34px rgba(140,200,240,.25),0 4px 14px rgba(0,0,0,.4)}
+.twin::before{content:"";position:absolute;inset:0;border-right:4px solid #1d1f24}
+.twin.l{left:2.5%}.twin.r{right:2.5%}
+/* wall screen + flowchart */
+#wrScreen{position:absolute;left:50%;top:11%;transform:translateX(-50%);width:min(40%,480px);z-index:5;
+  background:#0d0e11;border-radius:10px;padding:9px 9px 12px;box-shadow:0 10px 40px rgba(0,0,0,.65),0 0 0 1px #33363d}
+#wrScreen .scap{display:flex;align-items:center;gap:6px;font-size:10.5px;color:#cfd4dc;margin-bottom:6px;font-weight:600}
+#wrScreen .scap img{width:13px;height:13px;border-radius:3px}
+#wrScreen .scap b{color:#fff}
+#wrScreen .scap span{margin-left:auto;font-size:8.5px;color:#8b919c}
+#wrFlow{position:relative;background:#fbfcfe;border-radius:5px;aspect-ratio:16/7;max-height:160px;min-height:96px;overflow:hidden}
+.fx{position:absolute;font-size:clamp(6px,.62vw,8.5px);font-weight:600;color:#1e3a5f;background:#e8f1fb;
+  border:1px solid #bcd4ec;border-radius:4px;padding:2.5% 1.6%;white-space:nowrap;line-height:1.25;text-align:center}
+.fx.c1{background:#d9f4f4;border-color:#9fd8d8}
+.fx.c2{background:#fdf3d9;border-color:#e8d194}
+.fx.c3{background:#d9ecfd;border-color:#a4c8ee}
+.fx.c4{background:#dcf5e4;border-color:#9fdcb4;color:#1d5c33}
+.fa{position:absolute;color:#8aa6c4;font-size:clamp(7px,.66vw,9px);font-weight:700}
+/* meeting banner */
+#wrBanner{position:absolute;left:50%;top:2.8%;transform:translateX(-50%);z-index:9;
+  display:flex;align-items:center;gap:14px;background:rgba(16,17,20,.92);border:1px solid #33363d;
+  border-radius:22px;padding:7px 18px;box-shadow:0 8px 26px rgba(0,0,0,.55);white-space:nowrap}
+#wrBanner .wbl{display:flex;align-items:center;gap:9px}
+#wrBanner .wblogo{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4aa0e8,#1d5fa8);
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;box-shadow:0 0 10px rgba(80,160,240,.6)}
+#wrBanner .wbt b{display:block;font-size:12.5px;color:#fff}
+#wrBanner .wbt span{font-size:9.5px;color:#9aa1ac}
+#wrBanner .wbm{display:flex;align-items:center;gap:8px;border-left:1px solid #33363d;padding-left:14px}
+#wrBanner .wbm img{width:24px;height:24px;border-radius:50%;border:2px solid #3aa06c}
+#wrBanner .wbm i{font-style:normal}
+#wrBanner .wbm i b{display:block;font-size:11px;color:#fff}
+#wrBanner .wbm i span{font-size:9px;color:#9aa1ac}
+#wrBanner .wbr{border-left:1px solid #33363d;padding-left:14px;text-align:right}
+#wrBanner .wbr b{display:block;font-size:13px;color:#fff;font-family:Consolas,monospace}
+#wrBanner .wbr span{font-size:9px;color:#9aa1ac}
+#wrBanner .reddot{width:8px;height:8px;border-radius:50%;background:#ff4b4b;box-shadow:0 0 8px #ff4b4b;animation:blink 1.2s infinite}
+/* floor + table */
+#wrfloor{position:absolute;left:-6%;right:-6%;bottom:-14%;height:56%;border-radius:50% 50% 0 0;
+  background:linear-gradient(180deg,#3a3d44 0%,#2b2d33 60%,#202126 100%);box-shadow:0 -8px 40px rgba(0,0,0,.35)}
+#wrTable{position:absolute;left:50%;top:68%;transform:translate(-50%,-50%);width:min(58%,600px);height:30%;
+  border-radius:50%;z-index:2;
+  background:radial-gradient(ellipse at 42% 34%,#d3a86f 0%,#c1975c 45%,#a67d48 78%,#8f6a3c 100%);
+  box-shadow:0 14px 30px rgba(0,0,0,.5),0 0 0 6px #b0895077,0 3px 0 6px #6d5230}
+#wrTable::before{content:"";position:absolute;left:8%;right:8%;top:14%;bottom:14%;border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,235,200,.22),transparent 55%)}
+#wrTable::after{content:"";position:absolute;left:38%;top:30%;width:24%;height:38%;border-radius:10px;
+  background:linear-gradient(180deg,#26282d,#151619);box-shadow:0 6px 14px rgba(0,0,0,.5)}
+.glaptop{position:absolute;width:13%;height:34%;border-radius:3px;z-index:3;
+  background:linear-gradient(165deg,rgba(200,230,255,.30),rgba(160,200,240,.10) 70%);
+  border:1px solid rgba(220,240,255,.35);box-shadow:0 3px 8px rgba(0,0,0,.25);
+  transform:perspective(160px) rotateX(28deg)}
+.glaptop i{position:absolute;inset:12% 8%;display:block;border-radius:2px;
+  background:repeating-linear-gradient(rgba(140,220,255,.5) 0 2px,transparent 2px 7px);opacity:.6}
+.glaptop.t1{left:24%;top:-9%}.glaptop.t2{left:58%;top:-9%}
+.glaptop.t3{left:20%;top:74%}.glaptop.t4{left:64%;top:74%}
+.glaptop.t3 i,.glaptop.t4 i{animation:flickr 2.2s ease-in-out infinite}
+/* 3D avatars */
+.wa{position:absolute;transform:translate(-50%,-72%);width:78px;height:118px;z-index:4;cursor:pointer;pointer-events:auto;
+  transition:filter .18s}
+.wa:hover{filter:brightness(1.18) drop-shadow(0 0 9px #8fd0ff)}
+.wa .wpp{position:absolute;inset:0;animation:wbob 3.6s ease-in-out infinite alternate}
+@keyframes wbob{from{transform:translateY(0)}to{transform:translateY(2px)}}
+.wa .wchair{position:absolute;left:50%;bottom:-4px;width:52px;height:15px;border-radius:10px 10px 4px 4px;
+  transform:translateX(-50%);background:radial-gradient(ellipse at 50% 30%,#6f9fd8,#3f6da8 70%,#2d5186)}
+.wa .wbody{position:absolute;left:50%;bottom:12px;width:56px;height:44px;transform:translateX(-50%);
+  border-radius:26px 26px 14px 14px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--shirt) 88%,#fff) 0%,var(--shirt) 42%,color-mix(in srgb,var(--shirt) 55%,#000) 100%);
+  box-shadow:0 3px 9px rgba(0,0,0,.4),0 0 0 1px rgba(0,0,0,.18) inset}
+.wa .wbody::before{content:"";position:absolute;left:50%;top:2px;width:16px;height:26px;transform:translateX(-50%);
+  border-radius:8px;background:linear-gradient(180deg,color-mix(in srgb,var(--skin) 85%,#fff),var(--skin));opacity:.95}
+.wa .whead{position:absolute;left:50%;bottom:50px;width:40px;height:42px;transform:translateX(-50%);
+  border-radius:46% 46% 44% 44%;
+  background:radial-gradient(circle at 36% 32%,color-mix(in srgb,var(--skin) 80%,#fff),var(--skin) 58%,color-mix(in srgb,var(--skin) 70%,#000));
+  box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.wa .whair{position:absolute;left:-4%;top:-10%;width:108%;height:52%}
+.wa[data-hs="0"] .whair{border-radius:50% 50% 42% 42%;
+  background:linear-gradient(170deg,color-mix(in srgb,var(--hair) 80%,#fff) 0%,var(--hair) 55%)}
+.wa[data-hs="1"] .whair{border-radius:50% 50% 30% 66%;transform:rotate(-12deg);
+  background:linear-gradient(150deg,color-mix(in srgb,var(--hair) 75%,#fff) 0%,var(--hair) 50%)}
+.wa[data-hs="2"] .whair{border-radius:52% 52% 20% 20%;
+  background:var(--hair)}
+.wa[data-hs="2"] .whair::after{content:"";position:absolute;left:14%;top:52%;width:72%;height:46%;border-radius:16px;
+  background:linear-gradient(180deg,var(--hair),color-mix(in srgb,var(--hair) 60%,#000))}
+.wa[data-hs="3"] .whair{border-radius:50% 50% 45% 45%;background:
+  linear-gradient(180deg,color-mix(in srgb,var(--hair) 85%,#fff) 0%,var(--hair) 34%,var(--skin) 34.5%)}
+.wa[data-hs="3"] .whair::after{content:"";position:absolute;left:-12%;top:30%;width:26%;height:34%;
+  border-radius:50% 0 0 50%;background:var(--hair)}
+.wa .wcap{position:absolute;left:-6%;top:-16%;width:112%;height:44%;border-radius:50% 50% 8% 8%;
+  background:linear-gradient(170deg,#3a3f47,#1e2126);display:none}
+.wa[data-hs="2"] .wcap{display:block}
+.wa .weyes{position:absolute;left:50%;bottom:16px;width:26px;height:7px;transform:translateX(-50%)}
+.wa .weyes::before,.wa .weyes::after{content:"";position:absolute;top:0;width:4.5px;height:5px;border-radius:50%;
+  background:#2b2118;box-shadow:0 1px 1px rgba(0,0,0,.3)}
+.wa .weyes::before{left:2px}.wa .weyes::after{right:2px}
+.wa .wsmile{position:absolute;left:50%;bottom:9px;width:9px;height:4.5px;transform:translateX(-50%);
+  border-bottom:1.8px solid #8a5c3f;border-radius:0 0 9px 9px}
+.wa .wtag{position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);white-space:nowrap;
+  font-size:8.5px;font-weight:700;color:#fff;text-shadow:0 1px 3px #000;background:rgba(10,14,22,.72);
+  padding:1.5px 8px;border-radius:9px;border:1px solid rgba(150,190,240,.35);pointer-events:none}
+.wa .wtag b{color:#9fd4ff}
+.wa.back{cursor:default}
+.wa.back{filter:brightness(.8) saturate(.85)}
+.wa.back:hover{filter:brightness(.8) saturate(.85)}
+.wa.newm{animation:popin .6s cubic-bezier(.2,1.6,.4,1)}
+#wrMore{position:absolute;left:50%;bottom:3.5%;transform:translateX(-50%);z-index:6;font-size:10.5px;font-weight:700;
+  color:#cfe2ff;background:rgba(20,28,44,.85);border:1px solid rgba(140,180,240,.4);border-radius:14px;padding:4px 14px}
+/* switch pills */
+#views{position:absolute;right:12px;top:10px;z-index:40;display:flex;gap:6px}
+.vpill{font-size:10.5px;font-weight:700;letter-spacing:.5px;color:#bcd4f0;background:rgba(12,22,40,.78);
+  border:1px solid rgba(140,180,230,.35);border-radius:16px;padding:5px 13px;cursor:pointer;transition:.18s}
+.vpill:hover{background:rgba(40,70,120,.8)}
+.vpill.on{color:#0b1526;background:linear-gradient(#8fd0ff,#4aa0e8);border-color:#4aa0e8;text-shadow:none}
+/* team panel (right) */
+#tpanel{position:absolute;right:12px;top:52px;bottom:12px;width:252px;z-index:38;display:flex;flex-direction:column;
+  background:linear-gradient(rgba(13,22,40,.92),rgba(8,15,28,.95));border:1px solid rgba(140,175,220,.35);
+  border-radius:12px;box-shadow:0 10px 34px rgba(0,10,30,.5)}
+#tpanel .thd{padding:11px 13px 9px;border-bottom:1px solid rgba(140,175,220,.22)}
+#tpanel .thd b{font-size:12.5px;color:#eaf3ff;letter-spacing:1.2px;display:flex;align-items:center;gap:7px}
+#tpanel .thd b i{width:8px;height:8px;border-radius:50%;background:#46e06c;box-shadow:0 0 8px #46e06c;animation:blink 1.5s infinite}
+#tpanel .thd span{display:block;font-size:9.5px;color:#8fb2dc;margin-top:3px}
+#trows{flex:1;overflow-y:auto;padding:6px}
+#trows::-webkit-scrollbar{width:7px}
+#trows::-webkit-scrollbar-thumb{background:rgba(140,175,220,.35);border-radius:4px}
+.trow{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;cursor:pointer;transition:background .2s}
+.trow:hover{background:rgba(120,170,235,.14)}
+.trow .ava{width:30px;height:30px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.25)}
+.trow .inf{flex:1;min-width:0}
+.trow .nm{font-size:12px;font-weight:600;color:#f2f7fd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trow .tk{font-size:9.5px;color:#93a9c6;font-family:Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trow .dot{width:9px;height:9px;border-radius:50%;flex:none;background:#46e06c;box-shadow:0 0 7px #46e06c;animation:blink 2.2s infinite}
+#tadd{margin:8px;padding:10px;background:linear-gradient(#43d977,#25a052);color:#fff;border:1.5px solid #1a7a3e;
+  border-radius:9px;font-size:12.5px;font-weight:800;cursor:pointer;letter-spacing:.4px;box-shadow:0 3px 12px rgba(30,160,80,.5)}
+#tadd:hover{filter:brightness(1.12)}
+/* avatar builder swatches */
+.swl{display:flex;gap:5px;flex-wrap:wrap}
+.sw{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid rgba(0,0,0,.15);position:relative}
+.sw.on{box-shadow:0 0 0 2.5px #3f8fdd,0 0 8px rgba(70,150,230,.5)}
+.hsv{font-size:14px;text-align:center;line-height:1;padding:4px 7px;border-radius:6px;cursor:pointer;
+  border:1.5px solid #9db4cc;background:#fff}
+.hsv.on{background:#dcebf9;border-color:#3f8fdd;box-shadow:0 0 0 2px rgba(70,150,230,.35)}
+#waprev{display:flex;justify-content:center;margin:4px 0 10px;position:relative;height:112px}
+#waprev .wa{position:relative;left:auto;top:auto;transform:none;cursor:default}
+#waprev .wa:hover{filter:none}
+/* pin dialog */
+#pinErr{display:none;font-size:11px;font-weight:700;color:#c22;background:#ffe9e6;border:1px solid #f3b6ac;border-radius:5px;padding:6px 10px;margin-bottom:10px}
+.dangerb{background:linear-gradient(#ef5350,#c62828);color:#fff;border:1.5px solid #8f1d1d;border-radius:7px;
+  padding:10px 16px;font-size:12.5px;font-weight:700;cursor:pointer}
+.dangerb:hover{filter:brightness(1.1)}
+.membcap{font-size:9.5px;font-weight:800;letter-spacing:1.5px;color:#6a8bb0;margin:10px 0 5px}
+@media (max-width:760px){
+  #wrBanner{gap:8px;padding:5px 10px;top:1.5%}
+  #wrBanner .wbm{display:none}
+  #wrBanner .wblogo{width:20px;height:20px;font-size:8px}
+  #wrBanner .wbt b{font-size:10.5px}
+  #views{right:8px}
+  #wrScreen{top:7%;width:64%}
+  #wrTable{top:46%;height:24%;width:74%}
+  #tpanel{left:8px;right:8px;width:auto;top:auto;bottom:8px;height:37%}
+  #tadd{padding:9px;font-size:12px}
+  #trows .tk{font-size:9px}
+}
 </style>
 </head>
 <body>
@@ -353,6 +530,67 @@ body{
         <div id="dyn"></div>
       </div></div>
       <div id="flat"></div>
+      <div id="views">
+        <div class="vpill on" id="vpTeam">🪑 TEAM ROOM</div>
+        <div class="vpill" id="vpIso">🏢 ISO FLOOR</div>
+      </div>
+      <div id="teamroom">
+        <div id="twall"></div>
+        <div id="tceil"></div>
+        <div class="twin l"></div>
+        <div class="twin r"></div>
+        <div id="wrfloor"></div>
+        <div id="wrScreen">
+          <div class="scap"><b>Digital Flow</b><span>Client onboarding — live demo</span></div>
+          <div id="wrFlow">
+            <div class="fx c1" style="left:2.5%;top:12%">Start</div>
+            <div class="fa" style="left:12.5%;top:16%">→</div>
+            <div class="fx" style="left:17.5%;top:12%">Enter Website</div>
+            <div class="fa" style="left:33%;top:16%">→</div>
+            <div class="fx c2" style="left:38.5%;top:12%;width:13%">Have an<br>Account?</div>
+            <div class="fa" style="left:53.5%;top:5%">No ↓</div>
+            <div class="fa" style="left:44.5%;top:38%">Yes ↓</div>
+            <div class="fx c3" style="left:56%;top:8%">Sign Up</div>
+            <div class="fa" style="left:68%;top:12%">→</div>
+            <div class="fx" style="left:73.5%;top:8%">Fill Out Information</div>
+            <div class="fa" style="left:84%;top:26%">↓</div>
+            <div class="fx c3" style="left:73.5%;top:40%">Submit</div>
+            <div class="fx c3" style="left:38.5%;top:44%">Log In</div>
+            <div class="fa" style="left:58%;top:48%">←</div>
+            <div class="fa" style="left:79.5%;top:60%">↓</div>
+            <div class="fx c3" style="left:70%;top:70%;width:15%">Logged into the<br>system</div>
+            <div class="fx c2" style="left:38.5%;top:74%;width:16%">Enter Email &amp;<br>Password Valid?</div>
+            <div class="fa" style="left:56%;top:78%">←</div>
+            <div class="fa" style="left:46%;top:66%">No ↑</div>
+            <div class="fx c4" style="left:26%;top:74%">End</div>
+            <div class="fa" style="left:33.5%;top:78%">←</div>
+          </div>
+        </div>
+        <div id="wrBanner">
+          <span class="reddot"></span>
+          <div class="wbl">
+            <div class="wblogo">HWA</div>
+            <div class="wbt"><b>Workrooms Meeting</b><span>10.00 AM - 11.00 AM • daily standup</span></div>
+          </div>
+          <div class="wbm">
+            <img src="/avatar.png" alt="">
+            <i><b>Harish Mugal</b><span>sharing screen</span></i>
+          </div>
+          <div class="wbr"><b id="wbTime">--:--</b><span id="wbDate">--</span></div>
+        </div>
+        <div id="wrTable">
+          <div class="glaptop t1"><i></i></div><div class="glaptop t2"><i></i></div>
+          <div class="glaptop t3"><i></i></div><div class="glaptop t4"><i></i></div>
+        </div>
+        <div id="wrAvatars"></div>
+        <div id="wrMore" style="display:none"></div>
+        <div id="tpanel">
+          <div class="thd"><b><i></i>TEAM — <span id="tcount" style="letter-spacing:0">1</span> MEMBERS</b>
+            <span>Role badlo, naya member add karo — sab DATABASE me save ✅</span></div>
+          <div id="trows"></div>
+          <button id="tadd">➕ ADD NEW MEMBER</button>
+        </div>
+      </div>
       <div id="hint">👆 Kisi bhi team member / green hand pe click karo — Reception se enquiry bhi kar sakte ho</div>
     </div>
     <div id="side">
@@ -408,6 +646,74 @@ body{
   <div class="dlg" id="dlgProf">
     <div class="dhd">👤 Team Member Profile<div class="tbtn close" data-close>✕</div></div>
     <div class="dbody" id="profBody"></div>
+  </div>
+  <div class="dlg" id="dlgPin">
+    <div class="dhd">🔐 Admin Verification<div class="tbtn close" data-close>✕</div></div>
+    <div class="dbody">
+      <div id="pinErr"></div>
+      <div class="fld"><label>ADMIN PIN DAALO (sirf Harish ke liye)</label>
+        <input id="pinIn" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric"></div>
+      <div class="dbtns"><button class="okb" id="pinGo" style="flex:none;padding:10px 26px">UNLOCK 🔓</button>
+        <button class="nob" data-close>Cancel</button></div>
+    </div>
+  </div>
+  <div class="dlg" id="dlgAddM">
+    <div class="dhd">➕ Naya Team Member Add Karo<div class="tbtn close" data-close>✕</div></div>
+    <div class="dbody">
+      <div id="addErr" style="display:none"></div>
+      <div id="waprev"></div>
+      <div class="fld"><label>MEMBER KA NAAM *</label><input id="amNaam" placeholder="e.g. Rohit Sharma" maxlength="40"></div>
+      <div class="fld"><label>ROLE KYA DE Rahe Ho? *</label>
+        <select id="amRole">
+          <option>Full-Stack Developer</option>
+          <option>Web Designer</option>
+          <option>SEO &amp; Google Business Expert</option>
+          <option>Content Writer</option>
+          <option>Digital Marketing</option>
+          <option>Client Support</option>
+          <option>Intern</option>
+          <option>Chai &amp; Morale Manager</option>
+          <option value="__custom__">Custom role likho…</option>
+        </select></div>
+      <div class="fld" id="amCustomWrap" style="display:none"><label>CUSTOM ROLE</label>
+        <input id="amCustom" placeholder="e.g. Video Editor" maxlength="50"></div>
+      <div class="fld"><label>SHIRT COLOR (avatar)</label><div class="swl" id="amColors"></div></div>
+      <div class="fld"><label>SKIN TONE</label><div class="swl" id="amSkins"></div></div>
+      <div class="fld"><label>HAIR COLOR</label><div class="swl" id="amHairs"></div></div>
+      <div class="fld"><label>HAIR STYLE</label><div class="swl" id="amHs" style="gap:6px"></div></div>
+      <div class="dbtns"><button class="okb" id="amGo">TEAM ME ADD KARO ✚</button>
+        <button class="nob" data-close>Cancel</button></div>
+    </div>
+  </div>
+  <div class="dlg" id="dlgEditM">
+    <div class="dhd">✏️ Member Edit Karo — <span id="emTitle"></span><div class="tbtn close" data-close>✕</div></div>
+    <div class="dbody">
+      <div id="editErr" style="display:none"></div>
+      <div id="waprev2"></div>
+      <div class="fld"><label>NAAM</label><input id="emNaam" maxlength="40"></div>
+      <div class="fld"><label>ROLE</label>
+        <select id="emRole">
+          <option>Founder &amp; Service Manager</option>
+          <option>Full-Stack Developer</option>
+          <option>Web Designer</option>
+          <option>SEO &amp; Google Business Expert</option>
+          <option>Content Writer</option>
+          <option>Digital Marketing</option>
+          <option>Client Support</option>
+          <option>Intern</option>
+          <option>Chai &amp; Morale Manager</option>
+          <option value="__custom__">Custom role likho…</option>
+        </select></div>
+      <div class="fld" id="emCustomWrap" style="display:none"><label>CUSTOM ROLE</label>
+        <input id="emCustom" maxlength="50"></div>
+      <div class="fld"><label>SHIRT COLOR</label><div class="swl" id="emColors"></div></div>
+      <div class="fld"><label>SKIN TONE</label><div class="swl" id="emSkins"></div></div>
+      <div class="fld"><label>HAIR COLOR</label><div class="swl" id="emHairs"></div></div>
+      <div class="fld"><label>HAIR STYLE</label><div class="swl" id="emHs" style="gap:6px"></div></div>
+      <div class="dbtns"><button class="okb" id="emGo">SAVE CHANGES 💾</button>
+        <button class="dangerb" id="emDel">REMOVE 🗑</button>
+        <button class="nob" data-close>Cancel</button></div>
+    </div>
   </div>
 </div>
 <div id="toast"></div>
@@ -715,6 +1021,244 @@ $('#btnX').onclick=()=>{const w=$('#win');w.classList.remove('shake');void w.off
   toast('🔴 LIVE office band nahi hota bhai... lunch me bhi nahi 😂')};
 $('#miHelp').onclick=()=>toast('💡 Green ✋ = team member clickable • 🎫 Reception = enquiry • Neeche CRM pipeline live chal rha he');
 document.querySelectorAll('.mi:not(#miHelp)').forEach(m=>m.onclick=()=>toast('Ye demo menu he — asli office me ye button chai mangne ke liye he ☕'));
+
+/* ============ TEAM ROOM — WORKROOMS EDITION (DB-backed /api/team) ============ */
+const esc=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ADMIN_PIN='2007', PIN_KEY='hwa_pin_ok';
+const SHIRTS=['#2563eb','#16a34a','#dc2626','#9333ea','#ea580c','#0891b2','#be185d','#65a30d'];
+const SKINS=['#e8b98a','#f2c9a0','#c98d5f','#8d5a3a'];
+const HAIRS=['#2b2b2b','#4a2f1d','#111111','#5c3a21','#8a6a3a','#666666'];
+const SEATS=[
+ {x:50,y:55,s:.62,zi:1,back:1},{x:29,y:57,s:.64,zi:1,back:1},{x:71,y:57,s:.64,zi:1,back:1},
+ {x:12,y:64,s:.78,zi:2},{x:74,y:64,s:.78,zi:2},
+ {x:27,y:84,s:.95,zi:3},{x:74,y:84,s:.95,zi:3},{x:50,y:91,s:1.04,zi:4}
+];
+const MSEATS=[
+ {x:50,y:36,s:.55,zi:1,back:1},{x:29,y:37,s:.57,zi:1,back:1},{x:71,y:37,s:.57,zi:1,back:1},
+ {x:10,y:40,s:.62,zi:2},{x:90,y:40,s:.62,zi:2},
+ {x:25,y:55,s:.7,zi:3},{x:75,y:55,s:.7,zi:3},{x:50,y:57,s:.74,zi:4}
+];
+const seatsFor=()=>window.innerWidth<760?MSEATS:SEATS;
+let DBTEAM=[];
+
+/* ---- avatar builder (Workrooms-style 3D cartoon) ---- */
+function mkWA(m,forPreview){
+  const g=el('wa'+(forPreview?'':''));
+  g.dataset.hs=String(m.hairstyle|0);
+  g.style.setProperty('--shirt',m.color);g.style.setProperty('--skin',m.skin);g.style.setProperty('--hair',m.hair);
+  const seat=SEATS[0];
+  if(!forPreview){const SS=seatsFor();const st=SS[m._seat|0];g.style.left=st.x+'%';g.style.top=st.y+'%';
+    g.style.transform=`translate(-50%,-72%) scale(${st.s})`;g.style.zIndex=st.zi;
+    if(st.back)g.classList.add('back');
+    if(m._new)g.classList.add('newm');}
+  g.innerHTML=`<div class="wpp" style="animation-delay:${(Math.random()*2).toFixed(2)}s">
+    <div class="wchair"></div><div class="wbody"></div>
+    <div class="whead"><div class="whair"></div><div class="wcap"></div>
+      <div class="weyes"></div><div class="wsmile"></div></div>
+  </div>
+  <div class="wtag"><b>${esc(m.name.split(' ')[0])}</b> · ${esc(shortRole(m.role))}</div>`;
+  return g;
+}
+function shortRole(r){r=String(r||'');
+  if(/founder/i.test(r))return 'FOUNDER';
+  if(/full-stack|developer/i.test(r))return 'DEV';
+  if(/design/i.test(r))return 'DESIGNER';
+  if(/seo|google/i.test(r))return 'SEO';
+  if(/chai/i.test(r))return 'CHAI';
+  if(/market/i.test(r))return 'MARKETING';
+  if(/content|writer/i.test(r))return 'WRITER';
+  if(/support/i.test(r))return 'SUPPORT';
+  if(/intern/i.test(r))return 'INTERN';
+  return r.length>10?r.slice(0,10)+'…':r.toUpperCase()}
+
+/* ---- render team room ---- */
+function renderTeamRoom(){
+  const wrap=$('#wrAvatars');wrap.innerHTML='';
+  const max=Math.min(DBTEAM.length,SEATS.length);
+  for(let i=0;i<max;i++){const m=DBTEAM[i];m._seat=i;const g=mkWA(m);
+    g.onclick=()=>openMInfo(m.id);wrap.appendChild(g)}
+  const more=$('#wrMore');
+  if(DBTEAM.length>SEATS.length){more.style.display='block';
+    more.textContent='+'+(DBTEAM.length-SEATS.length)+' aur members table pe — scroll panel me dekho'}
+  else more.style.display='none';
+  $('#tcount').textContent=DBTEAM.length;
+  renderTeamPanel();
+}
+function renderTeamPanel(){
+  const rc=$('#trows');rc.innerHTML='';
+  DBTEAM.forEach(m=>{
+    const r=el('trow');
+    r.innerHTML=`<div class="ava" style="background:linear-gradient(160deg,${esc(m.color)},${esc(m.color)}99)">${esc(m.name[0]||'?').toUpperCase()}</div>
+      <div class="inf"><div class="nm">${esc(m.name)}</div><div class="tk">${esc(m.role)}</div></div><div class="dot"></div>`;
+    r.onclick=()=>openMInfo(m.id);rc.appendChild(r)});
+}
+
+/* ---- DB load ---- */
+async function loadTeam(silent){
+  try{const r=await fetch('/api/team');if(!r.ok)return;
+    const js=await r.json();DBTEAM=js.team||[];
+    renderTeamRoom();
+    if(!silent&&DBTEAM.length)toast('💾 Team DATABASE se live — '+DBTEAM.length+' members ✅');
+  }catch(e){}}
+loadTeam();
+setInterval(()=>loadTeam(true),30000);
+window.addEventListener('resize',()=>{if(DBTEAM.length)renderTeamRoom()});
+
+/* ---- view switcher ---- */
+function setView(v){
+  const tr=$('#teamroom'),iso=$('#world'),isoFlats=[$('#flat'),$('#brand'),$('#camdate')],side=$('#side');
+  if(v==='team'){tr.classList.add('on');iso.style.display='none';side.style.display='none';
+    isoFlats.forEach(f=>f.style.visibility='hidden');
+    $('#vpTeam').classList.add('on');$('#vpIso').classList.remove('on');
+    $('#hint').textContent='🪑 TEAM ROOM — avatar pe click (info/edit) • ➕ ADD NEW MEMBER se team badhao • 🏢 pill se ISO floor pe jao';}
+  else{tr.classList.remove('on');iso.style.display='';side.style.display='';
+    isoFlats.forEach(f=>f.style.visibility='');
+    $('#vpIso').classList.add('on');$('#vpTeam').classList.remove('on');
+    $('#hint').textContent='👆 Kisi bhi team member / green hand pe click karo — Reception se enquiry bhi kar sakte ho';}
+  layoutAll();
+}
+$('#vpTeam').onclick=()=>setView('team');
+$('#vpIso').onclick=()=>setView('iso');
+setView('team');
+
+/* ---- banner live clock ---- */
+function wrClk(){const d=new Date();
+  const t=d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const dt=d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  const wt=$('#wbTime'),wd=$('#wbDate');if(wt)wt.textContent=t;if(wd)wd.textContent=dt}
+wrClk();setInterval(wrClk,10000);
+
+/* ---- PIN gate ---- */
+let pinCb=null;
+function askPin(cb){
+  try{if(sessionStorage.getItem(PIN_KEY)==='1'){cb();return}}catch(e){}
+  pinCb=cb;$('#pinErr').style.display='none';$('#pinIn').value='';openDlg('#dlgPin');
+  setTimeout(()=>$('#pinIn').focus(),120)}
+$('#pinGo').onclick=()=>{
+  if($('#pinIn').value===ADMIN_PIN){try{sessionStorage.setItem(PIN_KEY,'1')}catch(e){}
+    closeDlg();toast('🔓 Admin unlocked — ab team manage kar saakte ho!');
+    const cb=pinCb;pinCb=null;if(cb)cb()}
+  else{const e=$('#pinErr');e.style.display='block';
+    e.textContent='⛔ Galat PIN bhai! Ye office sirf '+ADMIN_PIN.length+'-digit boss ke liye he 😎';
+    $('#win').classList.remove('shake');void $('#win').offsetWidth;$('#win').classList.add('shake')}};
+$('#pinIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#pinGo').click()});
+
+/* ---- swatch builder + live preview ---- */
+function buildSwatches(contId,colors,cur,onPick){
+  const c=$(contId);c.innerHTML='';
+  colors.forEach(col=>{const s=el('sw');s.style.background=col;if(col===cur)s.classList.add('on');
+    s.onclick=()=>{c.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));s.classList.add('on');onPick(col)};
+    c.appendChild(s)})}
+function buildHair(contId,cur,onPick){
+  const c=$(contId);c.innerHTML='';
+  [0,1,2,3].forEach(h=>{const s=el('hsv');s.textContent=['🧑','💇','🧢','👨'][h];s.dataset.h=h;
+    if(h===cur)s.classList.add('on');
+    s.onclick=()=>{c.querySelectorAll('.hsv').forEach(x=>x.classList.remove('on'));s.classList.add('on');onPick(h)};
+    c.appendChild(s)})}
+function previewInto(sel,m){const p=$(sel);p.innerHTML='';const g=mkWA(m,true);
+  g.style.transform='scale(1.05)';g.style.transformOrigin='top center';p.appendChild(g)}
+
+/* ---- ADD MEMBER dialog ---- */
+const amState={color:SHIRTS[1],skin:SKINS[0],hair:HAIRS[0],hs:0};
+function amCurRole(){return $('#amRole').value==='__custom__'?$('#amCustom').value.trim():$('#amRole').value}
+function amPreview(){previewInto('#waprev',{name:$('#amNaam').value.trim()||'Naya Member',role:amCurRole()||'Full-Stack Developer',
+  color:amState.color,skin:amState.skin,hair:amState.hair,hairstyle:amState.hs})}
+$('#tadd').onclick=()=>askPin(()=>{
+  Object.assign(amState,{color:SHIRTS[DBTEAM.length%SHIRTS.length],skin:SKINS[DBTEAM.length%SKINS.length],
+    hair:HAIRS[DBTEAM.length%HAIRS.length],hs:DBTEAM.length%4});
+  $('#amNaam').value='';$('#amCustom').value='';$('#amRole').selectedIndex=0;
+  $('#amCustomWrap').style.display='none';$('#addErr').style.display='none';
+  buildSwatches('#amColors',SHIRTS,amState.color,c=>{amState.color=c;amPreview()});
+  buildSwatches('#amSkins',SKINS,amState.skin,c=>{amState.skin=c;amPreview()});
+  buildSwatches('#amHairs',HAIRS,amState.hair,c=>{amState.hair=c;amPreview()});
+  buildHair('#amHs',amState.hs,h=>{amState.hs=h;amPreview()});
+  amPreview();openDlg('#dlgAddM');setTimeout(()=>$('#amNaam').focus(),120)});
+$('#amRole').addEventListener('change',()=>{$('#amCustomWrap').style.display=$('#amRole').value==='__custom__'?'block':'none';amPreview()});
+$('#amNaam').addEventListener('input',amPreview);
+$('#amCustom').addEventListener('input',amPreview);
+$('#amGo').onclick=async()=>{
+  const naam=$('#amNaam').value.trim();const e=$('#addErr');
+  if(!naam){e.style.display='block';e.textContent='⚠ Member ka naam to batao bhai! (Rule 1 yaha bhi lagta he)';return}
+  const role=amCurRole();
+  if(!role){e.style.display='block';e.textContent='⚠ Custom role likho ya list se choose karo';return}
+  const gB=$('#amGo');gB.disabled=true;const gOld=gB.textContent;gB.textContent='DB me add ho rha he…';
+  try{const r=await fetch('/api/team',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:naam,role,color:amState.color,skin:amState.skin,hair:amState.hair,hairstyle:amState.hs})});
+    const js=await r.json().catch(()=>({}));
+    if(!r.ok){e.style.display='block';e.textContent='⚠ '+(js.error||'Add nahi hua — dobara try karo');return}
+    closeDlg();await loadTeam(true);
+    const nm=DBTEAM.find(x=>x.id===js.member.id);if(nm)nm._new=1;
+    renderTeamRoom();
+    toast('🎉 '+naam+' TEAM ME ADD HO GAYA — role: '+role+' • DATABASE save ✅');
+  }catch(err){e.style.display='block';e.textContent='⚠ Database se baat nahi ho payi — offline he abhi'}
+  gB.disabled=false;gB.textContent=gOld};
+
+/* ---- member info + EDIT dialog ---- */
+let emId=null,emState=null;
+function openMInfo(id){
+  const m=DBTEAM.find(x=>x.id===id);if(!m)return;
+  const unlocked=(()=>{try{return sessionStorage.getItem(PIN_KEY)==='1'}catch(e){return false}})();
+  const st=m.task||'Kaam pe he';
+  $('#profBody').innerHTML=`
+    <div id="waprev3"></div>
+    <div class="pnm" style="margin-top:6px">${esc(m.name)}</div><div class="prl">${esc(m.role)} — LIVE</div>
+    <div class="pstat"><i></i>Abhi: ${esc(st)}</div>
+    ${unlocked
+      ?`<div class="dbtns"><button class="okb" id="piEdit" style="flex:none;padding:9px 22px">✏️ Edit / Role Change Karo</button>
+         <button class="nob" data-close>Band karo</button></div>
+        <p style="font-size:10.5px;color:#6a8bb0;text-align:center;margin-top:8px">🔓 Admin mode ON he — edit/remove available</p>`
+      :`<div class="dbtns"><button class="nob" data-close>Teekh he 👍</button></div>
+        <p style="font-size:10.5px;color:#6a8bb0;text-align:center;margin-top:8px">🔒 Edit/Role change ke liye admin PIN chahiye — ADD NEW MEMBER pe click karke unlock karo</p>`}`;
+  previewInto('#waprev3',m);
+  $('#profBody').querySelectorAll('[data-close]').forEach(b=>b.onclick=closeDlg);
+  const pe=$('#profBody').querySelector('#piEdit');
+  if(pe)pe.onclick=()=>openMEdit(m.id);
+  openDlg('#dlgProf')}
+function openMEdit(id){
+  const m=DBTEAM.find(x=>x.id===id);if(!m)return;
+  emId=id;emState={color:m.color,skin:m.skin,hair:m.hair,hs:m.hairstyle|0};
+  $('#emTitle').textContent=m.name;$('#editErr').style.display='none';
+  $('#emNaam').value=m.name;$('#emCustom').value='';
+  const found=[...$('#emRole').options].findIndex(o=>o.value!=='__custom__'&&o.text.toLowerCase()===String(m.role).toLowerCase());
+  if(found>-1){$('#emRole').selectedIndex=found;$('#emCustomWrap').style.display='none'}
+  else{$('#emRole').value='__custom__';$('#emCustomWrap').style.display='block';$('#emCustom').value=m.role}
+  buildSwatches('#emColors',SHIRTS,m.color,c=>{emState.color=c;emPreview()});
+  buildSwatches('#emSkins',SKINS,m.skin,c=>{emState.skin=c;emPreview()});
+  buildSwatches('#emHairs',HAIRS,m.hair,c=>{emState.hair=c;emPreview()});
+  buildHair('#emHs',emState.hs,h=>{emState.hs=h;emPreview()});
+  emPreview();openDlg('#dlgEditM')}
+function emPreview(){const m=DBTEAM.find(x=>x.id===emId);if(!m)return;
+  previewInto('#waprev2',{name:$('#emNaam').value.trim()||m.name,role:emCurRole(),
+    color:emState.color,skin:emState.skin,hair:emState.hair,hairstyle:emState.hs})}
+function emCurRole(){return $('#emRole').value==='__custom__'?$('#emCustom').value.trim():$('#emRole').options[$('#emRole').selectedIndex].text}
+$('#emRole').addEventListener('change',()=>{$('#emCustomWrap').style.display=$('#emRole').value==='__custom__'?'block':'none';emPreview()});
+$('#emNaam').addEventListener('input',emPreview);
+$('#emCustom').addEventListener('input',emPreview);
+$('#emGo').onclick=async()=>{
+  const m=DBTEAM.find(x=>x.id===emId);if(!m)return;
+  const naam=$('#emNaam').value.trim();const e=$('#editErr');
+  const role=emCurRole();
+  if(!naam||!role){e.style.display='block';e.textContent='⚠ Naam aur role dono chahiye bhai';return}
+  const gB=$('#emGo');gB.disabled=true;
+  try{const r=await fetch('/api/team/'+emId,{method:'PATCH',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:naam,role,color:emState.color,skin:emState.skin,hair:emState.hair,hairstyle:emState.hs})});
+    if(!r.ok){const js=await r.json().catch(()=>({}));e.style.display='block';e.textContent='⚠ '+(js.error||'Save nahi hua');return}
+    closeDlg();await loadTeam(true);renderTeamRoom();
+    toast('💾 '+naam+' update ho gaya — role: '+role+' ✅');
+  }catch(err){e.style.display='block';e.textContent='⚠ Database se baat nahi ho payi'}
+  gB.disabled=false};
+$('#emDel').onclick=async()=>{
+  const m=DBTEAM.find(x=>x.id===emId);if(!m)return;
+  if(m.id===1||/founder/i.test(m.role)){toast('😎 Boss ko remove karna? Page hi delete kar deta hu phir. Nahi bhai.')
+    const w=$('#win');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');return}
+  if(!confirm(m.name+' ko team se remove kar dein? (chair khaali ho jayegi)'))return;
+  const dB=$('#emDel');dB.disabled=true;
+  try{const r=await fetch('/api/team/'+emId,{method:'DELETE'});
+    if(!r.ok){toast('⚠ Remove nahi hua — dobara try karo');return}
+    closeDlg();await loadTeam(true);renderTeamRoom();
+    toast('🗑 '+m.name+' team se remove — DB updated ✅');
+  }catch(err){toast('⚠ Database se baat nahi ho payi')}
+  dB.disabled=false};
 
 </script>
 </body>

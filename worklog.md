@@ -370,3 +370,27 @@ Stage Summary:
 - Sarkari daftar bhi full-stack: complaint → SQLite → reload pe wapas + admin me 🏛 badge
 - DB: /api/agency-leads ab GET?source= + PATCH + DELETE support karta he
 - NOTE: PIN client-side he (demo-grade) — PIN change: contents.tsx ADMIN_PIN. Real auth chahiye toh batana
+
+---
+Task ID: 29
+Agent: Super Z (main)
+Task: User ne Workrooms Meeting reference image bheji — "office same aisa nahi bana sakte kya, is tarah ke puri team members, new member add option bhi ho, kya role dena he wo bhi chahiye" = Virtual Office ke andar WORKROOMS-STYLE 3D TEAM ROOM + DB-backed team management (add member + role assign)
+
+Work Log:
+- prisma/schema.prisma: TeamMember model add — name, role, color (shirt), skin, hair, hairstyle (0-3), task, active, sortOrder
+- npx prisma db push + generate; dev server restart (regenerated client ko running process nahi pakad raha tha — db.teamMember undefined fix)
+- NEW src/app/api/team/route.ts: GET (active members, EMPTY ho to Harish Mugal "Founder & Service Manager" AUTO-SEED) + POST (naam validate, shirt/skin/hair/hairstyle index-based auto-assign, sortOrder = max+1)
+- NEW src/app/api/team/[id]/route.ts: PATCH (name/role/task/color/skin/hair/hairstyle — hex validation) + DELETE (soft: active=false, chair khaali)
+- cr-office-iso-mockup.html: #teamroom scene (Workrooms style) — dark acoustic wall + wooden slat ceiling (perspective) + 2 sky/greenery windows + wooden OVAL table (glass laptops + center tablet) + wall screen "Digital Flow" (login flowchart CSS boxes/arrows — Start→Enter Website→Have an Account?→Sign Up/Log In→Submit→Logged In→End) + black meeting banner (HWA logo + "Workrooms Meeting 10.00 AM - 11.00 AM daily standup" + Harish avatar "sharing screen" + LIVE clock/date)
+- 3D avatars: pure CSS Workrooms-style characters (round head + skin/hair gradients + shirt body + blue stool chair + eyes/smile + name tag) — 8 seats (3 back smaller+dimmed, 2 sides, 3 front bigger), seatsFor() mobile/desktop split, bob animation
+- Team management: right TEAM panel (count + member list + role + ➕ ADD NEW MEMBER) — avatar/row click → profile card (locked: sirf info + "PIN chahiye" note; unlocked: Edit/Role Change button) — ADD dialog (naam + role dropdown [Dev/Designer/SEO/Writer/Marketing/Support/Intern/Chai Manager + CUSTOM] + shirt color 8 swatches + skin 4 + hair color 6 + hairstyle 4 live preview) — EDIT dialog (same + REMOVE) — PIN gate (2007, sessionStorage 'hwa_pin_ok', wrong PIN = shake + funny error, Harish/founder remove = BLOCKED "Boss ko remove karna? Page hi delete kar deta hu")
+- View switcher: 🪑 TEAM ROOM (default) ↔ 🏢 ISO FLOOR pills — team view me iso world/sidebar hidden, CRM strip shared dono me
+- Fixes during verify: seats screen ke piche chhup rahe the (screen z5 > avatar) → table top 68%/h30% + screen compact (aspect-ratio 16/7 % height collapse fix) + seats recalc; side seat x88 panel ke piche → x74; mobile me panel 50% cover → bottom sheet (37% height, full width) + MSEATS compact layout + resize re-render
+- E2E verified: PIN wrong reject ✅ → add "Rohit Sharma/Web Designer" (avatar table pe + toast + DB id confirm) ✅ → role change SEO (tag "Rohit · SEO" + DB PATCH confirm) ✅ → founder remove block+shake ✅ → member remove (DB soft-delete) ✅ → custom role "Video Editor" ✅ → ISO↔TEAM switch ✅ → 5 members filled table desktop screenshot ✅ → mobile 390x844 bottom-sheet layout ✅; tsc 0 src errors, eslint clean, browser errors 0
+- Cleanup: test members deleted (fake naam policy — DB me sirf Harish Mugal real, user apni real team ADD MEMBER se khud badhayega)
+
+Stage Summary:
+- TEAM ROOM LIVE: desktop "Virtual Office" icon → Workrooms-style 3D meeting room (banner + flowchart screen + oval table + DB avatars) → PIN 2007 se add/edit/role/remove — sab SQLite me
+- API: GET/POST /api/team + PATCH/DELETE /api/team/[id] — auto-seed Harish
+- DB: TeamMember table (0 fake naam — user real team add karega)
+- Screenshots: download/teamroom_v1.png (pehla render), desktop_teamroom_v2.png (avatar visible), desktop_teamroom_filled.png (5 members), mobile_teamroom_v2.png (mobile layout), final_teamroom_ship.png (ship state)

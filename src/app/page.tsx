@@ -29,6 +29,7 @@ import {
   MusicLibraryContent,
   PrivateVideosContent,
   AgencyOfficeContent,
+  AdminPanelContent,
 } from "@/components/win7/contents";
 import { JarvisMode } from "@/components/jarvis/JarvisMode";
 import { profile } from "@/lib/portfolio";
@@ -55,12 +56,14 @@ const WIN_CONFIGS: WinConfig[] = [
   { id: "computer", title: "Computer — System Info", icon: <ComputerIcon />, w: 640, h: 470, content: <ComputerContent /> },
   { id: "music", title: `Music Library — ${TOTAL_SONGS} Songs (YT Music)`, icon: <MediaIcon />, w: 560, h: 520, content: <MusicLibraryContent /> },
   { id: "office", title: "Harish Web Agency — Virtual Office (LIVE)", icon: <AgencyIcon />, w: 1150, h: 680, content: <AgencyOfficeContent /> },
+  { id: "admin", title: "System Configuration — HARISH-PC", icon: <GearIcon />, w: 980, h: 640, content: <AdminPanelContent /> },
   { id: "privatevid", title: "Private_Videos — Explorer", icon: <FolderPrivateIcon />, w: 640, h: 540, content: <PrivateVideosContent /> },
   { id: "recycle", title: "Recycle Bin", icon: <RecycleBinIcon />, w: 560, h: 380, content: <RecycleContent /> },
 ];
 
 const DESKTOP_ICONS: { id: WinId; label: string; icon: React.ReactNode }[] = [
   { id: "computer", label: "Computer", icon: <ComputerIcon /> },
+  { id: "admin", label: "System Config", icon: <GearIcon /> },
   { id: "about", label: "About_Me.txt", icon: <NotepadIcon /> },
   { id: "projects", label: "My Projects", icon: <FolderIcon /> },
   { id: "skills", label: "Skills.exe", icon: <GearIcon /> },
@@ -357,7 +360,7 @@ export default function DesktopPage() {
   }, []);
 
   const openWindowForJarvis = useCallback((id: string) => {
-    if (["about", "projects", "skills", "resume", "contact", "computer", "music", "office", "recycle", "privatevid"].includes(id)) {
+    if (["about", "projects", "skills", "resume", "contact", "computer", "music", "office", "recycle", "privatevid", "admin"].includes(id)) {
       openWindow(id as WinId);
     }
   }, [openWindow]);

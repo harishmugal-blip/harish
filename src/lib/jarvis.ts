@@ -164,6 +164,7 @@ export function parseLocalCommand(raw: string): JarvisAction {
 
   // window launcher
   const winMap: [RegExp, string][] = [
+    [/\b(open|kholo|show).*(admin|leads?|crm|enquir)\b/i, "admin"],
     [/\b(open|kholo|show).*(project|kaam)\b/i, "projects"],
     [/\b(open|kholo|show).*(resume|cv)\b/i, "resume"],
     [/\b(open|kholo|show).*(skill|expertise)\b/i, "skills"],

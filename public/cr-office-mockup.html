@@ -323,9 +323,36 @@
       clearTimeout(tt); tt = setTimeout(() => t.classList.add("hidden"), 3400);
     }
 
-    /* DARJ KARO */
+    /* register token counter (offline fallback) */
     let token = 70;
-    $("darj").addEventListener("click", function(){
+
+    /* DB se purani shikayat wapas load — REAL DATABASE (Prisma + SQLite) */
+    (async function loadDbRows(){
+      try {
+        const r = await fetch("/api/agency-leads");
+        if (!r.ok) return;
+        const ls = ((await r.json()).leads || []).filter((l) => l.source === "sarkari");
+        if (!ls.length) return;
+        const esc = (s) => String(s == null ? "" : s).replace(/</g, "&lt;");
+        ls.slice().reverse().forEach((l) => {
+          const row = document.createElement("div");
+          row.className = "row";
+          row.innerHTML =
+            '<span class="r-no">#' + String(l.token).padStart(4, "0") + '</span>' +
+            '<span class="r-text">"' + esc(l.msg) + '" — ' + esc(l.naam) + ' (vs ' + esc(String(l.kaam).replace(/^Complaint — /, "")) + ')</span>' +
+            '<span class="r-stamp green">DATABASE SE ✅</span>';
+          $("rows").prepend(row);
+        });
+        token = Math.max.apply(null, [token].concat(ls.map((l) => l.token | 0)));
+        $("regcount").textContent = "Register me: " + $("rows").children.length + " shikayat";
+        toast("📥 " + ls.length + " shikayat database se wapas aayi — register ab LIVE he");
+      } catch (e) {}
+    })();
+
+    /* DARJ KARO — ab shikayat REAL DATABASE me bhi jaati he (Prisma + SQLite) */
+    const pad4 = (n) => String(n).padStart(4, "0");
+    $("darj").addEventListener("click", async function(){
+      const btn = this;
       const err = $("err"); err.classList.add("hidden");
       const txt = $("ftext").value.trim();
       if (!txt) {
@@ -336,24 +363,35 @@
         err.textContent = "Rule 7(b) violated! 'Maa kasam' wala box tick karna zaroori he 🤞 — bina kasam ke sab jhooth maana jayega 😄";
         err.classList.remove("hidden"); return;
       }
+      btn.disabled = true;
       const naam = $("fname").value.trim() || "Anonymous";
       const target = $("ftarget").value.split("(")[0].trim();
+      /* DB SAVE — source: sarkari (admin panel me 🏛 badge ke saath dikhegi) */
+      let saved = null;
+      try {
+        const r = await fetch("/api/agency-leads", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ naam, kaam: "Complaint — " + target, msg: txt, source: "sarkari" }) });
+        if (r.ok) saved = (await r.json()).lead;
+      } catch (e) {}
+      const tok = saved && saved.token ? saved.token : token;
+      if (!saved) token++;
       const pools = ["CR DEKH LEGA", "PROFESSOR KO FORWARD 😈", "MEETING ME UTHAYA JAYEGA", "CHAI KE BAAD DISCUSS", "FILE ME SAFE 😌"];
-      const stamp = pools[Math.floor(Math.random() * pools.length)];
+      const stamp = saved ? "DATABASE ME DARJ ✅" : pools[Math.floor(Math.random() * pools.length)];
+      const esc = (s) => String(s).replace(/</g, "&lt;");
       const row = document.createElement("div");
       row.className = "row fresh";
       row.innerHTML =
-        '<span class="r-no">#' + String(token).padStart(4, "0") + '</span>' +
-        '<span class="r-text">"' + txt.replace(/</g, "&lt;") + '" — ' + naam.replace(/</g, "&lt;") + ' (vs ' + target + ')</span>' +
-        '<span class="r-stamp">' + stamp + '</span>';
+        '<span class="r-no">#' + pad4(tok) + '</span>' +
+        '<span class="r-text">"' + esc(txt) + '" — ' + esc(naam) + ' (vs ' + esc(target) + ')</span>' +
+        '<span class="r-stamp' + (saved ? " green" : "") + '">' + stamp + '</span>';
       $("rows").prepend(row);
-      $("tokentxt").textContent = "TOKEN #" + String(token).padStart(4, "0") + " • " + new Date().toLocaleDateString();
+      $("tokentxt").textContent = "TOKEN #" + pad4(tok) + " • " + new Date().toLocaleDateString();
       $("stamp-overlay").classList.remove("hidden");
       vis++; chai++; paint();
       $("regcount").textContent = "Register me: " + $("rows").children.length + " shikayat";
-      setTimeout(() => $("stamp-overlay").classList.add("hidden"), 2400);
-      token++;
       $("ftext").value = ""; $("fname").value = ""; $("fkasam").checked = false;
+      if (saved) toast("💾 Shikayat DATABASE me darj — ab ye kabhi nahi kho gi (admin panel me dikhegi 😎)");
+      setTimeout(() => { $("stamp-overlay").classList.add("hidden"); btn.disabled = false; }, 2400);
     });
 
     /* Naa, chhodo */

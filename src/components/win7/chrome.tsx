@@ -22,7 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import { profile } from "@/lib/portfolio";
 import { getRadioSnapshot, subscribeRadio, togglePlayPause, nextSong, radioStart } from "@/lib/radio";
 
-export type WinId = "about" | "projects" | "skills" | "resume" | "contact" | "computer" | "recycle" | "music" | "privatevid" | "myex" | "office";
+export type WinId = "about" | "projects" | "skills" | "resume" | "contact" | "computer" | "recycle" | "music" | "privatevid" | "myex" | "office" | "admin";
 
 export interface TaskItem {
   id: WinId;

@@ -356,7 +356,7 @@ body{
       <div id="hint">👆 Kisi bhi team member / green hand pe click karo — Reception se enquiry bhi kar sakte ho</div>
     </div>
     <div id="side">
-      <div class="hd"><i></i>LIVE TEAM STATUS<small id="oncount">6/6</small></div>
+      <div class="hd"><i></i>LIVE TEAM STATUS<small id="oncount">1 REAL + 4 BOTS</small></div>
       <div id="rows"></div>
       <div id="sfoot">
         <div class="cap">AAJ KE VISITORS</div>
@@ -419,32 +419,32 @@ const el=(cls,html)=>{const d=document.createElement('div');d.className=cls;if(h
 
 /* ---------------- TEAM DATA ---------------- */
 const TEAM=[
- {id:'harish',name:'Harish (CR)',ini:'H',role:'FOUNDER & SERVICE MANAGER',shirt:'#2f6fb5',hair:'#22242a',
+ {id:'harish',name:'Harish Mugal',ini:'H',role:'FOUNDER & FULL-STACK DEV',shirt:'#2f6fb5',hair:'#22242a',
   x:150,y:250, mon:null,
   tasks:['Client meeting chal rhi he 🤝','Leads check kar rha hu 📊','Aaj ka plan bana rha hu 🗓️'],
   lines:['Team, ye project Friday tak 🗓️','Google pe business leke jaana he 💪','Naya lead aaya he, Dhyan dena! 🎉'],
   skills:['Deal Closing','Client Calls','CRM','Planning'],
   quote:'"Business Google pe le jaana he — policy simple he."'},
- {id:'amit',name:'Amit',ini:'A',role:'FULL-STACK DEVELOPER',shirt:'#3c8f4f',hair:'#191b1f',
+ {id:'amit',name:'DEV DESK',ini:'D',role:'FULL-STACK DEVELOPER',shirt:'#3c8f4f',hair:'#191b1f',
   x:265,y:206, desk:{x:225,y:195,w:80,d:40,h:46}, mon:{type:'code',x:238,y:206}, hand:{x:265,y:206,z:124},
   tasks:['npm run build chala rha hu ⚙️','Ek bug fix kar rha hu 🐛','Code push kar rha hu ⬆️'],
   lines:['Ye div center nahi ho rya 😭','Deploy ho gaya 🚀','Client ne phir "bas ek change" bola 💀'],
   skills:['Next.js','Node.js','Prisma','Deploy'],
   quote:'"Kaam ho gaya he... production me dekh lenge 😅"'},
- {id:'rahul',name:'Rahul',ini:'R',role:'WEB DESIGNER',shirt:'#8a4fb5',hair:'#2a1c10',
+ {id:'rahul',name:'DESIGN DESK',ini:'D',role:'WEB DESIGNER',shirt:'#8a4fb5',hair:'#2a1c10',
   x:265,y:286, desk:{x:225,y:275,w:80,d:40,h:46}, mon:{type:'art',x:238,y:286}, hand:{x:265,y:286,z:124},
   tasks:['Figma me design kar rha hu 🎨','Logo final kar rha hu ✏️','Client revision dekh rha hu 😅'],
   lines:['Logo final ho gaya 🎨','Photoshop crash ho gaya 💀','Ye wala shade perfect he ✨'],
   skills:['Figma','Photoshop','UI/UX','Branding'],
   quote:'"Bas 5 min me ho jayega" — 2 ghante pehle'},
- {id:'sneha',name:'Sneha',ini:'S',role:'SEO & GOOGLE BUSINESS EXPERT',shirt:'#c2543f',hair:'#3a2418',
+ {id:'sneha',name:'SEO DESK',ini:'S',role:'SEO & GOOGLE BUSINESS EXPERT',shirt:'#c2543f',hair:'#3a2418',
   x:435,y:241, desk:{x:395,y:230,w:80,d:40,h:46}, mon:{type:'chart',x:420,y:240}, hand:{x:435,y:241,z:124},
   tasks:['Google review ka reply ⭐','GBL listing optimize 📈','Keywords track kar rhi hu 🔍'],
   lines:['Google review +5 ⭐ aaya!','Client Google pe #1 pe 🏆','GBL listing rank upar 📈'],
   skills:['SEO','Google Business','Keywords','Ads'],
   quote:'"Google pe dikhoge nahi to customer kaise aayega?"',clickable:true},
 ];
-const WALKER={id:'pankaj',name:'Pankaj',ini:'P',role:'CHAI & MORALE MANAGER',shirt:'#c78f3d',hair:'#111',
+const WALKER={id:'pankaj',name:'CHAI BOT',ini:'C',role:'CHAI & MORALE MANAGER',shirt:'#c78f3d',hair:'#111',
   tasks:['Chai delivery kar rha hu ☕','Morale badha rha hu 😄','Round laga rha hu 🚶'],
   lines:['Garam chai leke aaya sabke liye ☕','Chai break 5 min ☕','Morale +10 😄'],
   skills:['Chai','Chai','Chai (expert)','Morale'],
@@ -556,6 +556,9 @@ function buildRows(){
   rv.innerHTML=`<div class="ava" style="background:linear-gradient(160deg,#3fbd6d,#237a48)">🎫</div>
     <div class="inf"><div class="nm">Reception Desk</div><div class="tk" id="rcToken">Visitor Token #L-129 • next: aap?</div></div><div class="dot"></div>`;
   rv.onclick=openEnquiry;rc.appendChild(rv);
+  const nb=el('trow');
+  nb.innerHTML=`<div class="ava" style="background:linear-gradient(160deg,#5a6a78,#2f3b45)">🤖</div><div class="inf"><div class="nm">Real human: 1</div><div class="tk">Harish + 4 desk bots — sab real kaam karte he 😎</div></div><div class="dot"></div>`;
+  rc.appendChild(nb);
 }
 buildRows();
 /* task rotation */

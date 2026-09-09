@@ -344,3 +344,29 @@ Stage Summary:
 - Virtual Office ab FULL-STACK he: enquiry → POST API → Prisma → SQLite → real token → CRM green chip → reload pe wapas load → WhatsApp deep link real data ke saath
 - DB me abhi 1 lead (Sharma Saree Center #L-131)
 - NEXT ideas: admin panel (leads move/stage update), leads ko Harish ke liye /agency-admin window, visitor counter DB-based, team data real karna, ya dusre demos (sarkari/flat) bhi DB pe
+
+---
+Task ID: 28
+Agent: Super Z (main)
+Task: User ne 3 orders diye — ① Secret Admin Panel (sirf Harish ke liye — leads dikhe + stage move NEW→CONTACTED→...) ② Team ko real banao (dummy names hatao) ③ Sarkari CR Office demo bhi DB pe laga do
+
+Work Log:
+- API upgrade (src/app/api/agency-leads/route.ts): GET me ?source= filter + take 30→200; POST me source whitelist ["virtual-office","sarkari"]
+- NEW src/app/api/agency-leads/[id]/route.ts: PATCH (stage 0-4 validate + update) + DELETE (lead remove) — Next 16 Promise params
+- Secret Admin Panel:
+  * chrome.tsx: WinId union me "admin"
+  * page.tsx: WIN_CONFIGS entry (title DISGUISED "System Configuration — HARISH-PC", 980x640) + DESKTOP_ICONS 2nd icon "System Config" (GearIcon — visitors ko boring tech icon lagta he) + openWindowForJarvis "admin"
+  * jarvis.ts: winMap me "open admin/leads/crm/enquiry" → admin window
+  * contents.tsx: AdminPanelContent — PIN gate (ADMIN_PIN="2007" const, wrong PIN red+toast) + LEADS CRM panel (stats pills with counts + stage filter + leads list: token/naam/kaam/msg/phone/source badge 🏛SARKARI|🏢OFFICE/time-ago + tel: link + wa.me deep link prefilled msg + delete confirm) + stage mover pills (optimistic update + rollback on fail) + 15s auto-poll + Refresh btn
+- Team real (cr-office-iso-mockup.html): Harish (CR)→Harish Mugal (FOUNDER & FULL-STACK DEV); Amit→DEV DESK, Rahul→DESIGN DESK, Sneha→SEO DESK, Pankaj→CHAI BOT (ini D/D/S/C); oncount 6/6→"1 REAL + 4 BOTS"; sidebar me note row "Real human: 1 — Harish + 4 desk bots"
+- Sarkari DB (cr-office-mockup.html): loadDbRows IIFE — GET → source=sarkari filter → register me "DATABASE SE ✅" green stamp rows + token counter sync + toast; darj handler async — POST {naam, kaam:"Complaint — "+target, msg, source:"sarkari"} → DB token se row (#0132 format) + "DATABASE ME DARJ ✅" stamp + offline fallback + btn disable during save
+- Verified: tsc 0 src errors, eslint clean; agent-browser E2E — desktop 12 icons (System Config disguised) → dblclick → PIN gate ("Administrator Sign In") → wrong PIN 1111 reject ✅ → PIN 2007 unlock → Sharma Saree Center #L-131 dikhi → CONTACTED pill click → DB stage=1 confirm ✅ → 📞💬 buttons; sarkari form submit → DB id=3 token=132 source="sarkari" ✅ → reload pe "DATABASE SE ✅" row + toast ✅; ISO team — Harish Mugal/DEV/DESIGN/SEO DESK/CHAI BOT, Amit/Rahul/Sneha/Pankaj zero ✅; admin me dono source badges ✅; mobile 390x844 fullscreen CRM ✅; console/errors clean
+- Cleanup: test sarkari lead (id=3) DELETE, Sharma stage wapas 0 — DB clean (1 real lead)
+- Screenshots: download/admin_pin_gate.png, admin_crm_leads.png, admin_full_crm.png, admin_mobile_live.png
+
+Stage Summary:
+- SECRET ADMIN PANEL LIVE: desktop "System Config" icon (disguised) → PIN 2007 → full leads CRM (dekho/move/delete/WhatsApp/call) — JARVIS se "admin kholo" bhi chalta he
+- Team ab honest: sirf Harish Mugal real, baaki desk bots (koi fake naam nahi)
+- Sarkari daftar bhi full-stack: complaint → SQLite → reload pe wapas + admin me 🏛 badge
+- DB: /api/agency-leads ab GET?source= + PATCH + DELETE support karta he
+- NOTE: PIN client-side he (demo-grade) — PIN change: contents.tsx ADMIN_PIN. Real auth chahiye toh batana

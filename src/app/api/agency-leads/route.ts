@@ -2,16 +2,20 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 /* Harish Web Agency — Virtual Office CRM leads
-   GET  /api/agency-leads  → latest 30 leads (CRM pipeline me render hote he)
-   POST /api/agency-leads  → naya lead save (enquiry form → stamp token bhi isi se aata he) */
+   GET  /api/agency-leads         → latest 200 leads (CRM pipeline + Admin panel)
+   GET  /api/agency-leads?source=sarkari → sirf sarkari daftar ki shikayate
+   POST /api/agency-leads         → naya lead save (enquiry form → stamp token bhi isi se aata he) */
 
 const DEMO_START_TOKEN = 129; // mockup ke demo chips ke aage se real token count
+const SOURCES = ["virtual-office", "sarkari"];
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const source = new URL(req.url).searchParams.get("source") || undefined;
     const leads = await db.lead.findMany({
+      where: source ? { source } : undefined,
       orderBy: { createdAt: "desc" },
-      take: 30,
+      take: 200,
     });
     return NextResponse.json({ leads });
   } catch (e) {
@@ -32,11 +36,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Naam to batao bhai! (Rule 1)" }, { status: 400 });
     }
 
+    const srcRaw = String(body?.source ?? "virtual-office").trim();
+    const source = SOURCES.includes(srcRaw) ? srcRaw : "virtual-office";
+
     const last = await db.lead.aggregate({ _max: { token: true } });
     const token = Math.max(DEMO_START_TOKEN, last._max.token ?? DEMO_START_TOKEN) + 1;
 
     const lead = await db.lead.create({
-      data: { naam, kaam, phone, msg, token, stage: 0 },
+      data: { naam, kaam, phone, msg, token, stage: 0, source },
     });
 
     return NextResponse.json({ lead }, { status: 201 });

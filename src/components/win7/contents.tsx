@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { FolderIcon, DriveIcon, NotepadIcon, WinFlag, SoundFileIcon, CdMusicIcon } from "./icons";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -754,6 +754,282 @@ export function AgencyOfficeContent() {
         title="Harish Web Agency — Virtual Office LIVE"
         className="h-full w-full border-0 block"
       />
+    </div>
+  );
+}
+
+/* ---------------- ADMIN — Secret Leads CRM (sirf Harish ke liye 🔐) ---------------- */
+
+/* ⚠️ BOSS ZONE: apna secret PIN yahan badlo — ye desktop pe "System Config" icon ke piche chhupa he */
+const ADMIN_PIN = "2007";
+
+type AdminLead = {
+  id: number;
+  token: number;
+  naam: string;
+  kaam: string;
+  phone: string | null;
+  msg: string | null;
+  stage: number;
+  source: string;
+  createdAt: string;
+};
+
+const ADMIN_STAGES = ["NEW", "CONTACTED", "MEETING", "WEBSITE BUILT", "GOOGLE PE #1"];
+const ADMIN_STAGES_SHORT = ["NEW", "CONTACTED", "MEETING", "BUILT", "#1"];
+
+function adminTimeAgo(iso: string) {
+  const s = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
+  if (s < 60) return "abhi abhi";
+  if (s < 3600) return `${Math.floor(s / 60)} min pehle`;
+  if (s < 86400) return `${Math.floor(s / 3600)} ghante pehle`;
+  return `${Math.floor(s / 86400)} din pehle`;
+}
+
+function adminWaLink(phone: string | null, naam: string, kaam: string) {
+  const d = (phone || "").replace(/\D/g, "");
+  const num = d.length === 10 ? "91" + d : d;
+  if (!num) return null;
+  return `https://wa.me/${num}?text=${encodeURIComponent(
+    `Hi ${naam}! Harish here (Harish Web Agency) — aapki enquiry: ${kaam}. Baat karni thi 🙂`
+  )}`;
+}
+
+export function AdminPanelContent() {
+  const { toast } = useToast();
+  const [unlocked, setUnlocked] = useState(false);
+  const [pin, setPin] = useState("");
+  const [wrong, setWrong] = useState(false);
+  const [leads, setLeads] = useState<AdminLead[] | null>(null);
+  const [filter, setFilter] = useState<number | "all">("all");
+
+  const load = useCallback(async () => {
+    try {
+      const r = await fetch("/api/agency-leads", { cache: "no-store" });
+      const j = await r.json();
+      setLeads(Array.isArray(j.leads) ? j.leads : []);
+    } catch {
+      setLeads([]);
+      toast({ title: "Load fail", description: "Database tak nahi pahunch raha — Refresh dabao." });
+    }
+  }, [toast]);
+
+  useEffect(() => {
+    if (!unlocked) return;
+    void load();
+    const t = setInterval(() => void load(), 15000); /* live CRM — 15s me khud sync */
+    return () => clearInterval(t);
+  }, [unlocked, load]);
+
+  const unlock = () => {
+    if (pin.trim() === ADMIN_PIN) {
+      setUnlocked(true);
+      setWrong(false);
+      toast({ title: "🔓 Welcome Boss", description: "Admin CRM unlock — leads tumhare command pe he." });
+    } else {
+      setWrong(true);
+      toast({ title: "🚫 Galat PIN", description: "Ye area sirf Harish ke liye he bhai." });
+      setPin("");
+    }
+  };
+
+  const tryMove = async (l: AdminLead, stage: number) => {
+    if (l.stage === stage) return;
+    setLeads((ls) => (ls || []).map((x) => (x.id === l.id ? { ...x, stage } : x))); /* optimistic */
+    try {
+      const r = await fetch(`/api/agency-leads/${l.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stage }),
+      });
+      if (!r.ok) throw new Error("patch fail");
+      const j = await r.json();
+      if (j?.lead) setLeads((ls) => (ls || []).map((x) => (x.id === l.id ? (j.lead as AdminLead) : x)));
+      toast({ title: `📈 #L${l.token} → ${ADMIN_STAGES[stage]}`, description: `${l.naam} pipeline me aage badh gaya.` });
+    } catch {
+      setLeads((ls) => (ls || []).map((x) => (x.id === l.id ? { ...x, stage: l.stage } : x))); /* rollback */
+      toast({ title: "Stage move fail", description: "DB ne mana kar diya — dobara try karo." });
+    }
+  };
+
+  const tryDel = async (l: AdminLead) => {
+    if (!window.confirm(`#${l.token} — ${l.naam} ko delete karein? (wapas nahi aayega)`)) return;
+    try {
+      const r = await fetch(`/api/agency-leads/${l.id}`, { method: "DELETE" });
+      if (!r.ok) throw new Error("delete fail");
+      setLeads((ls) => (ls || []).filter((x) => x.id !== l.id));
+      toast({ title: "🗑 Lead delete", description: `#L${l.token} ${l.naam} DB se hata diya.` });
+    } catch {
+      toast({ title: "Delete fail", description: "Lead hataya nahi ja raha — refresh karke try karo." });
+    }
+  };
+
+  /* ---------- PIN gate ---------- */
+  if (!unlocked) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-gradient-to-b from-[#16324f] via-[#0f2438] to-[#081524] select-none">
+        <div
+          className={`w-[310px] rounded-[6px] border bg-[#f6f8fa] shadow-[0_14px_50px_rgba(0,0,0,0.55)] p-5 ${
+            wrong ? "border-[#d84a3a]" : "border-white/25"
+          }`}
+        >
+          <div className="text-center text-[34px] leading-none mb-1.5">🔐</div>
+          <div className="text-center text-[15px] font-bold text-[#1a2a38]">Administrator Sign In</div>
+          <div className="text-center text-[11px] text-[#7a8a98] mt-0.5 mb-3.5">Restricted area — sirf boss (Harish) ke liye</div>
+          <input
+            type="password"
+            inputMode="numeric"
+            autoFocus
+            value={pin}
+            onChange={(e) => {
+              setPin(e.target.value);
+              setWrong(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") unlock();
+            }}
+            placeholder="Admin PIN"
+            className={`w-full h-[30px] text-[13px] tracking-[0.3em] text-center rounded-[3px] border bg-white outline-none focus:border-[#5aabe0] focus:shadow-[0_0_5px_#8ec9ee] ${
+              wrong ? "border-[#d84a3a] bg-[#fdf1ef]" : "border-[#b8c8d6]"
+            }`}
+          />
+          <button
+            onClick={unlock}
+            className="w-full h-[30px] mt-2.5 text-[12.5px] font-semibold text-white rounded-[3px] border border-[#1e5e9e] bg-gradient-to-b from-[#4d9ad6] to-[#2b6fb0] hover:from-[#5aa8e2] hover:to-[#337cba] active:translate-y-[1px]"
+            style={{ textShadow: "0 1px 1px rgba(0,0,0,0.4)" }}
+          >
+            Unlock
+          </button>
+          <div className="text-center text-[10px] text-[#a8b4c0] mt-3">HARISH-PC • Secure Admin Channel</div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ---------- CRM panel ---------- */
+  const shown = (leads || []).filter((l) => filter === "all" || l.stage === filter);
+  const countFor = (i: number | "all") => (i === "all" ? (leads || []).length : (leads || []).filter((l) => l.stage === i).length);
+
+  return (
+    <div className="h-full w-full flex flex-col bg-[#f1f5f9] text-[#1a2a38] select-none">
+      <MenuBar items={["File", "Leads", "Stage", "Help"]} />
+
+      {/* header */}
+      <div className="flex items-center gap-2 px-3 h-[36px] bg-gradient-to-b from-[#f6fbff] to-[#e2eef8] border-b border-[#c5d5e2] shrink-0">
+        <span className="text-[15px]">🗂</span>
+        <span className="text-[13px] font-bold">LEADS CRM — ADMIN</span>
+        <span className="text-[10px] px-1.5 py-[1px] rounded bg-[#3fbd6d] text-white font-bold">LIVE</span>
+        <span className="text-[11px] text-[#5a6a78]">{leads ? `${leads.length} leads` : "loading…"}</span>
+        <div className="flex-1" />
+        <button
+          onClick={() => void load()}
+          className="text-[11px] px-2.5 py-[3px] rounded-[3px] border border-[#b8c8d6] bg-white hover:bg-[#e8f4fd] active:translate-y-[1px]"
+        >
+          ↻ Refresh
+        </button>
+      </div>
+
+      {/* stage filter pills */}
+      <div className="flex items-center gap-1.5 px-3 py-2 border-b border-[#dfe6ec] bg-[#f6f8fa] shrink-0 overflow-x-auto">
+        <button
+          onClick={() => setFilter("all")}
+          className={`text-[10.5px] px-2 py-[3px] rounded-full border whitespace-nowrap ${
+            filter === "all" ? "bg-[#2f6fb5] text-white border-[#1e5e9e] font-bold" : "bg-white text-[#4a5a68] border-[#c8d4de] hover:bg-[#eef6fd]"
+          }`}
+        >
+          SAB ({countFor("all")})
+        </button>
+        {ADMIN_STAGES_SHORT.map((s, i) => (
+          <button
+            key={s}
+            title={ADMIN_STAGES[i]}
+            onClick={() => setFilter(filter === i ? "all" : i)}
+            className={`text-[10.5px] px-2 py-[3px] rounded-full border whitespace-nowrap ${
+              filter === i ? "bg-[#2f6fb5] text-white border-[#1e5e9e] font-bold" : "bg-white text-[#4a5a68] border-[#c8d4de] hover:bg-[#eef6fd]"
+            }`}
+          >
+            {s} ({countFor(i)})
+          </button>
+        ))}
+      </div>
+
+      {/* leads list */}
+      <div className="flex-1 min-h-0 overflow-y-auto win7-scroll px-2.5 py-2">
+        {leads === null && <div className="text-center text-[12px] text-[#7a8a98] py-8">Database se leads aa rahi he… ⏳</div>}
+        {leads !== null && shown.length === 0 && (
+          <div className="text-center text-[12.5px] text-[#7a8a98] py-10">
+            Yahan koi lead nahi — chai piyo ☕, enquiry aate hi LIVE dikhegi
+          </div>
+        )}
+        {shown.map((l) => {
+          const wa = adminWaLink(l.phone, l.naam, l.kaam);
+          return (
+            <div key={l.id} className="mb-1.5 rounded-[3px] border border-[#d0dae2] bg-white shadow-sm">
+              <div className="flex items-center gap-2 px-2 py-1.5">
+                <span className="text-[10px] font-mono font-bold text-white bg-[#2f6fb5] rounded px-1 py-[2px] shrink-0">#{l.token}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-[12.5px] font-bold truncate">{l.naam}</span>
+                    <span
+                      className={`text-[9.5px] px-1 rounded border shrink-0 ${
+                        l.source === "sarkari" ? "bg-[#fdf6e3] text-[#8a6d1f] border-[#e3d5a3]" : "bg-[#eef6fd] text-[#2f6fb5] border-[#c8ddf0]"
+                      }`}
+                    >
+                      {l.source === "sarkari" ? "🏛 SARKARI" : "🏢 OFFICE"}
+                    </span>
+                    <span className="text-[10px] text-[#9aa8b4] shrink-0 ml-auto">{adminTimeAgo(l.createdAt)}</span>
+                  </div>
+                  <div className="text-[11px] text-[#4a5a68] truncate">
+                    {l.kaam}
+                    {l.msg ? ` — "${l.msg}"` : ""}
+                    {l.phone ? <span className="text-[#7a8a98]"> • 📞 {l.phone}</span> : null}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  {l.phone && (
+                    <a href={`tel:${l.phone}`} title={`Call ${l.naam}`} className="text-[13px] px-1 py-0.5 rounded hover:bg-[#e8f4fd] no-underline">
+                      📞
+                    </a>
+                  )}
+                  {wa && (
+                    <a href={wa} target="_blank" rel="noreferrer" title="WhatsApp kholo" className="text-[13px] px-1 py-0.5 rounded hover:bg-[#e8f8ee] no-underline">
+                      💬
+                    </a>
+                  )}
+                  <button onClick={() => void tryDel(l)} title="Delete lead" className="text-[13px] px-1 py-0.5 rounded hover:bg-[#fdeeea] cursor-pointer">
+                    🗑
+                  </button>
+                </div>
+              </div>
+              {/* stage mover */}
+              <div className="flex items-center gap-1 px-2 py-1 border-t border-[#e8eef2] bg-[#fafcfe] overflow-x-auto">
+                <span className="text-[9.5px] text-[#7a8a98] mr-0.5 shrink-0 font-semibold">STAGE:</span>
+                {ADMIN_STAGES_SHORT.map((s, i) => (
+                  <button
+                    key={s}
+                    title={`${ADMIN_STAGES[i]} — click karke move karo`}
+                    onClick={() => void tryMove(l, i)}
+                    className={`text-[9.5px] px-1.5 py-[2px] rounded border whitespace-nowrap ${
+                      i === l.stage
+                        ? "bg-gradient-to-b from-[#5aa8e2] to-[#2b6fb0] text-white border-[#1e5e9e] font-bold"
+                        : "bg-white text-[#6a7a88] border-[#d0dae2] hover:bg-[#eef6fd] hover:border-[#8fc3ea] cursor-pointer"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <StatusBar>
+        <span>DB: SQLite (Prisma) — {leads ? `${leads.length} records` : "…"}</span>
+        <span>Auto-refresh: 15s</span>
+        <span>Filter: {filter === "all" ? "SAB" : ADMIN_STAGES[filter]}</span>
+        <span className="ml-auto">🔐 Admin session — Harish</span>
+      </StatusBar>
     </div>
   );
 }
